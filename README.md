@@ -1,4 +1,4 @@
-# property-management-app
+# Property Management Application
 
 ## Rental Agreements and Documentation:
 
