@@ -4,6 +4,9 @@
 
 {% block content %}
     <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"> Capture Company Details</h3>
+        </div>
         <div class="input-states">
             <form class="form-horizontal">
                 <div class="form-group has-success">
@@ -73,7 +76,8 @@
                     </div>
                 </div>
                 <div class="form-group has-info">
-                    <button class="btn btn-info"><i class="ti-save"> </i> Save &amp; Proceed </button>
+                    <button class="btn btn-info mg-r-2"><i class="ti-save"> </i> Save &amp; Proceed </button>
+                    <a href="{{ url_for('companies.get_companies') }}" class="btn btn-danger"><i class="ti-cut"> </i> Cancel </a>
                 </div>
 
             </form>
