@@ -1,9 +1,57 @@
 
 
 {% extends "layouts/page.html" %}
-
+{% block css %}
+    <link href="{{ url_for('static', filename='css/lib/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/lib/themify-icons.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/lib/jsgrid/jsgrid-theme.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/lib/jsgrid/jsgrid.min.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/lib/menubar/sidebar.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/lib/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/lib/helper.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+{% endblock %}
 {% block content %}
-    <div class="card">
-        List of Companies
-    </div>
+                <div id="main-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="jsgrid-table-panel">
+                                    <div id="jsGrid"></div>
+                                </div>
+                            </div>
+                            <!-- /# card -->
+                        </div>
+                        <!-- /# column -->
+                    </div>
+                    <!-- /# row -->
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="footer">
+                                <p>2018 © Admin Board. - <a href="#">example.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- JS Grid Scripts Start-->
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/db.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/jsgrid.core.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/jsgrid.load-indicator.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/jsgrid.load-strategies.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/jsgrid.sort-strategies.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/jsgrid.field.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/fields/jsgrid.field.text.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/fields/jsgrid.field.number.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/fields/jsgrid.field.select.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/fields/jsgrid.field.checkbox.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/fields/jsgrid.field.control.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jsgrid/jsgrid-init.js') }}"></script>
+    <!-- JS Grid Scripts End-->
 {% endblock %}
