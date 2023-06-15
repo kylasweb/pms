@@ -22,11 +22,15 @@ def create_app(config):
         from src.routes.companies import companies_route
         from src.routes.buildings import buildings_route
         from src.routes.maintenance import maintenance_route
+        from src.routes.reports import reports_route
+        from src.routes.payments import payments_route
 
         app.register_blueprint(home_route)
         app.register_blueprint(companies_route)
         app.register_blueprint(buildings_route)
         app.register_blueprint(maintenance_route)
+        app.register_blueprint(reports_route)
+        app.register_blueprint(payments_route)
 
 
     return app

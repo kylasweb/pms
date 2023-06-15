@@ -4,6 +4,6 @@ reports_route = Blueprint('reports', __name__)
 
 
 @reports_route.get('/admin/reports')
-async def get_maintenance():
+async def get_reports():
     return render_template('reports/reports.html')
 
