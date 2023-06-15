@@ -34,5 +34,4 @@ def create_app(config):
         app.register_blueprint(payments_route)
         app.register_blueprint(invoices_route)
 
-
     return app
