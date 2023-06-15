@@ -28,7 +28,7 @@
     window.db = db;
 
 
-    db.countries = [
+    db.companies = [
         { Name: "", Id: 0 },
         { Name: "United States", Id: 1 },
         { Name: "Canada", Id: 2 },
