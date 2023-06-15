@@ -15,7 +15,12 @@ def create_app(config):
 
     app.template_folder = template_folder()
     app.static_folder = static_folder()
-
     app.config['SECRET_KEY'] = config.SECRET_KEY
+
+    with app.app_context():
+        from src.routes.home import home_route
+
+        app.register_blueprint(home_route)
+
 
     return app

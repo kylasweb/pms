@@ -1,8 +1,8 @@
-from pydantic import BaseSettings
+from pydantic import BaseSettings, Field
 
 
 class Settings(BaseSettings):
-    pass
+    SECRET_KEY: str = Field(default="abs")
 
 
 def config_instance() -> Settings:
