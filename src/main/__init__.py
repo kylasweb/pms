@@ -19,8 +19,12 @@ def create_app(config):
 
     with app.app_context():
         from src.routes.home import home_route
+        from src.routes.companies import companies_route
+        from src.routes.buildings import buildings_route
 
         app.register_blueprint(home_route)
+        app.register_blueprint(companies_route)
+        app.register_blueprint(buildings_route)
 
 
     return app
