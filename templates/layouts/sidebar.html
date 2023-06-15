@@ -17,9 +17,9 @@
                     <li><a class="sidebar-sub-toggle"><i class="ti-briefcase"></i> Admin<span
                                 class="sidebar-collapse-icon ti-angle-down"></span></a>
                         <ul>
-                            <li><a href="chart-flot.html">Add Building</a></li>
+                            <li><a href="{{ url_for('buildings.add_building') }}">Add Building</a></li>
                             <li><a href="{{ url_for('buildings.get_buildings') }}">Buildings</a></li>
-                            <li><a href="chartjs.html">Maintenance</a></li>
+                            <li><a href="{{ url_for('maintenance.get_maintenance') }}">Maintenance</a></li>
                             <li><a href="chartjs.html">Reports</a></li>
                         </ul>
                     </li>
