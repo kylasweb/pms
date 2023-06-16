@@ -10,8 +10,8 @@
                     <li><a class="sidebar-sub-toggle"><i class="ti-dashboard"></i> Dashboard <span
                                 class="sidebar-collapse-icon ti-angle-down"></span></a>
                         <ul>
-                            <li><a href="{{ url_for('home.get_home') }}"><i class="ti-home"> </i> Home</a></li>
-                            <li><a href="{{ url_for('companies.get_companies') }}"><i class="ti-desktop"> </i> Companies</a></li>
+                            <li><a href="{{ url_for('home.get_home') }}"><i class="ti-home"></i> Home</a></li>
+                            <li><a href="{{ url_for('companies.get_companies') }}"><i class="ti-desktop"></i> Companies</a></li>
                         </ul>
                     </li>
 
@@ -19,10 +19,9 @@
                     <li><a class="sidebar-sub-toggle"><i class="ti-briefcase"></i> Admin<span
                                 class="sidebar-collapse-icon ti-angle-down"></span></a>
                         <ul>
-                            <li><a href="{{ url_for('buildings.add_building') }}">Add Building</a></li>
-                            <li><a href="{{ url_for('buildings.get_buildings') }}">Buildings</a></li>
-                            <li><a href="{{ url_for('maintenance.get_maintenance') }}">Maintenance</a></li>
-                            <li><a href="{{ url_for('reports.get_reports') }}">Reports</a></li>
+                            <li><a href="{{ url_for('buildings.get_buildings') }}"><i class="ti-layers"></i> Buildings</a></li>
+                            <li><a href="{{ url_for('maintenance.get_maintenance') }}"><i class="ti-settings"></i> Maintenance</a></li>
+                            <li><a href="{{ url_for('reports.get_reports') }}"><i class="ti-file"></i> Reports</a></li>
                         </ul>
                     </li>
 

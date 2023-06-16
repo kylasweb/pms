@@ -1,9 +1,205 @@
-
-
 {% extends "layouts/page.html" %}
 
 {% block content %}
     <div class="card">
-        Payments
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link  active" data-toggle="tab" href="#tenant-list">Tenant List</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#payment-list">Payment Records</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#create-payment">Create Payment Record</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="payment-list" class="tab-pane fade">
+                <!-- Content for Payment Records Tab -->
+                <h3>Payment Records</h3>
+                <table class="table table-responsive-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Payment ID</th>
+                            <th>Tenant Name</th>
+                            <th>Building</th>
+                            <th>Office Number</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                            <tr>
+                                <td>{{ payment.id }}</td>
+                                <td>{{ payment.tenant_name }} ({{ payment.building }} - {{ payment.office_number }})</td>
+                                <td>{{ payment.building }}</td>
+                                <td>{{ payment.office_number }}</td>
+                                <td>{{ payment.amount }}</td>
+                                <td>{{ payment.date }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div id="create-payment" class="tab-pane fade">
+                <!-- Content for Create Payment Record Tab -->
+                <h3>Create Payment Record</h3>
+                <form>
+                    <!-- Include necessary input fields for payment record details -->
+                    <div class="form-group">
+                        <label for="tenant-name">Tenant Name:</label>
+                        <select class="form-control" id="tenant-name" name="tenant-name">
+                            {% for tenant in tenants %}
+                                <option value="{{ tenant.id }}">{{ tenant.name }} ({{ tenant.building }} - {{ tenant.office_number }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount:</label>
+                        <input type="text" class="form-control" id="amount" name="amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="text" class="form-control" id="date" name="date">
+                    </div>
+                    <!-- Include previous payment records for reference -->
+                    <div class="form-group">
+                        <label for="previous-payments">Previous Payments:</label>
+                        <select class="form-control" id="previous-payments" name="previous-payments">
+                            <option value="">Select Previous Payment</option>
+                            {% for payment in payments %}
+                                <option value="{{ payment.id }}">
+                                    {{ payment.tenant_name }} ({{ payment.building }} - {{ payment.office_number }}) - {{ payment.amount }} - {{ payment.date }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Include other required input fields -->
+                    <!-- Add a submit button to create the payment record -->
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+            <div id="tenant-list" class="tab-pane fade  show active">
+                <!-- Content for Tenant List Tab -->
+                <h3>Tenant List</h3>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Total Buildings Occupied: {{ building_occupied }}</h5>
+                        <h5>Amount Owed/To Be Paid This Month: {{ amount_owed }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tenant ID</th>
+                                    <th>Tenant Name</th>
+                                    <th>Building</th>
+                                    <th>Office Number</th>
+                                    <th>Rental Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tenant in tenants %}
+                                    <tr>
+                                        <td>{{ tenant.id }}</td>
+                                        <td>{{ tenant.name }}</td>
+                                        <td>{{ tenant.building }}</td>
+                                        <td>{{ tenant.office_number }}</td>
+                                        <td>{{ tenant.rental_amount }}</td>
+                                        <td>
+                                            <button class="btn btn-primary" onclick="openPaymentDialog('{{ tenant.id }}')">
+                                                <i class="ti-wallet"></i> Make Payment </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+<script>
+    function openPaymentDialog(tenantId) {
+        // Retrieve the necessary information for the selected tenant using AJAX or other methods
+
+        // Create the dialog box
+        const dialogBox = document.createElement("div");
+        dialogBox.classList.add("modal", "fade");
+        dialogBox.id = "paymentDialog";
+        dialogBox.setAttribute("tabindex", "-1");
+        dialogBox.setAttribute("role", "dialog");
+        dialogBox.setAttribute("aria-labelledby", "paymentDialogTitle");
+        dialogBox.setAttribute("aria-hidden", "true");
+
+        // Create the dialog content
+        const dialogContent = document.createElement("div");
+        dialogContent.classList.add("modal-dialog");
+        dialogContent.setAttribute("role", "document");
+
+        // Create the dialog content container
+        const dialogContainer = document.createElement("div");
+        dialogContainer.classList.add("modal-content");
+
+        // Add the content to the dialog box
+        dialogContent.appendChild(dialogContainer);
+        dialogBox.appendChild(dialogContent);
+
+        // Create the dialog title
+        const dialogTitle = document.createElement("h5");
+        dialogTitle.classList.add("modal-title");
+        dialogTitle.id = "paymentDialogTitle";
+        dialogTitle.textContent = "Make Payment";
+
+        // Create the form
+        const paymentForm = document.createElement("form");
+        paymentForm.classList.add("modal-body");
+
+        // Add necessary input fields to the form
+        // ...
+
+        // Create the submit button
+        const submitButton = document.createElement("button");
+        submitButton.textContent = "Submit";
+        submitButton.classList.add("btn", "btn-primary");
+
+        // Add an event listener to the submit button
+        submitButton.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Handle the payment submission logic here
+            // ...
+
+            // Close the dialog box
+            closeDialogBox();
+        });
+
+        // Create the dialog footer
+        const dialogFooter = document.createElement("div");
+        dialogFooter.classList.add("modal-footer");
+
+        // Add the elements to the dialog box
+        dialogContainer.appendChild(dialogTitle);
+        dialogContainer.appendChild(paymentForm);
+        dialogFooter.appendChild(submitButton);
+        dialogContainer.appendChild(dialogFooter);
+
+        // Append the dialog box to the document body
+        document.body.appendChild(dialogBox);
+
+        // Show the dialog box
+        $('#paymentDialog').modal('show');
+
+        // Function to close the dialog box
+        function closeDialogBox() {
+            $('#paymentDialog').modal('hide');
+        }
+    }
+</script>
+
 {% endblock %}
