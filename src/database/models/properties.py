@@ -55,3 +55,21 @@ class LeaseAgreement(BaseModel):
     rent_amount: float
     deposit_amount: float
     is_active: bool
+
+
+class LeaseAgreementTemplate(BaseModel):
+    """
+    Represents a lease agreement template.
+
+    Attributes:
+    - template_id (str): The ID of the template.
+    - property_id (str): The ID of the property associated with the template.
+    - template_name (str): The name of the template.
+    - template_text (str): The text content of the lease agreement template.
+    - is_default (bool): Indicates if the template is the default template for the property.
+    """
+    template_id: str
+    property_id: str
+    template_name: str
+    template_text: str
+    is_default: bool
