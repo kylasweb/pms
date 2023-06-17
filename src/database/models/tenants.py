@@ -6,6 +6,6 @@ class Tenant(BaseModel):
     name: str
     email: str
     phone_number: str
-    address: str
+    address_id: str
     lease_start_date: str
     lease_end_date: str

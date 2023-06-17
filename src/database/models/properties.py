@@ -1,3 +1,4 @@
+from datetime import date
 from pydantic import BaseModel
 from typing import List
 from src.database.models.address import Address
@@ -24,7 +25,7 @@ class Unit(BaseModel):
     is_occupied: bool
     rental_amount: int
     tenant_id: str
-    lease_start_date: str
-    lease_end_date: str
+    lease_start_date: date
+    lease_end_date: date
     unit_area: int
     has_reception: bool
