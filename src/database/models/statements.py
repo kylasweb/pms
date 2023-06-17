@@ -26,5 +26,4 @@ class Statement(BaseModel):
     items: list[str]
     is_paid: bool
     payment_date: datetime
-    generated_at: datetime = Field(default_factory=datetime.now,
-                                   description="The date when the statement was generated.")
+    generated_at: datetime = Field(default_factory=datetime.now, description="The date when the statement was generated.")
