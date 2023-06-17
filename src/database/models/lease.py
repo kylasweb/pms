@@ -1,0 +1,46 @@
+from datetime import date
+import uuid
+from pydantic import BaseModel, Field
+
+
+class LeaseAgreement(BaseModel):
+    """
+    Represents a lease agreement.
+
+    Attributes:
+    - agreement_id (str): The ID of the lease agreement.
+    - property_id (str): The ID of the property associated with the agreement.
+    - tenant_id (str): The ID of the tenant associated with the agreement.
+    - start_date (date): The start date of the lease.
+    - end_date (date): The end date of the lease.
+    - rent_amount (float): The monthly rent amount.
+    - deposit_amount (float): The security deposit amount.
+    - is_active (bool): Indicates if the lease agreement is currently active.
+    """
+
+    agreement_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Agreement ID")
+    property_id: str
+    tenant_id: str
+    start_date: date
+    end_date: date
+    rent_amount: float
+    deposit_amount: float
+    is_active: bool
+
+
+class LeaseAgreementTemplate(BaseModel):
+    """
+    Represents a lease agreement template.
+
+    Attributes:
+    - template_id (str): The ID of the template.
+    - property_id (str): The ID of the property associated with the template.
+    - template_name (str): The name of the template.
+    - template_text (str): The text content of the lease agreement template.
+    - is_default (bool): Indicates if the template is the default template for the property.
+    """
+    template_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="template ID")
+    property_id: str
+    template_name: str
+    template_text: str
+    is_default: bool
