@@ -28,6 +28,7 @@ class User(BaseModel):
 
     user_type: UserType
     username: str
+    password: str | None
     email: str
     full_name: str
     contact_number: str

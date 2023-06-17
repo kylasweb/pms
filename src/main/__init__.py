@@ -1,4 +1,4 @@
-from os import path
+
 from flask import Flask
 from src.utils import template_folder, static_folder
 

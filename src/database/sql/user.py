@@ -7,7 +7,7 @@ from src.database.models.users import UserType
 from src.database.constants import ID_LEN, NAME_LEN
 
 
-class User(Base):
+class UserORM(Base):
     __tablename__ = 'users'
 
     user_id: str = Column(String(ID_LEN), primary_key=True, unique=True)
@@ -19,3 +19,16 @@ class User(Base):
     email: str = Column(String(256))
     full_name: str = Column(String(NAME_LEN))
     contact_number: str = Column(String(13))
+
+    def to_dict(self) -> dict[str, str | bool]:
+        return {
+            'user_id': self.user_id,
+            'is_tenant': self.is_tenant,
+            'tenant_id': self.tenant_id,
+            'company_id': self.company_id,
+            'user_type': self.user_type,
+            'username': self.username,
+            'email': self.email,
+            'full_name': self.full_name,
+            'contact_number': self.contact_number
+        }
