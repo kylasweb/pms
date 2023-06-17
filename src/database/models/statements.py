@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import date
 
+
 class Statement(BaseModel):
     statement_number: str
     month: str

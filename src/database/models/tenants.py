@@ -2,8 +2,8 @@ from pydantic import BaseModel
 
 
 class Tenant(BaseModel):
-    name: str
     tenant_id: str
+    name: str
     email: str
     phone_number: str
     address: str
