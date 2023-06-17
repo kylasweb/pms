@@ -1,9 +1,11 @@
 from datetime import date
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+from src.database.tools import create_transaction_id
 
 
 class Payment(BaseModel):
-    transaction_id: str
+    transaction_id: str = Field(default_factory=create_transaction_id, description="Transaction ID")
     tenant_id: str
     property_id: str
     amount: float

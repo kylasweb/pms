@@ -1,11 +1,12 @@
 from datetime import date
-from pydantic import BaseModel
+import uuid
+from pydantic import BaseModel, Field
 from typing import List
 from src.database.models.address import Address
 
 
 class Property(BaseModel):
-    property_id: str
+    property_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Property ID")
     address: Address
     property_type: str
     number_of_units: int
@@ -21,7 +22,7 @@ class Property(BaseModel):
 
 class Unit(BaseModel):
     property_id: str
-    unit_id: str
+    unit_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unit ID")
     is_occupied: bool
     rental_amount: int
     tenant_id: str
