@@ -18,12 +18,12 @@ class Property(BaseModel):
     parking_spots: int
 
 
-class OfficeShop(BaseModel):
+class Unit(BaseModel):
     property_id: str
     is_occupied: bool
     rental_amount: int
     tenant_name: str
     lease_start_date: str
     lease_end_date: str
-    office_area: int
+    unit_area: int
     has_reception: bool
