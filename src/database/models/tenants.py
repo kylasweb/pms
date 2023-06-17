@@ -1,3 +1,4 @@
+from datetime import date
 from pydantic import BaseModel
 
 
@@ -7,5 +8,5 @@ class Tenant(BaseModel):
     email: str
     phone_number: str
     address_id: str
-    lease_start_date: str
-    lease_end_date: str
+    lease_start_date: date
+    lease_end_date: date

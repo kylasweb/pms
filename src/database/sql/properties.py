@@ -8,7 +8,7 @@ class PropertyORM(Base):
     __tablename__ = 'properties'
 
     property_id = Column(String(ID_LEN), primary_key=True)
-    address_id = Column(String(ID_LEN), ForeignKey('address.address_id'))
+    address_id = Column(String(ID_LEN), ForeignKey('addresses.address_id'))
     property_type = Column(String)
     number_of_units = Column(Integer)
     available_units: int = Column(Integer)
