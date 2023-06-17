@@ -20,9 +20,10 @@ class Property(BaseModel):
 
 class Unit(BaseModel):
     property_id: str
+    unit_id: str
     is_occupied: bool
     rental_amount: int
-    tenant_name: str
+    tenant_id: str
     lease_start_date: str
     lease_end_date: str
     unit_area: int
