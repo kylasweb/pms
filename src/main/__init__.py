@@ -26,6 +26,7 @@ def create_app(config):
         from src.routes.payments import payments_route
         from src.routes.invoices import invoices_route
         from src.routes.statements import statements_route
+        from src.routes.auth import auth_route
 
         app.register_blueprint(home_route)
         app.register_blueprint(companies_route)
@@ -35,5 +36,6 @@ def create_app(config):
         app.register_blueprint(payments_route)
         app.register_blueprint(invoices_route)
         app.register_blueprint(statements_route)
+        app.register_blueprint(auth_route)
 
     return app
