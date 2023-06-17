@@ -40,15 +40,21 @@ class UserView:
 
     @staticmethod
     async def put(user: User) -> User:
-        """
-
-        :param user:
-        :return:
-        """
         with Session() as session:
-            user_data: UserORM = session.query(UserORM).filter(UserORM.user_id == user.user_id).first()
+            user_data: UserORM = session.query(UserORM).filter_by(user_id=user.user_id).first()
             if not user_data:
                 return None
+
+            # Update user_data with the values from the user Pydantic BaseModel
+            for field in user_data.__table__.columns.keys():
+                if hasattr(user, field):
+                    setattr(user_data, field, getattr(user, field))
+
+            # Save the updated user_data back to the session
+            session.add(user_data)
+            session.commit()
+
+            return User(**user_data.to_dict())
 
 
 
