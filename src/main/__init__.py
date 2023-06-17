@@ -1,13 +1,6 @@
 from os import path
 from flask import Flask
-
-
-def static_folder() -> str:
-    return path.join(path.dirname(path.abspath(__file__)), '../../static')
-
-
-def template_folder() -> str:
-    return path.join(path.dirname(path.abspath(__file__)), '../../templates')
+from src.utils import template_folder, static_folder
 
 
 def create_app(config):
