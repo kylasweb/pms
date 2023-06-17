@@ -1,7 +1,7 @@
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
+from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, inspect
 from sqlalchemy.dialects.mysql import ENUM
 
-from src.database.sql import Base
+from src.database.sql import Base, engine
 from src.database.models.users import UserType
 
 from src.database.constants import ID_LEN, NAME_LEN
@@ -33,3 +33,8 @@ class UserORM(Base):
             'full_name': self.full_name,
             'contact_number': self.contact_number
         }
+
+    @classmethod
+    def create_if_not_table(cls):
+        if not inspect(engine).has_table(cls.__tablename__):
+            Base.metadata.create_all(bind=engine)

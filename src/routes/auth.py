@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request
+from datetime import datetime, timedelta
+from flask import Blueprint, render_template, request, make_response, flash, redirect, url_for
+from src.view.auth import UserView
 
 auth_route = Blueprint('auth', __name__)
 
@@ -6,6 +8,54 @@ auth_route = Blueprint('auth', __name__)
 @auth_route.get('/admin/login')
 async def get_login():
     return render_template('login.html')
+
+
+@auth_route.post('/admin/login')
+async def do_login():
+    """
+    Handle the login request.
+    :return: The authenticated User object.
+    """
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    auth_view = UserView()
+    login_user = await auth_view.login(username=username, password=password)
+
+    if login_user and login_user.username == username:
+        # Authentication successful
+        # Render the companies.html template
+        response = make_response(render_template('companies/companies.html'))
+        # Calculate expiration time (e.g., 30 minutes from now)
+        expiration = datetime.utcnow() + timedelta(minutes=30)
+        # Set the authentication cookie
+        response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
+        # Return the response
+        return response
+    else:
+        # Authentication failed
+        # Add your desired logic here for failed login
+        flash('Login failed. Please try again.')  # Flash the failure message
+        return redirect(url_for('home.get_home'))
+
+
+@auth_route.get('/admin/logout')
+async def do_logout():
+    """
+    Handle the logout request.
+    :return: Redirect to the home page.
+    """
+    # Create a response object
+    response = make_response(redirect(url_for('home.get_home')))
+
+    # Remove the session cookie
+    response.delete_cookie('auth')
+
+    # Flash the success message
+    flash('You have been successfully logged out.')
+
+    # Return the response
+    return response
 
 
 @auth_route.get('/admin/register')

@@ -45,6 +45,18 @@
                             <div class="page-title">
                                 <h1>Hello, <span>Welcome Here</span></h1>
                             </div>
+                            <!-- place flash messages here -->
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for message in messages %}
+                                                <li>{{ message }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                     </div>
                     <!-- /# column -->
@@ -76,7 +88,6 @@
     {% block scripts %}
         {#  Page Custom Scripts #}
     {% endblock %}
-
 
     <script src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>

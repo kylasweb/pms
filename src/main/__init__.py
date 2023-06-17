@@ -1,6 +1,15 @@
-
 from flask import Flask
 from src.utils import template_folder, static_folder
+
+
+def bootstrapper():
+    from src.database.sql.address import AddressORM
+    from src.database.sql.tenants import TenantORM
+    from src.database.sql.user import UserORM
+
+    AddressORM.create_if_not_table()
+    TenantORM.create_if_not_table()
+    UserORM.create_if_not_table()
 
 
 def create_app(config):

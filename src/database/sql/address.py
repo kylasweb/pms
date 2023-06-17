@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, Date, ForeignKey, inspect
 from datetime import date
 from src.database.constants import ID_LEN, NAME_LEN
-from src.database.sql import Base
+from src.database.sql import Base, engine
 
 
 class AddressORM(Base):
@@ -13,3 +13,8 @@ class AddressORM(Base):
     state = Column(String(NAME_LEN), index=True)
     postal_code = Column(String(8))
     country = Column(String(NAME_LEN))
+
+    @classmethod
+    def create_if_not_table(cls):
+        if not inspect(engine).has_table(cls.__tablename__):
+            Base.metadata.create_all(bind=engine)
