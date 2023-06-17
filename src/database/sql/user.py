@@ -16,6 +16,7 @@ class UserORM(Base):
     company_id: str = Column(String(ID_LEN))
     user_type: str = Column(ENUM(UserType), nullable=False)
     username: str = Column(String(NAME_LEN))
+    password_hash: str = Column(String(255))
     email: str = Column(String(256))
     full_name: str = Column(String(NAME_LEN))
     contact_number: str = Column(String(13))

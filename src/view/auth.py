@@ -56,5 +56,14 @@ class UserView:
 
             return User(**user_data.to_dict())
 
+    @staticmethod
+    async def login(username: str, password: str) -> User:
+        with Session() as session:
+            user_data: UserORM = session.query(UserORM).filter_by(username=username).first()
+            if not user_data:
+                return None
 
+            # Perform password validation here (e.g., compare hashes)
 
+            # If password is valid, return the user as a User object
+            return User(**user_data.to_dict())
