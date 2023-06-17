@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, render_template, request, make_response, flash, redirect, url_for
-
 from src.database.models.users import User
 from src.view.auth import UserView
 

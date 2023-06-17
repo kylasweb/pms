@@ -54,7 +54,7 @@ class UserView:
             session.add(user_data)
             session.commit()
 
-            return User(**user_data.to_dict())
+            return User.from_orm(user_data)
 
     @staticmethod
     async def login(username: str, password: str) -> User:
@@ -66,4 +66,4 @@ class UserView:
             # Perform password validation here (e.g., compare hashes)
 
             # If password is valid, return the user as a User object
-            return User(**user_data.to_dict())
+            return User.from_orm(user_data)
