@@ -39,7 +39,7 @@ async def do_login():
     else:
         # Authentication failed
         # Add your desired logic here for failed login
-        flash('Login failed. Please try again.')  # Flash the failure message
+        flash(message='Login failed. Please try again.', category="danger")  # Flash the failure message
         return redirect(url_for('home.get_home'))
 
 
@@ -56,7 +56,7 @@ async def do_logout():
     response.delete_cookie('auth')
 
     # Flash the success message
-    flash('You have been successfully logged out.')
+    flash(message='You have been successfully logged out.', category="danger")
 
     # Return the response
     return response
@@ -72,6 +72,11 @@ async def do_register():
     username = request.form.get('username')
     email = request.form.get('email')
     password = request.form.get('password')
+    terms = request.form.get('terms')
+
+    if terms != "on":
+        flash(message="please accept terms and conditions", category="danger")
+        return make_response(redirect(url_for('home.get_home')))
 
     # user_id will already be created by a factory
     user_data = User()
@@ -93,3 +98,14 @@ async def do_register():
 @auth_route.get('/admin/password-reset')
 async def get_password_reset():
     return render_template('password_reset.html')
+
+
+@auth_route.post('/admin/password-reset')
+async def do_password_reset():
+    email = request.form.get('email')
+    if not email:
+        flash(message="please submit an email in order to proceed with password reset", category="danger")
+        return make_response(redirect(url_for('home.get_home')))
+
+    flash(message="password reset email sent to your Inbox", category='success')
+    return make_response(redirect(url_for('home.get_home')))
