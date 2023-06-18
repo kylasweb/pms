@@ -52,8 +52,12 @@
                     </tbody>
                 </table>
             {% else %}
-                <p>No properties available.</p>
+                <p>No properties available for {{ company.company_name }}.</p>
+
             {% endif %}
+        <div class="card-footer">
+            <a href="#" class="btn btn-app btn-info"><i class="ti-save"> </i> Add Property</a>
+        </div>
         </div>
     </div>
 {% endblock %}
