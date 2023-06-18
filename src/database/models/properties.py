@@ -12,7 +12,7 @@ class Property(BaseModel):
     Attributes:
     - property_id (str): The ID of the property.
     - address (Address): The address of the property.
-    - property_type (str): The type of the property.
+    - property_type (str): The type of the property. Residential, commercial, industrial, agricultural, mixed
     - number_of_units (int): The total number of units in the property.
     - available_units (int): The number of units currently available.
     - amenities (List[str]): The list of amenities available in the property.
@@ -25,6 +25,7 @@ class Property(BaseModel):
     """
 
     property_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Property ID")
+    name: str
     address: Address
     property_type: str
     number_of_units: int

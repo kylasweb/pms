@@ -3,7 +3,7 @@
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Company Details</h3>
+            <h3 class="card-title"><i class="ti-briefcase"> </i> Company Details</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -21,22 +21,26 @@
                 </div>
             </div>
         </div>
+        <div class="card-footer">
+            <h3 class="card-title"><i class="ti-info"></i> Description</h3>
+            <span class="card-text">{{ company.description }}</span>
+        </div>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Properties</h3>
+            <h3 class="card-title"><i class="ti-folder"></i> Properties</h3>
         </div>
         <div class="card-body">
             {% if properties %}
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Property ID</th>
+                            <th>Property Name</th>
+                            <th>Landlord</th>
                             <th>Address</th>
                             <th>Property Type</th>
                             <th>Available Units</th>
-                            <th>Landlord</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,11 +56,12 @@
                     </tbody>
                 </table>
             {% else %}
-                <p>No properties available for {{ company.company_name }}.</p>
-
+                <div class="card-text m-b-2">
+                <p class="text">No properties available for Company: <span class="text-info"><strong><em>{{ company.company_name }}</em></strong></span></p>
+                </div>
             {% endif %}
         <div class="card-footer">
-            <a href="#" class="btn btn-app btn-info"><i class="ti-save"> </i> Add Property</a>
+            <a href="{{ url_for('buildings.add_building', company_id=company.company_id) }}" class="btn btn-app btn-info"><i class="ti-save"> </i> Add Property</a>
         </div>
         </div>
     </div>
