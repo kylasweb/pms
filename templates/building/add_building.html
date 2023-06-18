@@ -11,16 +11,10 @@
                 </div>
 
                 <div class="card-body">
-                <form action="/properties/create" method="post" class="container">
-
+                <form action="{{ url_for('buildings.do_add_building', company_id=company.company_id) }}" method="post" enctype="application/x-www-form-urlencoded" class="container">
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="address">Address:</label>
-                        <input type="text" id="address" name="address" class="form-control" required>
                     </div>
 
                     <div class="form-group">

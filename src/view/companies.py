@@ -1,3 +1,5 @@
+from src.database.models.properties import Property
+from src.database.sql.properties import PropertyORM
 from src.database.sql import Session
 from src.database.models.users import User
 from src.database.models.companies import Company
@@ -124,9 +126,33 @@ class CompaniesView:
         with Session() as session:
             company_orm: CompanyORM = CompanyORM(**company.dict())
             response = Company(**company_orm.to_dict())
-            session.add(company_orm)
             user_company_data = dict(id=str(uuid.uuid4()), company_id=company_orm.company_id, user_id=user.user_id)
+            session.add(company_orm)
             session.add(UserCompanyORM(**user_company_data))
             session.commit()
 
             return response
+
+    @staticmethod
+    async def add_property(_property: Property) -> Property:
+        """
+
+        :param _property:
+        :return:
+        """
+        with Session() as session:
+            property_orm: PropertyORM = PropertyORM(**_property.dict())
+            session.add(property_orm)
+            session.commit()
+            return _property
+        
+    @staticmethod
+    async def get_properties(company_id: str) -> list[Property]:
+        """
+
+        :param company_id:
+        :return:
+        """
+        with Session() as session:
+            properties: list[PropertyORM] = session.query(PropertyORM).filter(PropertyORM.company_id == company_id).all()
+            return [Property(**_prop.to_dict()) for _prop in properties]

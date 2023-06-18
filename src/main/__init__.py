@@ -12,6 +12,7 @@ def bootstrapper():
     from src.database.sql.tenants import TenantORM
     from src.database.sql.user import UserORM
     from src.database.sql.companies import UserCompanyORM, CompanyORM
+    from src.database.sql.properties import PropertyORM, UnitORM
 
     AddressORM.create_if_not_table()
     TenantORM.create_if_not_table()
@@ -19,6 +20,8 @@ def bootstrapper():
     UserCompanyORM.create_if_not_table()
     CompanyORM.create_if_not_table()
 
+    PropertyORM.create_if_not_table()
+    UnitORM.create_if_not_table()
 
 def create_app(config):
     app: Flask = Flask(__name__)

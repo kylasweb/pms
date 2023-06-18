@@ -25,8 +25,8 @@ async def get_company(user: User, company_id: str):
     user_data = user.dict()
     companies_view = CompaniesView()
     company = await companies_view.get_company(company_id=company_id, user_id=user.user_id)
-
-    context = dict(user=user_data, company=company.dict())
+    properties = await companies_view.get_properties(company_id=company_id)
+    context = dict(user=user_data, company=company.dict(), properties=[prop.dict() for prop in properties])
     # TODO load company data based on user data
     return render_template('companies/company.html', **context)
 

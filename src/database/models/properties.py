@@ -25,12 +25,12 @@ class Property(BaseModel):
     """
 
     property_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Property ID")
+    company_id: str | None
     name: str
-    address: Address
     property_type: str
     number_of_units: int
     available_units: int
-    amenities: List[str]
+    amenities: str
     landlord: str
     maintenance_contact: str
     lease_terms: str
