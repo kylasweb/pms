@@ -9,7 +9,7 @@ class UserView:
         pass
 
     @staticmethod
-    async def get(user_id: str) -> User | None:
+    async def get(user_id: str) -> dict[str, str] | None:
         """
 
         :param user_id:
@@ -20,10 +20,24 @@ class UserView:
 
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter(UserORM.user_id == user_id).first()
-            return User(**user_data.to_dict())
+            return user_data.to_dict()
 
     @staticmethod
-    async def post(user: User) -> dict[str, str]:
+    async def get_by_email(email: str) -> dict[str, str] | None:
+        """
+
+        :param email:
+        :return:
+        """
+        if not email:
+            return None
+
+        with Session() as session:
+            user_data: UserORM = session.query(UserORM).filter(UserORM.email == email.casefold()).first()
+            return user_data.to_dict()
+
+    @staticmethod
+    async def post(user: User) -> dict[str, str] | None:
         """
 
         :param user:
@@ -39,7 +53,7 @@ class UserView:
             return user.dict(exclude={'password'})
 
     @staticmethod
-    async def put(user: User) -> dict[str, str]:
+    async def put(user: User) -> dict[str, str] | None:
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter_by(user_id=user.user_id).first()
             if not user_data:
@@ -57,7 +71,7 @@ class UserView:
             return user_data.to_dict()
 
     @staticmethod
-    async def login(username: str, password: str) -> dict[str, str]:
+    async def login(username: str, password: str) -> dict[str, str] | None:
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter_by(username=username).first()
             if not user_data:

@@ -1,5 +1,6 @@
+import functools
 from functools import wraps
-
+from aiocache import cached
 from flask import Flask, request, redirect, url_for
 
 from src.database.models.users import User
@@ -10,8 +11,10 @@ app = Flask(__name__)
 
 
 # Your route handlers go here
-
+@cached(ttl=3600)
 async def get_user_details(user_id: str) -> User:
+    """Get the details for a user by their ID."""
+
     # Assuming you have a database session and engine configured
     with Session() as session:
         # Perform the query to retrieve the user based on the user_id

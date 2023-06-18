@@ -82,11 +82,18 @@ async def do_register():
         flash(message="please accept terms and conditions", category="danger")
         return make_response(redirect(url_for('auth.get_register')))
 
+    user_view = UserView()
+
+    user_exist = await user_view.get_by_email(email=email)
+    if user_exist:
+        flash(message="User Already Exist please login", category="success")
+        return make_response(redirect(url_for('auth.get_login')))
+
     # user_id will already be created by a factory
     user_data = User(**dict(username=username, password=password, email=email))
-    user_view = UserView()
-    _user_data: dict[str, str | bool] = await user_view.post(user=user_data)
 
+    _user_data: dict[str, str | bool] = await user_view.post(user=user_data)
+    flash(message="Successfully logged in", category="success")
     response = make_response(redirect(url_for('companies.get_companies')))
     # Calculate expiration time (e.g., 30 minutes from now)
     expiration = datetime.utcnow() + timedelta(minutes=30)

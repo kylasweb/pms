@@ -8,5 +8,8 @@ statements_route = Blueprint('statements', __name__)
 @statements_route.get('/admin/statements')
 @login_required
 async def get_statements(user: User):
-    return render_template('statements/statements.html')
+    user_data = user.dict()
+    context = dict(user=user_data)
+
+    return render_template('statements/statements.html', **context)
 

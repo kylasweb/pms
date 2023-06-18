@@ -8,4 +8,7 @@ maintenance_route = Blueprint('maintenance', __name__)
 @maintenance_route.get('/admin/maintenance')
 @login_required
 async def get_maintenance(user: User):
-    return render_template('maintenance/maintenance.html')
+    user_data = user.dict()
+    context = dict(user=user_data)
+
+    return render_template('maintenance/maintenance.html', **context)
