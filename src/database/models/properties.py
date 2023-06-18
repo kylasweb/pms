@@ -5,7 +5,6 @@ from typing import List
 from src.database.models.address import Address
 
 
-
 class Property(BaseModel):
     """
     Represents a property.
