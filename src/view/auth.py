@@ -23,7 +23,7 @@ class UserView:
             return User(**user_data.to_dict())
 
     @staticmethod
-    async def post(user: User) -> User:
+    async def post(user: User) -> dict[str, str]:
         """
 
         :param user:
@@ -33,13 +33,13 @@ class UserView:
             user_data: UserORM = session.query(UserORM).filter(UserORM.user_id == user.user_id).first()
             if user_data:
                 return None
-            new_user: UserORM = UserORM(user.dict(exclude={"password"}))
+            new_user: UserORM = UserORM(**user.dict())
             session.add(new_user)
             session.commit()
-            return user
+            return user.dict(exclude={'password'})
 
     @staticmethod
-    async def put(user: User) -> User:
+    async def put(user: User) -> dict[str, str]:
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter_by(user_id=user.user_id).first()
             if not user_data:
@@ -54,10 +54,10 @@ class UserView:
             session.add(user_data)
             session.commit()
 
-            return User.from_orm(user_data)
+            return user_data.to_dict()
 
     @staticmethod
-    async def login(username: str, password: str) -> User:
+    async def login(username: str, password: str) -> dict[str, str]:
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter_by(username=username).first()
             if not user_data:
@@ -66,4 +66,4 @@ class UserView:
             # Perform password validation here (e.g., compare hashes)
 
             # If password is valid, return the user as a User object
-            return User.from_orm(user_data)
+            return user_data.to_dict()

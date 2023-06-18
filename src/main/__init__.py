@@ -1,6 +1,7 @@
 from flask import Flask
+from flask_bcrypt import Bcrypt
 from src.utils import template_folder, static_folder
-
+bcrypt = Bcrypt()
 
 def bootstrapper():
     from src.database.sql.address import AddressORM
@@ -18,7 +19,7 @@ def create_app(config):
     app.template_folder = template_folder()
     app.static_folder = static_folder()
     app.config['SECRET_KEY'] = config.SECRET_KEY
-
+    bcrypt.init_app(app=app)
     with app.app_context():
         from src.routes.home import home_route
         from src.routes.companies import companies_route
@@ -39,5 +40,7 @@ def create_app(config):
         app.register_blueprint(invoices_route)
         app.register_blueprint(statements_route)
         app.register_blueprint(auth_route)
+
+        bootstrapper()
 
     return app

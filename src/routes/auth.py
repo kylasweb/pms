@@ -24,7 +24,7 @@ async def do_login():
     auth_view = UserView()
     login_user = await auth_view.login(username=username, password=password)
 
-    if login_user and login_user.username == username:
+    if login_user and login_user.get('username') == username:
         # Authentication successful
         # Render the companies.html template
         response = make_response(redirect(url_for('companies.get_companies')))
@@ -33,7 +33,7 @@ async def do_login():
         delay = timedelta(days=30) if remember == "on" else timedelta(minutes=30)
         expiration = datetime.utcnow() + delay
         # Set the authentication cookie
-        response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
+        response.set_cookie('auth', value=login_user.get('user_id'), expires=expiration, httponly=True)
         # Return the response
         return response
     else:
@@ -83,18 +83,15 @@ async def do_register():
         return make_response(redirect(url_for('auth.get_register')))
 
     # user_id will already be created by a factory
-    user_data = User()
-    user_data.username = username
-    user_data.password = password
-    user_data.email = email
+    user_data = User(**dict(username=username, password=password, email=email))
     user_view = UserView()
-    user_data: User = await user_view.post(user=user_data)
+    _user_data: dict[str, str | bool] = await user_view.post(user=user_data)
 
     response = make_response(redirect(url_for('companies.get_companies')))
     # Calculate expiration time (e.g., 30 minutes from now)
     expiration = datetime.utcnow() + timedelta(minutes=30)
     # Set the authentication cookie
-    response.set_cookie('auth', value=user_data.user_id, expires=expiration, httponly=True)
+    response.set_cookie('auth', value=_user_data.get('user_id'), expires=expiration, httponly=True)
     # Return the response
     return response
 

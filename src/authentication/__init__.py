@@ -20,7 +20,7 @@ def login_required(route_function):
         if auth_cookie:
             # Assuming you have a function to retrieve the user details based on the user_id
             user = await get_user_details(auth_cookie)
-            return route_function(user, *args, **kwargs)  # Inject user as a parameter
+            return await route_function(user, *args, **kwargs)  # Inject user as a parameter
         return redirect(url_for('auth.get_login'))  # Redirect to login page if not logged in
 
     return decorated_function

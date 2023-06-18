@@ -25,12 +25,11 @@ class User(BaseModel):
     - contact_number (str): The contact number of the user.
     """
     user_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    company_id: str
-    is_tenant: bool
-    tenant_id: str
-    user_type: UserType
+    company_id: str | None
+    is_tenant: bool = Field(default=False)
+    tenant_id: str | None
     username: str
-    password: str = None
+    password: str
     email: str
-    full_name: str
-    contact_number: str
+    full_name: str | None
+    contact_number: str | None
