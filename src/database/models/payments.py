@@ -8,7 +8,7 @@ class Payment(BaseModel):
     Represents a payment transaction.
 
     Attributes:
-        transaction_id (str): Transaction ID.
+        transaction_id (str): BankTransaction ID.
         tenant_id (str): ID of the tenant making the payment.
         property_id (str): ID of the property for which the payment is made.
         amount (float): Payment amount.
@@ -20,7 +20,7 @@ class Payment(BaseModel):
         rental_unit (str): Rental unit information.
         comments (str): Additional comments or notes.
     """
-    transaction_id: str = Field(default_factory=create_transaction_id, description="Transaction ID")
+    transaction_id: str = Field(default_factory=create_transaction_id, description="BankTransaction ID")
     tenant_id: str
     property_id: str
     amount: float

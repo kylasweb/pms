@@ -51,13 +51,10 @@ async def do_logout():
     """
     # Create a response object
     response = make_response(redirect(url_for('home.get_home')))
-
     # Remove the session cookie
     response.delete_cookie('auth')
-
     # Flash the success message
     flash(message='You have been successfully logged out.', category="danger")
-
     # Return the response
     return response
 
