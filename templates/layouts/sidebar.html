@@ -2,10 +2,12 @@
         <div class="nano">
             <div class="nano-content">
                 <ul>
-                    <div class="logo"><a href="{{ url_for('home.get_home') }}">
-                        <span> Property &amp; Rent Manager</span></a>
-                    </div>
-
+<div class="logo">
+    <a href="{{ url_for('home.get_home') }}">
+        <img src="{{ url_for('static', filename='images/custom/logo.png') }}" alt="logo" width="45" height="45">
+        <span> PRM</span>
+    </a>
+</div>
                     <li class="label">Main</li>
                     <li><a class="sidebar-sub-toggle"><i class="ti-dashboard"></i> Dashboard <span
                                 class="sidebar-collapse-icon ti-angle-down"></span></a>
