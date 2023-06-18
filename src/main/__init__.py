@@ -1,16 +1,23 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
+
+
 from src.utils import template_folder, static_folder
+
 bcrypt = Bcrypt()
+
 
 def bootstrapper():
     from src.database.sql.address import AddressORM
     from src.database.sql.tenants import TenantORM
     from src.database.sql.user import UserORM
+    from src.database.sql.companies import UserCompanyORM, CompanyORM
 
     AddressORM.create_if_not_table()
     TenantORM.create_if_not_table()
     UserORM.create_if_not_table()
+    UserCompanyORM.create_if_not_table()
+    CompanyORM.create_if_not_table()
 
 
 def create_app(config):

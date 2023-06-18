@@ -28,3 +28,6 @@ class Company(BaseModel):
     country: str
     contact_number: str
     website: str
+
+    class Config:
+        from_orm = True

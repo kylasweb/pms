@@ -25,7 +25,6 @@ class User(BaseModel):
     - contact_number (str): The contact number of the user.
     """
     user_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    company_id: str | None
     is_tenant: bool = Field(default=False)
     tenant_id: str | None
     username: str

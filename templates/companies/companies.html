@@ -13,14 +13,28 @@
                                             <thead>
                                                 <tr>
                                                     <th>Company Name</th>
-                                                    <th># Buildings</th>
-                                                    <th># Total Space</th>
-                                                    <th># Available</th>
-                                                    <th># Rented</th>
+                                                    <th>Address</th>
+                                                    <th>City</th>
+                                                    <th>Code</th>
+                                                    <th>Province</th>
+                                                    <th>Country</th>
                                                     <th><i class="ti-check-box"> </i> </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                            {% if companies %}
+                                                {% for company in companies %}
+                                                    <tr>
+                                                        <td>{{ company.company_name or '' }}</td>
+                                                        <td>{{ company.address_line_1 or '' }}</td>
+                                                        <td>{{ company.city or '' }}</td>
+                                                        <td>{{ company.postal_code or '' }}</td>
+                                                        <td>{{ company.province or '' }}</td>
+                                                        <td>{{ company.country or '' }}</td>
+                                                        <td><a href="{{ url_for('companies.get_company', company_id=company.company_id)}}"> Open</a> </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else %}
                                                 <tr>
                                                     <td>Tiger Nixon</td>
                                                     <td>3</td>
@@ -45,6 +59,7 @@
                                                     <td>28</td>
                                                     <td></td>
                                                 </tr>
+                                            {% endif %}
                                             </tbody>
                                         </table>
                                     </div>
