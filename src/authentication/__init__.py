@@ -1,7 +1,10 @@
 from functools import wraps
-from flask import Flask, request, render_template, redirect, url_for
+
+from flask import Flask, request, redirect, url_for
 
 from src.database.models.users import User
+from src.database.sql import Session
+from src.database.sql.user import UserORM
 
 app = Flask(__name__)
 
@@ -9,8 +12,11 @@ app = Flask(__name__)
 # Your route handlers go here
 
 async def get_user_details(user_id: str) -> User:
-    # Implementation of retrieving user details
-    pass
+    # Assuming you have a database session and engine configured
+    with Session() as session:
+        # Perform the query to retrieve the user based on the user_id
+        user = session.query(UserORM).filter(UserORM.user_id == user_id).first()
+        return User.from_orm(user)
 
 
 def login_required(route_function):
@@ -20,7 +26,18 @@ def login_required(route_function):
         if auth_cookie:
             # Assuming you have a function to retrieve the user details based on the user_id
             user = await get_user_details(auth_cookie)
+            print(f"User Details : {user}")
             return await route_function(user, *args, **kwargs)  # Inject user as a parameter
         return redirect(url_for('auth.get_login'))  # Redirect to login page if not logged in
+
+    return decorated_function
+
+
+def user_details(route_function):
+    @wraps(route_function)
+    async def decorated_function(*args, **kwargs):
+        user_id = request.cookies.get('auth')
+        user: User | None = await get_user_details(user_id=user_id) if user_id else None
+        return await route_function(user, *args, **kwargs)
 
     return decorated_function

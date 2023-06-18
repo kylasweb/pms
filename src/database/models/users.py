@@ -29,7 +29,10 @@ class User(BaseModel):
     is_tenant: bool = Field(default=False)
     tenant_id: str | None
     username: str
-    password: str
+    password: str | None
     email: str
     full_name: str | None
     contact_number: str | None
+
+    class Config:
+        orm_mode = True
