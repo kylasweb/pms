@@ -60,9 +60,14 @@
                 <p class="text">No properties available for Company: <span class="text-info"><strong><em>{{ company.company_name }}</em></strong></span></p>
                 </div>
             {% endif %}
-        <div class="card-footer">
-            <a href="{{ url_for('buildings.add_building', company_id=company.company_id) }}" class="btn btn-app btn-info"><i class="ti-save"> </i> Add Property</a>
-        </div>
+            <div class="card-footer">
+                <a href="{{ url_for('companies.get_companies') }}" class="btn btn-app btn-warning mr-2 mr-md-12 mb-2 mb-md-0">
+                    <i class="ti-briefcase"></i> Companies
+                </a>
+                <a href="{{ url_for('buildings.add_building', company_id=company.company_id) }}" class="btn btn-app btn-info">
+                    <i class="ti-save"></i> Add Property
+                </a>
+            </div>
         </div>
     </div>
 {% endblock %}
