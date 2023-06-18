@@ -19,6 +19,7 @@ async def do_login():
     """
     username = request.form.get('username')
     password = request.form.get('password')
+    remember = request.form.get('remember')
 
     auth_view = UserView()
     login_user = await auth_view.login(username=username, password=password)
@@ -28,7 +29,9 @@ async def do_login():
         # Render the companies.html template
         response = make_response(render_template('companies/companies.html'))
         # Calculate expiration time (e.g., 30 minutes from now)
-        expiration = datetime.utcnow() + timedelta(minutes=30)
+
+        delay = timedelta(days=30) if remember == "on" else timedelta(minutes=30)
+        expiration = datetime.utcnow() + delay
         # Set the authentication cookie
         response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
         # Return the response

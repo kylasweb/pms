@@ -15,7 +15,6 @@ class TenantORM(Base):
     lease_start_date: date = Column(Date)
     lease_end_date: date = Column(Date)
 
-
     @classmethod
     def create_if_not_table(cls):
         if not inspect(engine).has_table(cls.__tablename__):
