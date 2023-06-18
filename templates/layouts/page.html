@@ -46,18 +46,7 @@
                                 <h1>Hello, <span>Welcome Here</span></h1>
                             </div>
                             <!-- place flash messages here -->
-                            {% with messages = get_flashed_messages(with_categories=True) %}
-                                {% if messages %}
-                                    {% for category, message in messages %}
-                                        <div class="alert {% if category == 'danger' %}alert-danger{% elif category == 'success' %}alert-success{% endif %}">
-                                            <ul>
-                                                <li>{{ message }}</li>
-                                            </ul>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endwith %}
-
+                        {% include "layouts/flash.html" %}
                         </div>
                     </div>
                     <!-- /# column -->
