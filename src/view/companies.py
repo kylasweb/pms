@@ -1,4 +1,5 @@
 from src.database.sql import Session
+from src.database.models.users import User
 from src.database.models.companies import Company
 from src.database.sql.companies import CompanyORM, UserCompanyORM
 
@@ -88,18 +89,19 @@ class CompaniesView:
             user_company_list = session.query(UserCompanyORM).filter(UserCompanyORM.user_id == user_id).all()
             _companies = []
             for user_company in user_company_list:
-                _companies.append(session.query(CompanyORM).filter(CompanyORM.company_id == user_company.company_id).first())
+                _companies.append(
+                    session.query(CompanyORM).filter(CompanyORM.company_id == user_company.company_id).first())
             response = []
             if _companies:
                 for _company in _companies:
-                    response.append(Company.from_orm(_company))
+                    response.append(Company(**_company.to_dict()))
             else:
                 for _company in companies_temp_data:
                     response.append(Company(**_company))
             return response
 
     @staticmethod
-    async def get_company(company_id: str, user_id: str) -> Company:
+    async def get_company(company_id: str, user_id: str) -> Company | None:
         """
 
         :param company_id:
@@ -107,8 +109,24 @@ class CompaniesView:
         :return:
         """
         with Session() as session:
-            is_company_member = session.query(UserCompanyORM).filter(UserCompanyORM.user_id == user_id, UserCompanyORM.company_id).first()
+            is_company_member = session.query(UserCompanyORM).filter(UserCompanyORM.user_id == user_id,
+                                                                     UserCompanyORM.company_id).first()
             if not is_company_member:
                 return None
             company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
-            return Company.from_orm(company_orm)
+        return Company(**company_orm.to_dict())
+
+    @staticmethod
+    async def create_company(company: Company, user: User) -> Company:
+        # Perform necessary operations to create the company
+        # For example, you can save the company data in a database
+        # and associate it with the user
+        with Session() as session:
+            company_orm: CompanyORM = CompanyORM(**company.dict())
+            response = Company(**company_orm.to_dict())
+            session.add(company_orm)
+            user_company_data = dict(id=str(uuid.uuid4()), company_id=company_orm.company_id, user_id=user.user_id)
+            session.add(UserCompanyORM(**user_company_data))
+            session.commit()
+
+            return response

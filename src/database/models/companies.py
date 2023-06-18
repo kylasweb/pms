@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+import uuid
+
+from pydantic import BaseModel, Field
 
 
 class Company(BaseModel):
@@ -16,18 +18,18 @@ class Company(BaseModel):
     - website (str): The website URL of the company.
     """
 
-    company_id: str
-    company_name: str
-    description: str
+    company_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    company_name: str | None
+    description: str | None
 
-    address_line_1: str
-    address_line_2: str
-    city: str
-    postal_code: str
-    province: str
-    country: str
-    contact_number: str
-    website: str
+    address_line_1: str | None
+    address_line_2: str | None
+    city: str | None
+    postal_code: str | None
+    province: str | None
+    country: str | None
+    contact_number: str | None
+    website: str | None
 
     class Config:
         from_orm = True

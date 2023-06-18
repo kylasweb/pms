@@ -19,6 +19,25 @@ class CompanyORM(Base):
     contact_number: str = Column(String(13))
     website: str = Column(String(255))
 
+    def to_dict(self):
+        """
+        Convert the CompanyORM instance to a dictionary.
+        :return: Dictionary representation of the instance.
+        """
+        return {
+            "company_id": self.company_id,
+            "company_name": self.company_name,
+            "description": self.description,
+            "address_line_1": self.address_line_1,
+            "address_line_2": self.address_line_2,
+            "city": self.city,
+            "postal_code": self.postal_code,
+            "province": self.province,
+            "country": self.country,
+            "contact_number": self.contact_number,
+            "website": self.website
+        }
+
     @classmethod
     def create_if_not_table(cls):
         if not inspect(engine).has_table(cls.__tablename__):
