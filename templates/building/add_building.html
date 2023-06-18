@@ -1,80 +1,87 @@
 {% extends "layouts/page.html" %}
 
 {% block content %}
-    <div class="card">
-    <div class="card-title">
-        <h2 class="card-title">{{ company.company_name }}</h2>
-    </div>
-        <h2> Add Property </h2>
-        <form action="/properties/create" method="post" class="container">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" class="form-control" required>
-            </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-title">
+                    <h2 class="card-title">{{ company.company_name }}</h2>
+                </div>
+                <div class="card-footer">
+                    <span class="text-info">Use the form below to create properties for this company</span>
+                </div>
 
-            <div class="form-group">
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" class="form-control" required>
-            </div>
+                <div class="card-body">
+                <form action="/properties/create" method="post" class="container">
 
-            <div class="form-group">
-                <label for="property_type">Property Type:</label>
-                <select id="property_type" name="property_type" class="form-control" required>
-                    <option value="Residential">Residential</option>
-                    <option value="Commercial">Commercial</option>
-                    <option value="Industrial">Industrial</option>
-                    <option value="Agricultural">Agricultural</option>
-                    <option value="Mixed">Mixed</option>
-                </select>
-            </div>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="number_of_units">Number of Units:</label>
-                <input type="number" id="number_of_units" name="number_of_units" class="form-control" required>
-            </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="available_units">Available Units:</label>
-                <input type="number" id="available_units" name="available_units" class="form-control" required>
-            </div>
+                    <div class="form-group">
+                        <label for="property_type">Property Type:</label>
+                        <select id="property_type" name="property_type" class="form-control" required>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Industrial">Industrial</option>
+                            <option value="Agricultural">Agricultural</option>
+                            <option value="Mixed">Mixed</option>
+                        </select>
+                    </div>
 
-            <div class="form-group">
-                <label for="amenities">Amenities:</label>
-                <input type="text" id="amenities" name="amenities" class="form-control" required>
-            </div>
+                    <div class="form-group">
+                        <label for="number_of_units">Number of Units:</label>
+                        <input type="number" id="number_of_units" name="number_of_units" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="landlord">Landlord:</label>
-                <input type="text" id="landlord" name="landlord" class="form-control" required>
-            </div>
+                    <div class="form-group">
+                        <label for="available_units">Available Units:</label>
+                        <input type="number" id="available_units" name="available_units" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="maintenance_contact">Maintenance Contact:</label>
-                <input type="text" id="maintenance_contact" name="maintenance_contact" class="form-control" required>
-            </div>
+                    <div class="form-group">
+                        <label for="amenities">Amenities:</label>
+                        <input type="text" id="amenities" name="amenities" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="lease_terms">Lease Terms:</label>
-                <input type="text" id="lease_terms" name="lease_terms" class="form-control" required>
-            </div>
+                    <div class="form-group">
+                        <label for="landlord">Landlord:</label>
+                        <input type="text" id="landlord" name="landlord" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" class="form-control" required></textarea>
-            </div>
+                    <div class="form-group">
+                        <label for="maintenance_contact">Maintenance Contact:</label>
+                        <input type="text" id="maintenance_contact" name="maintenance_contact" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="built_year">Year Built:</label>
-                <input type="number" id="built_year" name="built_year" class="form-control" required>
-            </div>
+                    <div class="form-group">
+                        <label for="lease_terms">Lease Terms:</label>
+                        <input type="text" id="lease_terms" name="lease_terms" class="form-control" required>
+                    </div>
 
-            <div class="form-group">
-                <label for="parking_spots">Parking Spots:</label>
-                <input type="number" id="parking_spots" name="parking_spots" class="form-control" required>
-            </div>
-            <button type="submit" value="Submit" class="btn btn-primary"><i class="ti-save"> </i> Add Property</button>
-            <button type="reset" value="reset" class="btn btn-danger"><i class="ti-close"> </i> Reset</button>
-        </form>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" class="form-control" required></textarea>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="built_year">Year Built:</label>
+                        <input type="number" id="built_year" name="built_year" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parking_spots">Parking Spots:</label>
+                        <input type="number" id="parking_spots" name="parking_spots" class="form-control" required>
+                    </div>
+                    <button type="submit" value="Submit" class="btn btn-primary"><i class="ti-save"> </i> Add Property</button>
+                    <button type="reset" value="reset" class="btn btn-danger"><i class="ti-close"> </i> Reset</button>
+                </form>
+                </div>
+            </div>
     </div>
 {% endblock %}

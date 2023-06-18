@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 
+from src.database.models.companies import Company
 from src.database.models.users import User
 from src.authentication import login_required
 from src.view.companies import CompaniesView
@@ -37,8 +38,8 @@ async def get_building(user: User, building_id: str):
 async def add_building(user: User, company_id: str):
     user_data = user.dict()
     company_view = CompaniesView()
-    company = company_view.get_company(company_id=company_id, user_id=user.user_id)
-    context = dict(user=user_data, company=company)
+    company: Company = await company_view.get_company(company_id=company_id, user_id=user.user_id)
+    context = dict(user=user_data, company=company.dict())
     # TODO load company data based on user data
 
     return render_template('building/add_building.html', **context)
