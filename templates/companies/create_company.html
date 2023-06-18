@@ -1,137 +1,139 @@
 {% extends "layouts/page.html" %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Capture Company Details</h3>
-        </div>
-        <div class="input-states">
-            <form action="{{ url_for('companies.do_create_company') }}" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-layout"></i>
-                                Company Name
-                            </label>
-                            <input type="text" class="form-control" name="company_name">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Capture Company Details</h3>
+            </div>
+            <div class="input-states">
+                <form action="{{ url_for('companies.do_create_company') }}" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-layout"></i>
+                                    Company Name
+                                </label>
+                                <input type="text" class="form-control" name="company_name">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-info"></i>
-                                Company Description
-                            </label>
-                            <textarea type="text" class="form-control" name="description"></textarea>
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-info"></i>
+                                    Company Description
+                                </label>
+                                <textarea type="text" class="form-control" name="description"></textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-location-pin"></i>
-                                Address Line 1
-                            </label>
-                            <input type="text" class="form-control" name="address_line_1">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-location-pin"></i>
+                                    Address Line 1
+                                </label>
+                                <input type="text" class="form-control" name="address_line_1">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-location-pin"></i>
-                                Address Line 2
-                            </label>
-                            <input type="text" class="form-control" name="address_line_2">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-location-pin"></i>
+                                    Address Line 2
+                                </label>
+                                <input type="text" class="form-control" name="address_line_2">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-world"></i>
-                                City / Town
-                            </label>
-                            <input type="text" class="form-control" name="city">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-world"></i>
+                                    City / Town
+                                </label>
+                                <input type="text" class="form-control" name="city">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-location-pin"></i>
-                                Postal Code
-                            </label>
-                            <input type="text" class="form-control" name="postal_code">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-location-pin"></i>
+                                    Postal Code
+                                </label>
+                                <input type="text" class="form-control" name="postal_code">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-flag"></i>
-                                Province
-                            </label>
-                            <input type="text" class="form-control" name="province">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-flag"></i>
+                                    Province
+                                </label>
+                                <input type="text" class="form-control" name="province">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-world"></i>
-                                Country
-                            </label>
-                            <input type="text" class="form-control" name="country">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-world"></i>
+                                    Country
+                                </label>
+                                <input type="text" class="form-control" name="country">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-mobile"></i>
-                                Contact Number
-                            </label>
-                            <input type="text" class="form-control" name="contact_number">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-mobile"></i>
+                                    Contact Number
+                                </label>
+                                <input type="text" class="form-control" name="contact_number">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-success">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label class="form-label">
-                                <i class="ti-link"></i>
-                                Website
-                            </label>
-                            <input type="text" class="form-control" name="website">
+                    <div class="form-group has-success">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-label">
+                                    <i class="ti-link"></i>
+                                    Website
+                                </label>
+                                <input type="text" class="form-control" name="website">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group has-info">
-                    <div class="row">
-                        <div class="col-sm-offset-3 col-sm-9">
-                            <button class="btn btn-info mg-r-2">
-                                <i class="ti-save"></i>
-                                Save &amp; Proceed
-                            </button>
-                            <a href="{{ url_for('companies.get_companies') }}" class="btn btn-danger">
-                                <i class="ti-close"></i>
-                                Cancel
-                            </a>
+                    <div class="form-group has-info">
+                        <div class="row">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button class="btn btn-info mg-r-2">
+                                    <i class="ti-save"></i>
+                                    Save &amp; Proceed
+                                </button>
+                                <a href="{{ url_for('companies.get_companies') }}" class="btn btn-danger">
+                                    <i class="ti-close"></i>
+                                    Cancel
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock %}
