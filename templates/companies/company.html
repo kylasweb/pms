@@ -17,7 +17,7 @@
                     <p><strong>Province:</strong> {{ company.province }}</p>
                     <p><strong>Country:</strong> {{ company.country }}</p>
                     <p><strong>Contact Number:</strong> {{ company.contact_number }}</p>
-                    <p><strong>Website:</strong> <a href="{{ company.website }}">{{ company.website }}</a></p>
+                    <p><strong>Website:</strong> <a href="{{ company.website }}" class="alert-link">{{ company.website }}</a></p>
                 </div>
             </div>
         </div>
@@ -39,6 +39,7 @@
                             <th>Property Name</th>
                             <th>Landlord</th>
                             <th>Property Type</th>
+                            <th>Total Units</th>
                             <th>Available Units</th>
                         </tr>
                     </thead>
@@ -48,6 +49,7 @@
                                 <td><span class="text text-info font-weight-bold">{{ property.name }}</span></td>
                                 <td>{{ property.landlord }}</td>
                                 <td>{{ property.property_type }}</td>
+                                <td>{{ property.number_of_units }}</td>
                                 <td>{{ property.available_units }}</td>
                             </tr>
                         {% endfor %}
