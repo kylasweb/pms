@@ -27,7 +27,7 @@ async def do_login():
     if login_user and login_user.username == username:
         # Authentication successful
         # Render the companies.html template
-        response = make_response(render_template('companies/companies.html'))
+        response = make_response(redirect(url_for('companies.get_companies')))
         # Calculate expiration time (e.g., 30 minutes from now)
 
         delay = timedelta(days=30) if remember == "on" else timedelta(minutes=30)
@@ -86,7 +86,7 @@ async def do_register():
     user_view = UserView()
     user_data: User = await user_view.post(user=user_data)
 
-    response = make_response(render_template('companies/companies.html'))
+    response = make_response(redirect(url_for('companies.get_companies')))
     # Calculate expiration time (e.g., 30 minutes from now)
     expiration = datetime.utcnow() + timedelta(minutes=30)
     # Set the authentication cookie
