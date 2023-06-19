@@ -1,11 +1,12 @@
+import uuid
+
 from src.database.models.properties import Property
 from src.database.sql.properties import PropertyORM
 from src.database.sql import Session
 from src.database.models.users import User
 from src.database.models.companies import Company
 from src.database.sql.companies import CompanyORM, UserCompanyORM
-
-import uuid
+from src.view import error_handler
 
 companies_temp_data = [
     {
@@ -81,6 +82,7 @@ class CompaniesView:
         pass
 
     @staticmethod
+    @error_handler
     async def get_user_companies(user_id: str) -> list[Company]:
         """
             returns a list of user companies
@@ -103,6 +105,7 @@ class CompaniesView:
             return response
 
     @staticmethod
+    @error_handler
     async def get_company(company_id: str, user_id: str) -> Company | None:
         """
 
@@ -119,6 +122,7 @@ class CompaniesView:
         return Company(**company_orm.to_dict())
 
     @staticmethod
+    @error_handler
     async def create_company(company: Company, user: User) -> Company:
         # Perform necessary operations to create the company
         # For example, you can save the company data in a database
@@ -134,6 +138,7 @@ class CompaniesView:
             return response
 
     @staticmethod
+    @error_handler
     async def add_property(_property: Property) -> Property:
         """
 
@@ -145,8 +150,9 @@ class CompaniesView:
             session.add(property_orm)
             session.commit()
             return _property
-        
+
     @staticmethod
+    @error_handler
     async def get_properties(company_id: str) -> list[Property]:
         """
 
@@ -154,5 +160,6 @@ class CompaniesView:
         :return:
         """
         with Session() as session:
-            properties: list[PropertyORM] = session.query(PropertyORM).filter(PropertyORM.company_id == company_id).all()
+            properties: list[PropertyORM] = session.query(PropertyORM).filter(
+                PropertyORM.company_id == company_id).all()
             return [Property(**_prop.to_dict()) for _prop in properties]

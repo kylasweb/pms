@@ -1,6 +1,7 @@
 from src.database.models.users import User
 from src.database.sql import Session
 from src.database.sql.user import UserORM
+from src.view import error_handler
 
 
 class UserView:
@@ -9,6 +10,7 @@ class UserView:
         pass
 
     @staticmethod
+    @error_handler
     async def get(user_id: str) -> dict[str, str] | None:
         """
 
@@ -23,6 +25,7 @@ class UserView:
             return user_data.to_dict()
 
     @staticmethod
+    @error_handler
     async def get_by_email(email: str) -> dict[str, str] | None:
         """
 
@@ -37,6 +40,7 @@ class UserView:
             return user_data.to_dict()
 
     @staticmethod
+    @error_handler
     async def post(user: User) -> dict[str, str] | None:
         """
 
@@ -53,6 +57,7 @@ class UserView:
             return user.dict(exclude={'password'})
 
     @staticmethod
+    @error_handler
     async def put(user: User) -> dict[str, str] | None:
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter_by(user_id=user.user_id).first()
@@ -71,6 +76,7 @@ class UserView:
             return user_data.to_dict()
 
     @staticmethod
+    @error_handler
     async def login(username: str, password: str) -> dict[str, str] | None:
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter_by(username=username).first()
