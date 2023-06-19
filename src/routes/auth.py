@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, render_template, request, make_response, flash, redirect, url_for
 from src.database.models.users import User
-from src.view.auth import UserView
+from src.controller.auth import UserController
 
 auth_route = Blueprint('auth', __name__)
 
@@ -21,7 +21,7 @@ async def do_login():
     password = request.form.get('password')
     remember = request.form.get('remember')
 
-    auth_view = UserView()
+    auth_view = UserController()
     login_user = await auth_view.login(username=username, password=password)
 
     if login_user and login_user.get('username') == username:
@@ -79,7 +79,7 @@ async def do_register():
         flash(message="please accept terms and conditions", category="danger")
         return make_response(redirect(url_for('auth.get_register')))
 
-    user_view = UserView()
+    user_view = UserController()
 
     user_exist = await user_view.get_by_email(email=email)
     if user_exist:

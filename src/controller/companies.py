@@ -6,7 +6,7 @@ from src.database.sql import Session
 from src.database.models.users import User
 from src.database.models.companies import Company
 from src.database.sql.companies import CompanyORM, UserCompanyORM
-from src.view import error_handler
+from src.controller import error_handler
 
 companies_temp_data = [
     {
@@ -77,7 +77,7 @@ companies_temp_data = [
 ]
 
 
-class CompaniesView:
+class CompaniesController:
     def __init__(self):
         pass
 

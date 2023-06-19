@@ -4,7 +4,7 @@ from src.database.models.properties import Property
 from src.database.models.companies import Company
 from src.database.models.users import User
 from src.authentication import login_required
-from src.view.companies import CompaniesView
+from src.controller.companies import CompaniesController
 
 buildings_route = Blueprint('buildings', __name__)
 
@@ -38,8 +38,8 @@ async def get_building(user: User, building_id: str):
 @login_required
 async def add_building(user: User, company_id: str):
     user_data = user.dict()
-    company_view = CompaniesView()
-    company: Company = await company_view.get_company(company_id=company_id, user_id=user.user_id)
+    company_controller = CompaniesController()
+    company: Company = await company_controller.get_company(company_id=company_id, user_id=user.user_id)
     context = dict(user=user_data, company=company.dict())
     # TODO load company data based on user data
 
@@ -53,11 +53,11 @@ from flask import request
 @login_required
 async def do_add_building(user: User, company_id: str):
     user_data = user.dict()
-    company_view = CompaniesView()
-    company: Company = await company_view.get_company(company_id=company_id, user_id=user.user_id)
+    company_controller = CompaniesController()
+    company: Company = await company_controller.get_company(company_id=company_id, user_id=user.user_id)
     property_data: Property = Property(**request.form)
     property_data.company_id = company.company_id
-    property_model = await company_view.add_property(_property=property_data)
+    property_model = await company_controller.add_property(_property=property_data)
 
     _message: str = f"Property : {property_model.name} Successfully added to : {company.company_name}"
     flash(message=_message, category="success")

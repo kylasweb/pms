@@ -1,10 +1,10 @@
 from src.database.models.users import User
 from src.database.sql import Session
 from src.database.sql.user import UserORM
-from src.view import error_handler
+from src.controller import error_handler
 
 
-class UserView:
+class UserController:
 
     def __init__(self):
         pass
