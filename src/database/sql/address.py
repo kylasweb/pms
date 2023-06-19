@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, Date, ForeignKey, inspect
-from datetime import date
+from sqlalchemy import Column, String, inspect
+
 from src.database.constants import ID_LEN, NAME_LEN
 from src.database.sql import Base, engine
 
