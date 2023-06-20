@@ -1,7 +1,7 @@
 import functools
 from functools import wraps
 from aiocache import cached
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, flash
 
 from src.database.models.users import User
 from src.database.sql import Session
@@ -30,7 +30,12 @@ def login_required(route_function):
             # Assuming you have a function to retrieve the user details based on the user_id
             user = await get_user_details(auth_cookie)
             print(f"User Details : {user}")
-            return await route_function(user, *args, **kwargs)  # Inject user as a parameter
+            try:
+                return await route_function(user, *args, **kwargs)  # Inject user as a parameter
+            except TypeError as e:
+                flash(message='Error making request please try again later', category="danger")
+                print(str(e))
+                return redirect(url_for('home.get_home'))
         return redirect(url_for('auth.get_login'))  # Redirect to login page if not logged in
 
     return decorated_function

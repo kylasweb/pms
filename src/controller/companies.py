@@ -1,5 +1,7 @@
 import uuid
 
+from src.database.sql.bank_account import BankAccountORM
+from src.database.models.bank_accounts import BusinessBankAccount
 from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty
 from src.database.sql.properties import PropertyORM, UnitORM
 from src.database.sql import Session
@@ -139,6 +141,19 @@ class CompaniesController:
 
     @staticmethod
     @error_handler
+    async def update_bank_account(account_details: BusinessBankAccount) -> BusinessBankAccount:
+        """
+
+        :return:
+        """
+        with Session() as session:
+            bank_account_orm: BankAccountORM = BankAccountORM(**account_details.dict())
+            session.add(bank_account_orm)
+            session.commit()
+            return account_details
+
+    @staticmethod
+    @error_handler
     async def add_property(_property: Property) -> Property:
         """
 
@@ -183,6 +198,20 @@ class CompaniesController:
             properties: list[PropertyORM] = session.query(PropertyORM).filter(
                 PropertyORM.company_id == company_id).all()
             return [Property(**_prop.to_dict()) for _prop in properties]
+
+    @staticmethod
+    @error_handler
+    async def get_bank_accounts(company_id: str) -> list[BusinessBankAccount]:
+        """
+
+        :param company_id:
+        :return:
+        """
+        with Session() as session:
+            bank_accounts: list[BankAccountORM] = session.query(BankAccountORM).filter(
+                BankAccountORM.company_id == company_id).all()
+
+            return [BusinessBankAccount(**account.to_dict()) for account in bank_accounts]
 
     @staticmethod
     @error_handler

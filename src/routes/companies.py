@@ -1,4 +1,7 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
+
+from src.database.models.properties import Property
+from src.database.models.bank_accounts import BusinessBankAccount
 from src.authentication import login_required
 from src.database.models.users import User
 from src.database.models.companies import Company
@@ -13,9 +16,11 @@ companies_route = Blueprint('companies', __name__)
 async def get_companies(user: User):
     user_data = user.dict()
     companies_controller = CompaniesController()
-    companies = await companies_controller.get_user_companies(user_id=user.user_id)
+    companies: list[Company] = await companies_controller.get_user_companies(user_id=user.user_id)
+    companies_dict = [company.dict() for company in companies if company] if isinstance(companies, list) else []
+
     context = dict(user=user_data,
-                   companies=[company.dict() for company in companies])
+                   companies= companies_dict)
 
     return render_template('companies/companies.html', **context)
 
@@ -25,11 +30,17 @@ async def get_companies(user: User):
 async def get_company(user: User, company_id: str):
     user_data = user.dict()
     companies_controller = CompaniesController()
-    company = await companies_controller.get_company(company_id=company_id, user_id=user.user_id)
-    properties = await companies_controller.get_properties(company_id=company_id)
+    company: Company = await companies_controller.get_company(company_id=company_id, user_id=user.user_id)
+    properties: list[Property] = await companies_controller.get_properties(company_id=company_id)
+
+    bank_accounts: list[BusinessBankAccount] = await companies_controller.get_bank_accounts(company_id=company_id)
+    properties_dict = [prop.dict() for prop in properties if prop] if isinstance(properties, list) else []
+    bank_accounts_dicts = [account.dict() for account in bank_accounts if account] if isinstance(bank_accounts, list) else []
+
     context = dict(user=user_data,
                    company=company.dict(),
-                   properties=[prop.dict() for prop in properties])
+                   properties=properties_dict,
+                   bank_accounts=bank_accounts_dicts)
 
     return render_template('companies/company.html', **context)
 
@@ -60,7 +71,13 @@ async def do_create_company(user: User):
 @companies_route.post('/admin/company/add-bank-account/<string:company_id>')
 @login_required
 async def do_add_bank_account(user: User, company_id: str):
-    bank_account_details = request.form
+    bank_account_details: BusinessBankAccount = BusinessBankAccount(**request.form)
     print(bank_account_details)
+    if company_id == bank_account_details.company_id:
+        flash(message='Ounch That one hurt ', category="danger")
+        return redirect(url_for('home.get_home'))
+    companies_controller = CompaniesController()
+    _ = await companies_controller.update_bank_account(account_details=bank_account_details)
+
     flash(message="successfully updated company bank account details", category="success")
     return redirect(url_for('companies.get_company', company_id=company_id))
