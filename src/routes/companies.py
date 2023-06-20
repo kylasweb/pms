@@ -20,7 +20,7 @@ async def get_companies(user: User):
     companies_dict = [company.dict() for company in companies if company] if isinstance(companies, list) else []
 
     context = dict(user=user_data,
-                   companies= companies_dict)
+                   companies=companies_dict)
 
     return render_template('companies/companies.html', **context)
 
