@@ -55,3 +55,12 @@ async def do_create_company(user: User):
     _message = f"Company {_company_data.company_name} Added Successfully"
     flash(message=_message, category="success")
     return redirect(url_for('companies.get_companies'))
+
+
+@companies_route.post('/admin/company/add-bank-account/<string:company_id>')
+@login_required
+async def do_add_bank_account(user: User, company_id: str):
+    bank_account_details = request.form
+    print(bank_account_details)
+    flash(message="successfully updated company bank account details", category="success")
+    return redirect(url_for('companies.get_company', company_id=company_id))

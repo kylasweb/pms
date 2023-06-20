@@ -30,6 +30,17 @@
                     <ul class="list-group">
                         <li class="list-group-item"><strong>Contact Number:</strong> {{ company.contact_number }}</li>
                         <li class="list-group-item"><strong>Website:</strong> <a href="{{ company.website }}" class="alert-link">{{ company.website }}</a></li>
+                        <li class="list-group-item">
+                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bankAccountModal">
+                                <span class="ti-wallet"></span> Bank Account
+                            </button>
+                        </li>
+                        <div class="alert alert-primary alert-dismissible fade show">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                          <strong>Bank Account!</strong> You can add the bank account details for the company by clicking on the "Bank Account" button.
+                            This will allow you to enter the necessary information for managing financial transactions.
+                        </div>
+
                     </ul>
                 </div>
             </div>
@@ -83,4 +94,52 @@
             </div>
         </div>
     </div>
+<div class="modal fade" id="bankAccountModal" tabindex="-1" role="dialog" aria-labelledby="bankAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bankAccountModalLabel">Add Bank Account Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ url_for('companies.do_add_bank_account', company_id=company.company_id) }}" method="POST" enctype="application/x-www-form-urlencoded">
+            <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="bank_name">Bank Name</label>
+                        <input type="text" class="form-control" id="bank_name" name="bank_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="account_number">Account Number</label>
+                        <input type="text" class="form-control" id="account_number" name="account_number">
+                    </div>
+                    <div class="form-group">
+                        <label for="account_holder">Account Holder Name</label>
+                        <input type="text" class="form-control" id="account_holder" name="account_holder">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="branch">Branch</label>
+                        <input type="text" class="form-control" id="branch" name="branch">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="account_type">Account Type</label>
+                        <select class="form-control" id="account_type" name="account_type">
+                            <option value="savings">Savings</option>
+                            <option value="current">Current</option>
+                            <option value="cheque">Cheque</option>
+                        </select>
+                    </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-danger" data-dismiss="modal"><i class="ti-close"> </i> Close</button>
+                <button type="submit" class="btn btn-primary"><i class="ti-save"> </i> Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
