@@ -9,9 +9,9 @@ from src.database.models.users import User
 from src.database.models.companies import Company
 from src.controller.companies import CompaniesController
 
-
 companies_route = Blueprint('companies', __name__)
 companies_logger = init_logger('companies_logger')
+
 
 @companies_route.get('/admin/companies')
 @login_required
@@ -37,7 +37,8 @@ async def get_company(user: User, company_id: str):
 
     bank_accounts: list[BusinessBankAccount] = await companies_controller.get_bank_accounts(company_id=company_id)
     properties_dict = [prop.dict() for prop in properties if prop] if isinstance(properties, list) else []
-    bank_accounts_dicts = [account.dict() for account in bank_accounts if account] if isinstance(bank_accounts, list) else []
+    bank_accounts_dicts = [account.dict() for account in bank_accounts if account] if isinstance(bank_accounts,
+                                                                                                 list) else []
 
     context = dict(user=user_data,
                    company=company.dict(),
@@ -59,7 +60,6 @@ async def get_create_company(user: User):
 @companies_route.post('/admin/create-company')
 @login_required
 async def do_create_company(user: User):
-
     form_data = request.form
     try:
         company_data = Company(**form_data)
