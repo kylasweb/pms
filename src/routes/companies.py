@@ -52,4 +52,3 @@ async def do_create_company(user: User):
     _message = f"Company {_company_data.company_name} Added Successfully"
     flash(message=_message, category="success")
     return redirect(url_for('companies.get_companies'))
-

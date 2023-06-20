@@ -1,8 +1,19 @@
+import socket
 from pydantic import BaseSettings, Field
 
 
-class MySQLSettings(BaseSettings):
+class CloudFlareSettings(BaseSettings):
+    EMAIL: str = Field(..., env="CLOUDFLARE_EMAIL")
+    TOKEN: str = Field(..., env="CLOUDFLARE_TOKEN")
+    X_CLIENT_SECRET_TOKEN: str = Field(..., env="CLIENT_SECRET")
 
+    class Config:
+        case_sensitive = True
+        env_file = '.env.development'
+        env_file_encoding = 'utf-8'
+
+
+class MySQLSettings(BaseSettings):
     PRODUCTION_DB: str = Field(..., env="production_sql_db")
     DEVELOPMENT_DB: str = Field(..., env="dev_sql_db")
 
@@ -11,9 +22,23 @@ class MySQLSettings(BaseSettings):
         env_file_encoding = 'utf-8'
 
 
+class Logging(BaseSettings):
+    filename: str = Field(default="rental.logs")
+
+    class Config:
+        env_file = '.env.development'
+        env_file_encoding = 'utf-8'
+
+
 class Settings(BaseSettings):
-    SECRET_KEY: str = Field(default="abs")
+    APP_NAME: str = Field(default='rental and property manager')
+    SECRET_KEY: str = Field(..., env="SECRET_KEY")
+    CLIENT_SECRET: str = Field(..., env="CLIENT_SECRET")
     MYSQL_SETTINGS: MySQLSettings = MySQLSettings()
+    CLOUDFLARE_SETTINGS: CloudFlareSettings = CloudFlareSettings()
+    DEVELOPMENT_SERVER_NAME: str = Field(default="DESKTOP-T9V7F59")
+    LOGGING: Logging = Logging()
+    HOST_ADDRESSES: str = Field(..., env='HOST_ADDRESSES')
 
     class Config:
         env_file = '.env.development'
@@ -26,3 +51,7 @@ def config_instance() -> Settings:
     :return:
     """
     return Settings()
+
+
+def is_development():
+    return socket.gethostname() == config_instance().DEVELOPMENT_SERVER_NAME

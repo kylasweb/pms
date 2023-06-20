@@ -1,11 +1,11 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
-
-
+from src.firewall import Firewall
 from src.utils import template_folder, static_folder
 
 bcrypt = Bcrypt()
 
+firewall = Firewall()
 
 def bootstrapper():
     from src.database.sql.address import AddressORM
@@ -23,6 +23,7 @@ def bootstrapper():
     PropertyORM.create_if_not_table()
     UnitORM.create_if_not_table()
 
+
 def create_app(config):
     app: Flask = Flask(__name__)
 
@@ -31,6 +32,9 @@ def create_app(config):
     app.config['SECRET_KEY'] = config.SECRET_KEY
     bcrypt.init_app(app=app)
     with app.app_context():
+
+        firewall.init_app(app=app)
+
         from src.routes.home import home_route
         from src.routes.companies import companies_route
         from src.routes.buildings import buildings_route
@@ -40,6 +44,7 @@ def create_app(config):
         from src.routes.invoices import invoices_route
         from src.routes.statements import statements_route
         from src.routes.auth import auth_route
+
 
         app.register_blueprint(home_route)
         app.register_blueprint(companies_route)
