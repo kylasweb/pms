@@ -64,6 +64,8 @@
 </div>
     <div class="card-footer">
         <button class="btn btn-sm btn-primary"><i class="ti-save"> </i>  Update</button>
-        <button type="reset" class="btn btn-sm btn-danger" onclick="location.href='{{ url_for('buildings.get_building', building_id=property.property_id) }}'"><i class="ti-close"> </i> Cancel</button>
+
+        <a href="{{ url_for('buildings.get_building', building_id=property.property_id) }}" class="btn btn-sm btn-danger">
+        <i class="ti-close"></i> Cancel </a>
     </div>
 </form>
