@@ -113,7 +113,8 @@ class Firewall:
             and both request host and header matches
         """
         header_host = request.headers.get('Host')
-
+        self._logger.info(f'Host is : {header_host}')
+        self._logger.info(f'allowed hosts : {self.allowed_hosts}')
         if header_host.casefold() != request.host.casefold():
             abort(401, 'Bad Host Header')
         if request.host not in self.allowed_hosts:
