@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
+from pydantic import ValidationError
 
+from src.logger import init_logger
 from src.database.models.properties import Property
 from src.database.models.bank_accounts import BusinessBankAccount
 from src.authentication import login_required
@@ -9,7 +11,7 @@ from src.controller.companies import CompaniesController
 
 
 companies_route = Blueprint('companies', __name__)
-
+companies_logger = init_logger('companies_logger')
 
 @companies_route.get('/admin/companies')
 @login_required
@@ -59,25 +61,35 @@ async def get_create_company(user: User):
 async def do_create_company(user: User):
 
     form_data = request.form
-    company_data = Company(**form_data)
-    companies_controller = CompaniesController()
-    _company_data = await companies_controller.create_company(company=company_data, user=user)
+    try:
+        company_data = Company(**form_data)
+        companies_controller = CompaniesController()
+        _company_data = await companies_controller.create_company(company=company_data, user=user)
 
-    _message = f"Company {_company_data.company_name} Added Successfully"
-    flash(message=_message, category="success")
+        _message = f"Company {_company_data.company_name} Added Successfully"
+        flash(message=_message, category="success")
+    except ValidationError as e:
+        companies_logger.error(str(e))
+        flash(message="Error creating Company please fill in all required fields", category='danger')
+
     return redirect(url_for('companies.get_companies'))
 
 
 @companies_route.post('/admin/company/add-bank-account/<string:company_id>')
 @login_required
 async def do_add_bank_account(user: User, company_id: str):
-    bank_account_details: BusinessBankAccount = BusinessBankAccount(**request.form)
-    print(bank_account_details)
-    if company_id == bank_account_details.company_id:
-        flash(message='Ounch That one hurt ', category="danger")
-        return redirect(url_for('home.get_home'))
-    companies_controller = CompaniesController()
-    _ = await companies_controller.update_bank_account(account_details=bank_account_details)
+    try:
+        bank_account_details: BusinessBankAccount = BusinessBankAccount(**request.form)
+        if company_id == bank_account_details.company_id:
+            flash(message='Ounch That one hurt ', category="danger")
+            return redirect(url_for('home.get_home'))
+        companies_controller = CompaniesController()
+        _ = await companies_controller.update_bank_account(account_details=bank_account_details)
 
-    flash(message="successfully updated company bank account details", category="success")
+        flash(message="successfully updated company bank account details", category="success")
+
+    except ValidationError as e:
+        companies_logger.error(str(e))
+        flash(message="Error creating Bank Account please fill in all the details", category="danger")
+
     return redirect(url_for('companies.get_company', company_id=company_id))
