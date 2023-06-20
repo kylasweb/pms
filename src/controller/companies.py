@@ -246,27 +246,45 @@ class CompaniesController:
 
             return [BusinessBankAccount(**account.to_dict()) for account in bank_accounts]
 
-    @staticmethod
     @error_handler
-    async def get_property(property_id: str) -> Property:
+    async def get_property(self, user: User, property_id: str) -> Property:
         """
 
+        :param user:
         :param property_id:
         :return:
         """
         with Session() as session:
             _property: PropertyORM = session.query(PropertyORM).filter(
                 PropertyORM.property_id == property_id).first()
+
+            user_id = user.user_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=_property.company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to access the Property")
+
             return Property(**_property.to_dict())
 
-    @staticmethod
     @error_handler
-    async def get_property_units(property_id: str) -> list[Unit]:
+    async def get_property_units(self, user: User, property_id: str) -> list[Unit]:
         """
 
         :return: False
         """
         with Session() as session:
+            user_id = user.user_id
+
+            _property: PropertyORM = session.query(PropertyORM).filter(
+                PropertyORM.property_id == property_id).first()
+
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=_property.company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to access the Property")
+
             property_units: list[UnitORM] = session.query(UnitORM).filter(UnitORM.property_id == property_id).all()
             return [Unit(**prop.to_dict()) for prop in property_units]
 
@@ -280,6 +298,17 @@ class CompaniesController:
         :return:
         """
         with Session() as session:
+            user_id = user.user_id
+
+            _property: PropertyORM = session.query(PropertyORM).filter(
+                PropertyORM.property_id == property_id).first()
+
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=_property.company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to access the Property")
+
             unit: UnitORM = UnitORM(**unit_data.dict())
             session.add(unit)
             session.commit()

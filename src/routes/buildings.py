@@ -30,8 +30,8 @@ async def get_building(user: User, building_id: str):
     """
     user_data = user.dict()
     company_controller = CompaniesController()
-    building_property: Property = await company_controller.get_property(property_id=building_id)
-    property_units: list[Unit] = await company_controller.get_property_units(property_id=building_id)
+    building_property: Property = await company_controller.get_property(user=user, property_id=building_id)
+    property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
     context = dict(user=user_data,
                    property=building_property.dict(),
                    property_editor=False,
@@ -72,9 +72,9 @@ async def do_add_building(user: User, company_id: str):
 async def edit_building(user: User, building_id: str):
     user_data = user.dict()
     company_controller = CompaniesController()
-    building: Property = await company_controller.get_property(property_id=building_id)
+    building: Property = await company_controller.get_property(user=user, property_id=building_id)
 
-    property_units: list[Unit] = await company_controller.get_property_units(property_id=building_id)
+    property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
     context = dict(user=user_data,
                    property_editor=True,
                    property=building.dict(),
@@ -92,7 +92,7 @@ async def do_edit_building(user: User, building_id: str):
 
     company_controller = CompaniesController()
     building: Property = await company_controller.update_property(user=user, property_details=updated_building)
-    property_units: list[Unit] = await company_controller.get_property_units(property_id=building_id)
+    property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
     context = dict(user=user_data,
                    property_editor=False,
                    property=building.dict(),

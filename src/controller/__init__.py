@@ -1,5 +1,4 @@
 import functools
-
 from flask import redirect, url_for, flash
 
 from src.logger import init_logger
