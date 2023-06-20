@@ -80,3 +80,19 @@ class AddUnit(BaseModel):
     rental_amount: int
     unit_area: int
     has_reception: bool
+
+
+class UpdateProperty(BaseModel):
+    property_id: str
+    company_id: str | None
+    name: str | None
+    property_type: str | None
+    number_of_units: int | None
+    available_units: int | None
+    amenities: str | None
+    landlord: str | None
+    maintenance_contact: str | None
+    lease_terms: str | None
+    description: str | None
+    built_year: int | None
+    parking_spots: int | None

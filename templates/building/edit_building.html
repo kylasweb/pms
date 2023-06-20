@@ -1,9 +1,68 @@
+<form class="row m-b-2" action="{{ url_for('buildings.do_edit_building', building_id=property.property_id) }}" method="POST">
+    <input type="hidden" name="property_id" value="{{ property.property_id }}" />
 
-
-{% extends "layouts/page.html" %}
-
-{% block content %}
-    <div class="card">
-        Edit a Specific Building
+<div class="card-footer col-sm-12 col-lg-6 col-md-6">
+    <div class="card-header">
+        <h3 class="card-title">Editing ...</h3>
     </div>
-{% endblock %}
+    <div class="card-body">
+
+            <div class="form-group">
+                <label class="label" for="name">Name</label>
+                <input class="form-control" type="text" name="name" value="{{ property.name }}"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="description">Description</label>
+                <textarea class="form-control" name="description" >{{ property.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label class="label" for="address">Address</label>
+                <input class="form-control" type="text" name="address" value="{{ property.address }}"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="property_type">Property Type</label>
+                <input class="form-control" type="text" name="property_type" value="{{ property.property_type }}"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="amenities">Amenities</label>
+                <input class="form-control" type="text" name="amenities" value="{{ property.amenities }}"/>
+            </div>
+            <!-- Add more fields for other property details -->
+
+    </div>
+</div>
+
+<div class="card-footer col-sm-12 col-lg-6 col-md-6">
+    <div class="card-header">
+        <h3 class="card-title">Editing ...</h3>
+    </div>
+    <div class="card-body">
+
+            <div class="form-group">
+                <label class="label" for="landlord">Name</label>
+                <input class="form-control" type="text" name="landlord" value="{{ property.landlord }}"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="maintenance_contact">Maintenance</label>
+                <input class="form-control" type="text" name="maintenance_contact" value="{{ property.maintenance_contact }}"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="lease_terms">Lease Terms</label>
+                <textarea class="form-control" type="text" name="lease_terms">{{ property.lease_terms }} </textarea>
+            </div>
+            <div class="form-group">
+                <label class="label" for="built_year">Built Year</label>
+                <input class="form-control" type="number" name="built_year" value="{{ property.built_year }}"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="parking_spots">Parking Spots</label>
+                <input class="form-control" type="number" name="parking_spots" value="{{ property.parking_spots }}"/>
+            </div>
+            <!-- Add more fields for other property details -->
+
+    </div>
+</div>
+    <div class="card-footer">
+        <button class="btn btn-sm btn-primary"><i class="ti-save"> </i>  Update</button>
+    </div>
+</form>

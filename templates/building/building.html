@@ -24,7 +24,7 @@
                 <i class="ti-desktop"> </i> Company
             </a>
 
-            <a href="#" class="btn btn-sm btn-success">
+            <a href="{{ url_for('buildings.edit_building', building_id=property.property_id) }}" class="btn btn-sm btn-success">
                 <i class="ti-desktop"> </i> Edit
             </a>
         </div>
@@ -51,6 +51,12 @@
             </ul>
         </div>
     </div>
+
+        <!-- include the building / Property Editor form here -->
+        {% if property_editor %}
+            {% include 'building/edit_building.html' %}
+        {% endif %}
+
 </div>
 
         </div>

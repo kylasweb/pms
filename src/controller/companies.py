@@ -1,6 +1,6 @@
 import uuid
 
-from src.database.models.properties import Property, Unit, AddUnit
+from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty
 from src.database.sql.properties import PropertyORM, UnitORM
 from src.database.sql import Session
 from src.database.models.users import User
@@ -150,6 +150,26 @@ class CompaniesController:
             session.add(property_orm)
             session.commit()
             return _property
+
+    @staticmethod
+    @error_handler
+    async def update_property(property_details: UpdateProperty):
+        with Session() as session:
+            original_property_orm: PropertyORM = session.query(PropertyORM).filter(
+                PropertyORM.property_id == property_details.property_id).first()
+
+            # Create a dictionary of field names and values from the property_details object
+            field_updates = {field: getattr(property_details, field) for field in property_details.__fields__}
+
+            # Update the relevant fields in original_property_orm
+            for field, value in field_updates.items():
+                if value:
+                    setattr(original_property_orm, field, value)
+
+            # Commit the changes to the database
+
+            session.commit()
+            return Property(**original_property_orm.to_dict())
 
     @staticmethod
     @error_handler
