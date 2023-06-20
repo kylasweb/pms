@@ -1,13 +1,14 @@
 {% extends "layouts/page.html" %}
 
 {% block content %}
+    <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-title">
-                    <h2 class="card-title">{{ company.company_name }}</h2>
+                    <h2 class="card-title font-weight-bold">{{ company.company_name }}</h2>
                 </div>
                 <div class="card-footer">
-                    <span class="text-info">Use the form below to create properties for this company</span>
+                    <span class="text-info font-weight-bold">Use the form below to create a Property/Building for this Company</span>
                 </div>
 
                 <div class="card-body">
@@ -15,6 +16,11 @@
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" class="form-control" required></textarea>
                     </div>
 
                     <div class="form-group">
@@ -26,16 +32,6 @@
                             <option value="Agricultural">Agricultural</option>
                             <option value="Mixed">Mixed</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="number_of_units">Number of Units:</label>
-                        <input type="number" id="number_of_units" name="number_of_units" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="available_units">Available Units:</label>
-                        <input type="number" id="available_units" name="available_units" class="form-control" required>
                     </div>
 
                     <div class="form-group">
@@ -55,12 +51,7 @@
 
                     <div class="form-group">
                         <label for="lease_terms">Lease Terms:</label>
-                        <input type="text" id="lease_terms" name="lease_terms" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea id="description" name="description" class="form-control" required></textarea>
+                        <textarea type="text" id="lease_terms" name="lease_terms" class="form-control" required> </textarea>
                     </div>
 
                     <div class="form-group">
@@ -72,10 +63,52 @@
                         <label for="parking_spots">Parking Spots:</label>
                         <input type="number" id="parking_spots" name="parking_spots" class="form-control" required>
                     </div>
-                    <button type="submit" value="Submit" class="btn btn-primary"><i class="ti-save"> </i> Add Property</button>
-                    <button type="reset" value="reset" class="btn btn-danger"><i class="ti-close"> </i> Reset</button>
+                    <button type="submit" value="Submit" class="btn btn-sm btn-primary"><i class="ti-save"> </i> Save</button>
+                    <button type="reset" value="reset" class="btn btn-sm btn-danger"><i class="ti-close"> </i> Cancel</button>
                 </form>
                 </div>
             </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Property / Building</h3>
+            </div>
+
+            <div class="card-body">
+                <h3 class="card-title"><i class="ti-info"></i> How to Add a Property</h3>
+                <div class="card-content">
+                    <p>
+                        Follow the steps below to add a new property:
+                    </p>
+                    <ol class="list-group">
+                        <li class="list-group-item"><span class="font-weight-bold">Fill in the necessary details in the form fields.</span></li>
+                        <li  class="list-group-item"><span class="font-weight-bold">Click the "Update" button to save the changes.</span></li>
+                        <li  class="list-group-item"><span class="font-weight-bold">If you want to cancel and discard the changes, click the "Cancel" button.</span></li>
+                    </ol>
+                </div>
+                <hr />
+                <div class="card-content">
+
+                    <p class="font-weight-bold text-danger">
+                        <i class="ti-wand"> </i>
+                        Please ensure that all required fields are filled in correctly to successfully add the property.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <h3 class="card-title">NOTE</h3>
+                <span class="card-content font-weight-bold font-italic">
+                    <p>Buildings are used to organize the rental units.</p>
+                    <p>Each building represents a physical structure or property that contains multiple units available for rent.</p>
+                    <p>By grouping the units into buildings, it becomes easier to manage and categorize the properties within your rental management system.</p>
+                    <p> You can assign specific details, such as the building name, address, property type, amenities, and more, to each building. </p>
+                    <p> This helps in efficiently organizing and managing your rental properties.</p>
+                </span>
+            </div>
+
+        </div>
+    </div>
     </div>
 {% endblock %}

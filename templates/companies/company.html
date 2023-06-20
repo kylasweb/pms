@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <ul class="list-group">
-                        <li class="list-group-item"><strong>Address:</strong> {{ company.address_line_1 }}</li>
+                        <li class="list-group-item"><strong>Location:</strong> {{ company.address_line_1 }}</li>
                         <li  class="list-group-item"><strong>City:</strong> {{ company.city }}</li>
                         <li  class="list-group-item"><strong>Postal Code:</strong> {{ company.postal_code }}</li>
                         <li class="list-group-item"><strong>Province:</strong> {{ company.province }}</li>
@@ -42,7 +42,7 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title"><i class="ti-folder"></i> Properties</h3>
+            <h3 class="card-title"><i class="ti-folder"></i> Properties / Buildings </h3>
             <div>
                 <a href="{{ url_for('buildings.add_building', company_id=company.company_id) }}"
                    class="btn btn-sm btn-info mr-2">

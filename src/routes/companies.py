@@ -14,8 +14,9 @@ async def get_companies(user: User):
     user_data = user.dict()
     companies_controller = CompaniesController()
     companies = await companies_controller.get_user_companies(user_id=user.user_id)
-    context = dict(user=user_data, companies=[company.dict() for company in companies])
-    # TODO load company data based on user data
+    context = dict(user=user_data,
+                   companies=[company.dict() for company in companies])
+
     return render_template('companies/companies.html', **context)
 
 
@@ -26,8 +27,10 @@ async def get_company(user: User, company_id: str):
     companies_controller = CompaniesController()
     company = await companies_controller.get_company(company_id=company_id, user_id=user.user_id)
     properties = await companies_controller.get_properties(company_id=company_id)
-    context = dict(user=user_data, company=company.dict(), properties=[prop.dict() for prop in properties])
-    # TODO load company data based on user data
+    context = dict(user=user_data,
+                   company=company.dict(),
+                   properties=[prop.dict() for prop in properties])
+
     return render_template('companies/company.html', **context)
 
 
@@ -36,7 +39,7 @@ async def get_company(user: User, company_id: str):
 async def get_create_company(user: User):
     user_data = user.dict()
     context = dict(user=user_data)
-    # TODO load company data based on user data
+
     return render_template('companies/create_company.html', **context)
 
 
