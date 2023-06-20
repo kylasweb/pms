@@ -2,22 +2,35 @@
 
 {% block content %}
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title"><i class="ti-briefcase"> </i> Company Details</h3>
+            <div>
+                <a href="{{ url_for('companies.get_companies') }}" class="btn btn-sm btn-warning mr-2 mr-md-12 mb-2 mb-md-0">
+                    <i class="ti-briefcase"></i> Companies
+                </a>
+                <a href="{{ url_for('companies.get_companies') }}" class="btn btn-sm btn-success mr-2 mr-md-12 mb-2 mb-md-0">
+                    <i class="ti-desktop"></i> Edit
+                </a>
+
+            </div>
         </div>
         <div class="card-body">
+            <h4>{{ company.company_name }}</h4>
             <div class="row">
-                <div class="col-md-6">
-                    <h4>{{ company.company_name }}</h4>
-                    <p><strong>Address:</strong> {{ company.address_line_1 }}</p>
-                    <p><strong>City:</strong> {{ company.city }}</p>
-                    <p><strong>Postal Code:</strong> {{ company.postal_code }}</p>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Address:</strong> {{ company.address_line_1 }}</li>
+                        <li  class="list-group-item"><strong>City:</strong> {{ company.city }}</li>
+                        <li  class="list-group-item"><strong>Postal Code:</strong> {{ company.postal_code }}</li>
+                        <li class="list-group-item"><strong>Province:</strong> {{ company.province }}</li>
+                        <li class="list-group-item"><strong>Country:</strong> {{ company.country }}</li>
+                    </ul>
                 </div>
-                <div class="col-md-6">
-                    <p><strong>Province:</strong> {{ company.province }}</p>
-                    <p><strong>Country:</strong> {{ company.country }}</p>
-                    <p><strong>Contact Number:</strong> {{ company.contact_number }}</p>
-                    <p><strong>Website:</strong> <a href="{{ company.website }}" class="alert-link">{{ company.website }}</a></p>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Contact Number:</strong> {{ company.contact_number }}</li>
+                        <li class="list-group-item"><strong>Website:</strong> <a href="{{ company.website }}" class="alert-link">{{ company.website }}</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -28,19 +41,25 @@
     </div>
 
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title"><i class="ti-folder"></i> Properties</h3>
+            <div>
+                <a href="{{ url_for('buildings.add_building', company_id=company.company_id) }}"
+                   class="btn btn-sm btn-info mr-2">
+                    <i class="ti-save"></i> Add Property
+                </a>
+            </div>
         </div>
         <div class="card-body col-lg-12 col-md-12">
             {% if properties %}
-                <table class="table table-responsive-lg table-responsive-md table-striped">
+                <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Property Name</th>
                             <th>Landlord</th>
-                            <th>Property Type</th>
+                            <th class="d-none d-sm-table-cell">Property Type</th>
                             <th>Total Units</th>
-                            <th>Available Units</th>
+                            <th class="d-none d-sm-table-cell">Available Units</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,9 +67,9 @@
                             <tr>
                                 <td><a href="{{ url_for('buildings.get_building', building_id=property.property_id) }}" class="text text-info font-weight-bold">{{ property.name }}</a></td>
                                 <td>{{ property.landlord }}</td>
-                                <td>{{ property.property_type }}</td>
+                                <td class="d-none d-sm-table-cell">{{ property.property_type }}</td>
                                 <td>{{ property.number_of_units }}</td>
-                                <td>{{ property.available_units }}</td>
+                                <td class="d-none d-sm-table-cell">{{ property.available_units }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -61,12 +80,6 @@
                 </div>
             {% endif %}
             <div class="card-footer">
-                <a href="{{ url_for('companies.get_companies') }}" class="btn btn-app btn-warning mr-2 mr-md-12 mb-2 mb-md-0">
-                    <i class="ti-briefcase"></i> Companies
-                </a>
-                <a href="{{ url_for('buildings.add_building', company_id=company.company_id) }}" class="btn btn-app btn-info">
-                    <i class="ti-save"></i> Add Property
-                </a>
             </div>
         </div>
     </div>

@@ -16,54 +16,67 @@
     <div class="tab-content">
         <!-- Property Details -->
         <div id="property-details" class="tab-pane fade show active">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Property Details : <strong>{{ property.name }}</strong></h3>
-                </div>
-                <div class="row">
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title"><strong>{{ property.name }}</strong></h3>
+        <div>
+            <a href="{{ url_for('companies.get_company', company_id=property.company_id) }}" class="btn btn-sm btn-warning">
+                <i class="ti-desktop"> </i> Company
+            </a>
 
-                <div class="card-body col-sm-12 col-lg-6 col-md-6">
-                    <p><strong>Name:</strong> {{ property.name }}</p>
-                    <p><strong>Address:</strong> {{ property.address }}</p>
-                    <p><strong>Property Type:</strong> {{ property.property_type }}</p>
-                    <p><strong>Number of Units:</strong> {{ property.number_of_units }}</p>
-                    <p><strong>Available Units:</strong> {{ property.available_units }}</p>
-                    <p><strong>Amenities:</strong> {{ property.amenities }}</p>
-                </div>
-                <div class="card-body col-sm-12 col-lg-6 col-md-6">
-                    <p><strong>Landlord:</strong> {{ property.landlord }}</p>
-                    <p><strong>Maintenance Contact:</strong> {{ property.maintenance_contact }}</p>
-                    <p><strong>Lease Terms:</strong> {{ property.lease_terms }}</p>
-                    <p><strong>Description:</strong> {{ property.description }}</p>
-                    <p><strong>Built Year:</strong> {{ property.built_year }}</p>
-                    <p><strong>Parking Spots:</strong> {{ property.parking_spots }}</p>
-                </div>
-                </div>
-            </div>
+            <a href="#" class="btn btn-sm btn-success">
+                <i class="ti-desktop"> </i> Edit
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body col-sm-12 col-lg-6 col-md-6">
+            <ul class="list-group">
+            <li class="list-group-item"><strong>Name:</strong> <span class="text-right">{{ property.name }}</span></li>
+            <li class="list-group-item"><strong>Address:</strong> <span class="text-right">{{ property.address }}</span></li>
+            <li class="list-group-item"><strong>Property Type:</strong> <span class="text-right">{{ property.property_type }}</span></li>
+            <li class="list-group-item"><strong>Number of Units:</strong> <span class="text-right">{{ property.number_of_units }}</span></li>
+            <li class="list-group-item"><strong>Available Units:</strong> <span class="text-right">{{ property.available_units }}</span></li>
+            <li class="list-group-item"><strong>Amenities:</strong> <span class="text-right">{{ property.amenities }}</span></li>
+            </ul>
+        </div>
+        <div class="card-body col-sm-12 col-lg-6 col-md-6">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Landlord:</strong> <span class="text-right">{{ property.landlord }}</span></li>
+            <li class="list-group-item"><strong>Maintenance Contact:</strong> <span class="text-right">{{ property.maintenance_contact }}</span></li>
+            <li class="list-group-item"><strong>Lease Terms:</strong> <span class="text-right">{{ property.lease_terms }}</span></li>
+            <li class="list-group-item"><strong>Description:</strong> <span class="text-right">{{ property.description }}</span></li>
+            <li class="list-group-item"><strong>Built Year:</strong> <span class="text-right">{{ property.built_year }}</span></li>
+            <li class="list-group-item"><strong>Parking Spots:</strong> <span class="text-right">{{ property.parking_spots }}</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
         </div>
 
         <!-- Units List -->
         <div id="units-list" class="tab-pane fade">
         <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title">Units List - Property Name : <span class="font-weight-bold">{{ property.name }}</span></h3>
-                    <div>
-                        <button id="add-unit-btn" class="btn btn-sm btn-primary mr-2"><i class="ti-folder"> </i> Open Unit Editor</button>
-                    </div>
+            <h3 class="card-title"><span class="font-weight-bold">{{ property.name }}</span></h3>
+            <div>
+                <button id="add-unit-btn" class="btn btn-sm btn-primary mr-2"><i class="ti-save"> </i> Add</button>
+            </div>
         </div>
         </div>
         <div class="card-body ">
-            <table class="table table-striped table-bordered table-responsive-sm">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>Unit Number</th>
                         <th>Is Occupied</th>
                         <th>Rental Amount</th>
-                        <th>Tenant ID</th>
-                        <th>Lease Start Date</th>
-                        <th>Lease End Date</th>
-                        <th>Unit Area</th>
-                        <th>Has Reception</th>
+                        <th class="d-none d-sm-table-cell">Tenant ID</th>
+                        <th class="d-none d-sm-table-cell">Lease Start Date</th>
+                        <th class="d-none d-sm-table-cell">Lease End Date</th>
+                        <th class="d-none d-sm-table-cell">Unit Area</th>
+                        <th class="d-none d-sm-table-cell">Has Reception</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,11 +85,11 @@
                             <td>{{ unit.unit_id }}</td>
                             <td>{{ unit.is_occupied }}</td>
                             <td>{{ unit.rental_amount }}</td>
-                            <td>{{ unit.tenant_id }}</td>
-                            <td>{{ unit.lease_start_date }}</td>
-                            <td>{{ unit.lease_end_date }}</td>
-                            <td>{{ unit.unit_area }}</td>
-                            <td>{{ unit.has_reception }}</td>
+                            <td class="d-none d-sm-table-cell">{{ unit.tenant_id }}</td>
+                            <td class="d-none d-sm-table-cell">{{ unit.lease_start_date }}</td>
+                            <td class="d-none d-sm-table-cell">{{ unit.lease_end_date }}</td>
+                            <td class="d-none d-sm-table-cell">{{ unit.unit_area }}</td>
+                            <td class="d-none d-sm-table-cell">{{ unit.has_reception }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -111,7 +124,7 @@
                             <label for="has_reception"><strong>Has Reception</strong>
                             <input class="form-control" type="checkbox" name="has_reception"></label>
                         </div>
-                        <button type="submit" class="btn btn-primary"><i class="ti-save"> </i> Add Unit</button>
+                        <button type="submit" class="btn btn-primary"><i class="ti-save"> </i> Save</button>
                     </form>
                 </div>
             </div>
