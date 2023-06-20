@@ -95,7 +95,7 @@ class Firewall:
             app.before_request(self.is_host_valid)
             app.before_request(self.is_edge_ip_allowed)
             app.before_request(self.check_if_request_malicious)
-            # app.before_request(self.verify_client_secret_token)
+            app.before_request(self.verify_client_secret_token)
 
             # Setting up Security headers for outgoing requests
             app.after_request(self.add_security_headers)
