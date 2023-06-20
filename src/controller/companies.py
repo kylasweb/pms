@@ -10,6 +10,7 @@ from src.database.models.companies import Company
 from src.database.sql.companies import CompanyORM, UserCompanyORM
 from src.controller import error_handler, UnauthorizedError
 
+
 class CompaniesController:
     def __init__(self):
         pass

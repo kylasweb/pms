@@ -7,7 +7,6 @@ from src.database.models.companies import Company
 from src.database.models.users import User
 from src.authentication import login_required
 
-
 buildings_route = Blueprint('buildings', __name__)
 
 
