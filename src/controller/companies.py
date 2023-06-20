@@ -86,24 +86,17 @@ class CompaniesController:
     @staticmethod
     @error_handler
     async def get_user_companies(user_id: str) -> list[Company]:
-        """
-            returns a list of user companies
-        :param user_id:
-        :return:
-        """
         with Session() as session:
             user_company_list = session.query(UserCompanyORM).filter(UserCompanyORM.user_id == user_id).all()
-            _companies = []
-            for user_company in user_company_list:
-                _companies.append(
-                    session.query(CompanyORM).filter(CompanyORM.company_id == user_company.company_id).first())
+
             response = []
-            if _companies:
-                for _company in _companies:
-                    response.append(Company(**_company.to_dict()))
-            else:
-                for _company in companies_temp_data:
-                    response.append(Company(**_company))
+            for user_company in user_company_list:
+                if isinstance(user_company, UserCompanyORM):
+                    company_orm = session.query(CompanyORM).filter(
+                        CompanyORM.company_id == user_company.company_id).first()
+                    if isinstance(company_orm, CompanyORM):
+                        response.append(Company(**company_orm.to_dict()))
+
             return response
 
     @staticmethod
