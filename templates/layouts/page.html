@@ -30,9 +30,12 @@
     <link href="{{ url_for('static', filename='css/lib/menubar/sidebar.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/lib/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/lib/helper.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"></head>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 {% endblock %}
+{% block custom_css %}
 
+{% endblock %}
+</head>
 <body>
 {% include "layouts/sidebar.html" %}
 {% include "layouts/header.html" %}

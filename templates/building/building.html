@@ -1,4 +1,7 @@
 {% extends "layouts/page.html" %}
+{% block custom_css %}
+    <link href="{{ url_for('static', filename='css/property/unit.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
     <ul class="nav nav-tabs">
@@ -80,7 +83,8 @@
         <h3 class="card-title">Add Units</h3>
         <span><strong>Property Name:</strong> <em>{{ property.name }}</em></span>
     </div>
-    <div id="add-unit-container" style="display: none;">
+
+    <div id="add-unit-container"  class="add-unit-container hidden">
         <div class="card-body col-lg-6 col-md-6 col-sm-12">
             <form action="{{ url_for('buildings.do_add_unit', building_id=property.property_id) }}" method="post">
                 <!-- Add units form fields -->
