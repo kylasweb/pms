@@ -57,6 +57,17 @@ class UnitORM(Base):
     unit_area: int = Column(Integer)
     has_reception: bool = Column(Boolean)
 
+    def to_dict(self) -> dict[str, str]:
+        """
+        Convert the UnitORM object to a dictionary.
+        :return: Dictionary representation of the object.
+        """
+        return {'unit_id': self.unit_id, 'property_id': self.property_id, 'tenant_id': self.tenant_id,
+                'is_occupied': self.is_occupied, 'rental_amount': self.rental_amount, 'unit_area': self.unit_area,
+                'has_reception': self.has_reception,
+                'lease_start_date': self.lease_start_date.isoformat() if self.lease_start_date else None,
+                'lease_end_date': self.lease_end_date.isoformat() if self.lease_end_date else None}
+
     @classmethod
     def create_if_not_table(cls):
         if not inspect(engine).has_table(cls.__tablename__):

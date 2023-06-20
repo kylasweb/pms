@@ -1,9 +1,140 @@
-
-
 {% extends "layouts/page.html" %}
 
 {% block content %}
-    <div class="card">
-        Building Data
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#property-details"><strong>Property Details</strong></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#units-list"><strong>Units List</strong></a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Property Details -->
+        <div id="property-details" class="tab-pane fade show active">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Property Details : <strong>{{ property.name }}</strong></h3>
+                </div>
+                <div class="row">
+
+                <div class="card-body col-sm-12 col-lg-6 col-md-6">
+                    <p><strong>Name:</strong> {{ property.name }}</p>
+                    <p><strong>Address:</strong> {{ property.address }}</p>
+                    <p><strong>Property Type:</strong> {{ property.property_type }}</p>
+                    <p><strong>Number of Units:</strong> {{ property.number_of_units }}</p>
+                    <p><strong>Available Units:</strong> {{ property.available_units }}</p>
+                    <p><strong>Amenities:</strong> {{ property.amenities }}</p>
+                </div>
+                <div class="card-body col-sm-12 col-lg-6 col-md-6">
+                    <p><strong>Landlord:</strong> {{ property.landlord }}</p>
+                    <p><strong>Maintenance Contact:</strong> {{ property.maintenance_contact }}</p>
+                    <p><strong>Lease Terms:</strong> {{ property.lease_terms }}</p>
+                    <p><strong>Description:</strong> {{ property.description }}</p>
+                    <p><strong>Built Year:</strong> {{ property.built_year }}</p>
+                    <p><strong>Parking Spots:</strong> {{ property.parking_spots }}</p>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Units List -->
+        <div id="units-list" class="tab-pane fade">
+        <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Units List - Property Name : <span class="font-weight-bold">{{ property.name }}</span></h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th>Unit Number</th>
+                        <th>Is Occupied</th>
+                        <th>Rental Amount</th>
+                        <th>Tenant ID</th>
+                        <th>Lease Start Date</th>
+                        <th>Lease End Date</th>
+                        <th>Unit Area</th>
+                        <th>Has Reception</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for unit in units %}
+                        <tr>
+                            <td>{{ unit.unit_id }}</td>
+                            <td>{{ unit.is_occupied }}</td>
+                            <td>{{ unit.rental_amount }}</td>
+                            <td>{{ unit.tenant_id }}</td>
+                            <td>{{ unit.lease_start_date }}</td>
+                            <td>{{ unit.lease_end_date }}</td>
+                            <td>{{ unit.unit_area }}</td>
+                            <td>{{ unit.has_reception }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Add Units</h3>
+        <span><strong>Property Name:</strong> <em>{{ property.name }}</em></span>
     </div>
+    <div id="add-unit-container" style="display: none;">
+        <div class="card-body col-lg-6 col-md-6 col-sm-12">
+            <form action="{{ url_for('buildings.do_add_unit', building_id=property.property_id) }}" method="post">
+                <!-- Add units form fields -->
+                <input type="hidden" name="property_id" value="{{ property.property_id }}">
+                <div class="form-group">
+                    <label for="unit_id">Unit Number:</label>
+                    <input class="form-control" type="text" name="unit_id">
+                </div>
+
+                <div class="form-group">
+                    <label for="rental_amount">Rental Amount:</label>
+                    <input class="form-control" type="number" name="rental_amount">
+                </div>
+
+                <div class="form-group">
+                    <label for="unit_area">Unit Area:</label>
+                    <input class="form-control" type="number" name="unit_area">
+                </div>
+                <div class="form-group">
+                    <label for="has_reception"><strong>Has Reception</strong>
+                    <input class="form-control" type="checkbox" name="has_reception"></label>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="ti-save"> </i> Add Unit</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button id="add-unit-btn" class="btn btn-primary"><i class="ti-folder"></i> Open Unit Editor</button>
+    </div>
+</div>
+
+
+
+        </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var container = document.getElementById("add-unit-container");
+    var button = document.getElementById("add-unit-btn");
+
+    button.addEventListener("click", function() {
+        if (container.style.display === "none") {
+            container.style.display = "block";
+            button.innerHTML = "<i class='ti-close'> </i> Close Editor";
+            button.className = "btn btn-danger"
+        } else {
+            container.style.display = "none";
+            button.innerHTML = "<i class='ti-folder'></i> Open Unit Editor";
+            button.className = "btn btn-primary";
+        }
+    });
+</script>
+
 {% endblock %}

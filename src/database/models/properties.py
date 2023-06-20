@@ -1,6 +1,6 @@
 from datetime import date
 import uuid
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import List
 from src.database.models.address import Address
 
@@ -39,6 +39,7 @@ class Property(BaseModel):
     parking_spots: int
 
 
+# noinspection PyNestedDecorators
 class Unit(BaseModel):
     """
     Represents a unit in a property.
@@ -56,11 +57,26 @@ class Unit(BaseModel):
     """
 
     property_id: str
-    unit_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unit ID")
-    is_occupied: bool
+    unit_id: str
+    is_occupied: bool = Field(default=False)
     rental_amount: int
-    tenant_id: str
-    lease_start_date: date
-    lease_end_date: date
+    tenant_id: str | None = Field(default=None)
+    lease_start_date: date | None = Field(default=None)
+    lease_end_date: date | None = Field(default=None)
+    unit_area: int
+    has_reception: bool
+
+    @validator('is_occupied', pre=True)
+    @classmethod
+    def check_is_occupied(cls, value):
+        if value is None:
+            return False
+        return value
+
+
+class AddUnit(BaseModel):
+    property_id: str
+    unit_id: str
+    rental_amount: int
     unit_area: int
     has_reception: bool

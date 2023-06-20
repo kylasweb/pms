@@ -1,7 +1,7 @@
 import uuid
 
-from src.database.models.properties import Property
-from src.database.sql.properties import PropertyORM
+from src.database.models.properties import Property, Unit, AddUnit
+from src.database.sql.properties import PropertyORM, UnitORM
 from src.database.sql import Session
 from src.database.models.users import User
 from src.database.models.companies import Company
@@ -163,3 +163,42 @@ class CompaniesController:
             properties: list[PropertyORM] = session.query(PropertyORM).filter(
                 PropertyORM.company_id == company_id).all()
             return [Property(**_prop.to_dict()) for _prop in properties]
+
+    @staticmethod
+    @error_handler
+    async def get_property(property_id: str) -> Property:
+        """
+
+        :param property_id:
+        :return:
+        """
+        with Session() as session:
+            _property: PropertyORM = session.query(PropertyORM).filter(
+                PropertyORM.property_id == property_id).first()
+            return Property(**_property.to_dict())
+
+    @staticmethod
+    @error_handler
+    async def get_property_units(property_id: str) -> list[Unit]:
+        """
+
+        :return: False
+        """
+        with Session() as session:
+            property_units: list[UnitORM] = session.query(UnitORM).filter(UnitORM.property_id == property_id).all()
+            return [Unit(**prop.to_dict()) for prop in property_units]
+
+    @staticmethod
+    @error_handler
+    async def add_unit(unit_data: AddUnit, property_id: str) -> AddUnit:
+        """
+
+        :param property_id:
+        :param unit_data:
+        :return:
+        """
+        with Session() as session:
+            unit: UnitORM = UnitORM(**unit_data.dict())
+            session.add(unit)
+            session.commit()
+            return unit_data
