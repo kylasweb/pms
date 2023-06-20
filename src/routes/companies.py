@@ -41,7 +41,7 @@ async def get_company(user: User, company_id: str):
                                                                                                  list) else []
 
     context = dict(user=user_data,
-                   company=company.dict(),
+                   company=company.dict() if isinstance(company, Company) else {},
                    properties=properties_dict,
                    bank_accounts=bank_accounts_dicts)
 

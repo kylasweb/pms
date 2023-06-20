@@ -83,12 +83,12 @@ class CompaniesController:
     def __init__(self):
         pass
 
-    @staticmethod
     @error_handler
-    async def is_company_member(user_id: str, company_id: str, session):
+    async def is_company_member(self, user_id: str, company_id: str, session):
         result: UserCompanyORM = session.query(UserCompanyORM).filter(
             UserCompanyORM.user_id == user_id, UserCompanyORM.company_id == company_id).first()
-        return isinstance(result, UserCompanyORM)
+        return isinstance(result, UserCompanyORM) and (result.company_id == company_id) and (result.user_id == user_id)
+
 
     @staticmethod
     @error_handler
@@ -108,19 +108,15 @@ class CompaniesController:
 
     @error_handler
     async def get_company(self, company_id: str, user_id: str) -> Company | None:
-        """
-
-        :param company_id:
-        :param user_id:
-        :return:
-        """
         with Session() as session:
-            is_company_member: bool = await self.is_company_member(company_id=company_id,
-                                                                   user_id=user_id, session=session)
-            if not is_company_member:
-                return None
+            _is_company_member: bool = await self.is_company_member(company_id=company_id,
+                                                                    user_id=user_id,
+                                                                    session=session)
+            if not _is_company_member:
+                raise UnauthorizedError('You are not authorized to access this company')
+
             company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
-        return Company(**company_orm.to_dict())
+            return Company(**company_orm.to_dict()) if company_orm else None
 
     @staticmethod
     @error_handler
@@ -129,6 +125,7 @@ class CompaniesController:
         # For example, you can save the company data in a database
         # and associate it with the user
         with Session() as session:
+            # TODO Check if payment is already made
             company_orm: CompanyORM = CompanyORM(**company.dict())
             response = Company(**company_orm.to_dict())
             user_company_data = dict(id=str(uuid.uuid4()), company_id=company_orm.company_id, user_id=user.user_id)
@@ -287,7 +284,6 @@ class CompaniesController:
 
             property_units: list[UnitORM] = session.query(UnitORM).filter(UnitORM.property_id == property_id).all()
             return [Unit(**prop.to_dict()) for prop in property_units]
-
 
     @error_handler
     async def add_unit(self, user: User, unit_data: AddUnit, property_id: str) -> AddUnit:
