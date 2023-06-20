@@ -1,8 +1,18 @@
 import functools
+
+from flask import redirect, url_for, flash
+
 from src.logger import init_logger
 from sqlalchemy.exc import OperationalError, ProgrammingError, IntegrityError
 
 error_logger = init_logger("error_logger")
+
+
+class UnauthorizedError(Exception):
+    def __init__(self, description: str = "You are not Authorized to access that resource", code: int = 401):
+        self.description = description
+        self.code = code
+        super().__init__(self.description)
 
 
 def error_handler(view_func):
@@ -11,8 +21,11 @@ def error_handler(view_func):
         try:
             return await view_func(*args, **kwargs)
         except (OperationalError, ProgrammingError, IntegrityError, AttributeError) as e:
-            # Handle specific MySQL errors here
             error_logger.error(str(e))
             pass
+        except UnauthorizedError as e:
+            error_logger.error(str(e))
+            flash(message=e.description, category='danger')
+            return redirect(url_for('home.get_home'))
 
     return wrapped_method

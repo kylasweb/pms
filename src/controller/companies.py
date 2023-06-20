@@ -8,7 +8,7 @@ from src.database.sql import Session
 from src.database.models.users import User
 from src.database.models.companies import Company
 from src.database.sql.companies import CompanyORM, UserCompanyORM
-from src.controller import error_handler
+from src.controller import error_handler, UnauthorizedError
 
 companies_temp_data = [
     {
@@ -85,6 +85,13 @@ class CompaniesController:
 
     @staticmethod
     @error_handler
+    async def is_company_member(user_id: str, company_id: str, session):
+        result: UserCompanyORM = session.query(UserCompanyORM).filter(
+            UserCompanyORM.user_id == user_id, UserCompanyORM.company_id == company_id).first()
+        return isinstance(result, UserCompanyORM)
+
+    @staticmethod
+    @error_handler
     async def get_user_companies(user_id: str) -> list[Company]:
         with Session() as session:
             user_company_list = session.query(UserCompanyORM).filter(UserCompanyORM.user_id == user_id).all()
@@ -99,9 +106,8 @@ class CompaniesController:
 
             return response
 
-    @staticmethod
     @error_handler
-    async def get_company(company_id: str, user_id: str) -> Company | None:
+    async def get_company(self, company_id: str, user_id: str) -> Company | None:
         """
 
         :param company_id:
@@ -109,8 +115,8 @@ class CompaniesController:
         :return:
         """
         with Session() as session:
-            is_company_member = session.query(UserCompanyORM).filter(UserCompanyORM.user_id == user_id,
-                                                                     UserCompanyORM.company_id).first()
+            is_company_member: bool = await self.is_company_member(company_id=company_id,
+                                                                   user_id=user_id, session=session)
             if not is_company_member:
                 return None
             company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
@@ -132,37 +138,57 @@ class CompaniesController:
 
             return response
 
-    @staticmethod
     @error_handler
-    async def update_bank_account(account_details: BusinessBankAccount) -> BusinessBankAccount:
+    async def update_bank_account(self, user: User, account_details: BusinessBankAccount) -> BusinessBankAccount | None:
         """
 
         :return:
         """
         with Session() as session:
+            user_id = user.user_id
+            company_id = account_details.company_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id, company_id=company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to Update Bank Account")
+
             bank_account_orm: BankAccountORM = BankAccountORM(**account_details.dict())
             session.add(bank_account_orm)
             session.commit()
             return account_details
 
-    @staticmethod
     @error_handler
-    async def add_property(_property: Property) -> Property:
+    async def add_property(self, user: User, _property: Property) -> Property | None:
         """
 
+        :param user:
         :param _property:
         :return:
         """
         with Session() as session:
+            user_id = user.user_id
+            company_id = _property.company_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id, company_id=company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to Add Properties to this Company")
+
             property_orm: PropertyORM = PropertyORM(**_property.dict())
             session.add(property_orm)
             session.commit()
             return _property
 
-    @staticmethod
     @error_handler
-    async def update_property(property_details: UpdateProperty):
+    async def update_property(self, user: User, property_details: UpdateProperty) -> Property | None:
         with Session() as session:
+            user_id = user.user_id
+            company_id = property_details.company_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to update this Property")
+
             original_property_orm: PropertyORM = session.query(PropertyORM).filter(
                 PropertyORM.property_id == property_details.property_id).first()
 
@@ -179,28 +205,42 @@ class CompaniesController:
             session.commit()
             return Property(**original_property_orm.to_dict())
 
-    @staticmethod
     @error_handler
-    async def get_properties(company_id: str) -> list[Property]:
+    async def get_properties(self, user: User, company_id: str) -> list[Property]:
         """
 
+        :param user:
         :param company_id:
         :return:
         """
         with Session() as session:
+            user_id = user.user_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to access Properties in this Company")
+
             properties: list[PropertyORM] = session.query(PropertyORM).filter(
                 PropertyORM.company_id == company_id).all()
             return [Property(**_prop.to_dict()) for _prop in properties]
 
-    @staticmethod
     @error_handler
-    async def get_bank_accounts(company_id: str) -> list[BusinessBankAccount]:
+    async def get_bank_accounts(self, user: User, company_id: str) -> list[BusinessBankAccount]:
         """
 
+        :param user:
         :param company_id:
         :return:
         """
         with Session() as session:
+            user_id = user.user_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to access that Bank Account")
+
             bank_accounts: list[BankAccountORM] = session.query(BankAccountORM).filter(
                 BankAccountORM.company_id == company_id).all()
 

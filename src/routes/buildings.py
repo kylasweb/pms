@@ -60,7 +60,7 @@ async def do_add_building(user: User, company_id: str):
     company: Company = await company_controller.get_company(company_id=company_id, user_id=user.user_id)
     property_data: Property = Property(**request.form)
     property_data.company_id = company.company_id
-    property_model: Property = await company_controller.add_property(_property=property_data)
+    property_model: Property = await company_controller.add_property(user=user, _property=property_data)
 
     _message: str = f"Property : {property_model.name.title()} Successfully added to : {company.company_name.title()}"
     flash(message=_message, category="success")
@@ -91,7 +91,7 @@ async def do_edit_building(user: User, building_id: str):
     updated_building: UpdateProperty = UpdateProperty(**request.form)
 
     company_controller = CompaniesController()
-    building: Property = await company_controller.update_property(property_details=updated_building)
+    building: Property = await company_controller.update_property(user=user, property_details=updated_building)
     property_units: list[Unit] = await company_controller.get_property_units(property_id=building_id)
     context = dict(user=user_data,
                    property_editor=False,

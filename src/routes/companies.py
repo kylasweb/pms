@@ -33,9 +33,9 @@ async def get_company(user: User, company_id: str):
     user_data = user.dict()
     companies_controller = CompaniesController()
     company: Company = await companies_controller.get_company(company_id=company_id, user_id=user.user_id)
-    properties: list[Property] = await companies_controller.get_properties(company_id=company_id)
+    properties: list[Property] = await companies_controller.get_properties(user=user, company_id=company_id)
 
-    bank_accounts: list[BusinessBankAccount] = await companies_controller.get_bank_accounts(company_id=company_id)
+    bank_accounts: list[BusinessBankAccount] = await companies_controller.get_bank_accounts(user=user, company_id=company_id)
     properties_dict = [prop.dict() for prop in properties if prop] if isinstance(properties, list) else []
     bank_accounts_dicts = [account.dict() for account in bank_accounts if account] if isinstance(bank_accounts,
                                                                                                  list) else []
@@ -84,7 +84,7 @@ async def do_add_bank_account(user: User, company_id: str):
             flash(message='Ounch That one hurt ', category="danger")
             return redirect(url_for('home.get_home'))
         companies_controller = CompaniesController()
-        _ = await companies_controller.update_bank_account(account_details=bank_account_details)
+        _ = await companies_controller.update_bank_account(user=user, account_details=bank_account_details)
 
         flash(message="successfully updated company bank account details", category="success")
 
