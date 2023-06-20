@@ -21,53 +21,32 @@
                                                 <tr>
                                                     <th>Company Name</th>
                                                     <th>Address</th>
-                                                    <th>City</th>
-                                                    <th>Code</th>
-                                                    <th>Province</th>
-                                                    <th>Country</th>
-                                                    <th><i class="ti-check-box"> </i> </th>
+                                                    <th class="d-none d-sm-table-cell">City</th>
+                                                    <th class="d-none d-sm-table-cell">Code</th>
+                                                    <th class="d-none d-sm-table-cell">Province</th>
+                                                    <th class="d-none d-sm-table-cell">Country</th>
+                                                    <th class="d-none d-sm-table-cell"><i class="ti-check-box"> </i> </th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
                                             {% if companies %}
+                                            <tbody>
+
                                                 {% for company in companies %}
                                                     <tr>
                                                         <td> <a href="{{ url_for('companies.get_company', company_id=company.company_id)}}" class="text text-info font-weight-bold"> {{ company.company_name or '' }} </a></td>
                                                         <td>{{ company.address_line_1 or '' }}</td>
-                                                        <td>{{ company.city or '' }}</td>
-                                                        <td>{{ company.postal_code or '' }}</td>
-                                                        <td>{{ company.province or '' }}</td>
-                                                        <td>{{ company.country or '' }}</td>
-                                                        <td><a href="{{ url_for('companies.get_company', company_id=company.company_id)}}"> Open</a> </td>
+                                                        <td class="d-none d-sm-table-cell">{{ company.city or '' }}</td>
+                                                        <td class="d-none d-sm-table-cell">{{ company.postal_code or '' }}</td>
+                                                        <td class="d-none d-sm-table-cell">{{ company.province or '' }}</td>
+                                                        <td class="d-none d-sm-table-cell">{{ company.country or '' }}</td>
+                                                        <td class="d-none d-sm-table-cell"><a href="{{ url_for('companies.get_company', company_id=company.company_id)}}"> Open</a> </td>
                                                     </tr>
                                                 {% endfor %}
-                                            {% else %}
-                                                <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>3</td>
-                                                    <td>35</td>
-                                                    <td>7</td>
-                                                    <td>28</td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Garrett Winters</td>
-                                                    <td>3</td>
-                                                    <td>35</td>
-                                                    <td>7</td>
-                                                    <td>28</td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Ashton Cox</td>
-                                                    <td>3</td>
-                                                    <td>35</td>
-                                                    <td>7</td>
-                                                    <td>28</td>
-                                                    <td></td>
-                                                </tr>
-                                            {% endif %}
                                             </tbody>
+
+                                            {% else %}
+                                                <span class="font-weight-bold alert">Please Add your Company In order to begin...</span>
+                                            {% endif %}
                                         </table>
                                     </div>
                                 </div>
