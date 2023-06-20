@@ -6,7 +6,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th><i class="ti-home"></i> Property Name</th>
+                    <th><i class="ti-home"></i>  Property Name</th>
                     <th><i class="ti-location-pin"></i> Location</th>
                     <th><i class="ti-layout-grid2"></i> Number of Units</th>
                     <th><i class="ti-money"></i> Rental Price</th>
@@ -15,7 +15,7 @@
             <tbody>
                 {% for property in properties %}
                 <tr>
-                    <td><i class="ti-home"></i> {{ property.name }}</td>
+                    <td><i class="ti-home"></i> <a href="#" class="alert-link"> {{ property.name }} </a></td>
                     <td><i class="ti-location-pin"></i> {{ property.location }}</td>
                     <td><i class="ti-layout-grid2"></i> {{ property.num_units }}</td>
                     <td><i class="ti-money"></i> {{ property.rental_price }}</td>

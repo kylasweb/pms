@@ -7,6 +7,7 @@ bcrypt = Bcrypt()
 
 firewall = Firewall()
 
+
 def bootstrapper():
     from src.database.sql.address import AddressORM
     from src.database.sql.tenants import TenantORM
@@ -32,7 +33,6 @@ def create_app(config):
     app.config['SECRET_KEY'] = config.SECRET_KEY
     bcrypt.init_app(app=app)
     with app.app_context():
-
         firewall.init_app(app=app)
 
         from src.routes.home import home_route
@@ -44,7 +44,6 @@ def create_app(config):
         from src.routes.invoices import invoices_route
         from src.routes.statements import statements_route
         from src.routes.auth import auth_route
-
 
         app.register_blueprint(home_route)
         app.register_blueprint(companies_route)

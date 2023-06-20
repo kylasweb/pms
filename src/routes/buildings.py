@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request
 
 from src.database.models.properties import Property
 from src.database.models.companies import Company
@@ -46,9 +46,6 @@ async def add_building(user: User, company_id: str):
     return render_template('building/add_building.html', **context)
 
 
-from flask import request
-
-
 @buildings_route.post('/admin/add-building/<string:company_id>')
 @login_required
 async def do_add_building(user: User, company_id: str):
@@ -62,3 +59,4 @@ async def do_add_building(user: User, company_id: str):
     _message: str = f"Property : {property_model.name} Successfully added to : {company.company_name}"
     flash(message=_message, category="success")
     return redirect(url_for('companies.get_company', company_id=company.company_id))
+
