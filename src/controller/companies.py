@@ -288,11 +288,12 @@ class CompaniesController:
             property_units: list[UnitORM] = session.query(UnitORM).filter(UnitORM.property_id == property_id).all()
             return [Unit(**prop.to_dict()) for prop in property_units]
 
-    @staticmethod
+
     @error_handler
-    async def add_unit(unit_data: AddUnit, property_id: str) -> AddUnit:
+    async def add_unit(self, user: User, unit_data: AddUnit, property_id: str) -> AddUnit:
         """
 
+        :param user:
         :param property_id:
         :param unit_data:
         :return:

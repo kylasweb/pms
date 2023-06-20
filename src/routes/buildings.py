@@ -15,7 +15,7 @@ buildings_route = Blueprint('buildings', __name__)
 async def get_buildings(user: User):
     user_data = user.dict()
     context = dict(user=user_data)
-    # TODO load company data based on user data
+
     return render_template('building/buildings.html', **context)
 
 
@@ -109,7 +109,7 @@ async def do_add_unit(user: User, building_id: str):
     try:
         unit_data: AddUnit = AddUnit(**request.form)
         company_controller = CompaniesController()
-        _ = await company_controller.add_unit(unit_data=unit_data, property_id=building_id)
+        _ = await company_controller.add_unit(user=user, unit_data=unit_data, property_id=building_id)
         flash(message="Unit Added Successfully", category="success")
     except ValidationError as e:
         flash(message="To Add a Unit please Fill in all Fields", category="danger")
