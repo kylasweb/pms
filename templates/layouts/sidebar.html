@@ -9,10 +9,11 @@
     </a>
 </div>
                     <li class="label">Main</li>
+                    <li><a href="{{ url_for('home.get_home') }}"><i class="ti-home"></i> Home</a></li>
                     <li><a class="sidebar-sub-toggle"><i class="ti-dashboard"></i> Dashboard <span
                                 class="sidebar-collapse-icon ti-angle-down"></span></a>
                         <ul>
-                            <li><a href="{{ url_for('home.get_home') }}"><i class="ti-home"></i> Home</a></li>
+
                             <li><a href="{{ url_for('companies.get_companies') }}"><i class="ti-desktop"></i> Companies</a></li>
                         </ul>
                     </li>
@@ -22,6 +23,8 @@
                                 class="sidebar-collapse-icon ti-angle-down"></span></a>
                         <ul>
                             <li><a href="{{ url_for('buildings.get_buildings') }}"><i class="ti-layers"></i> Buildings</a></li>
+                            <li><a href="#"><i class="ti-briefcase"></i> Rentals</a></li>
+                            <li><a href="#"><i class="ti-briefcase"></i> Bookings</a></li>
                             <li><a href="{{ url_for('maintenance.get_maintenance') }}"><i class="ti-settings"></i> Maintenance</a></li>
                             <li><a href="{{ url_for('reports.get_reports') }}"><i class="ti-file"></i> Reports</a></li>
                         </ul>
