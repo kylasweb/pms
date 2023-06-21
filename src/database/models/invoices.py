@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from datetime import date, datetime
 from src.database.tools import create_invoice_number
 
+
 class Customer(BaseModel):
     customer_id: str
     name: str
@@ -60,7 +61,6 @@ class Invoice(BaseModel):
     def days_remaining(self) -> int:
         today = datetime.now().date()
         return (self.due_date - today).days
-
 
     @property
     def notes(self) -> str:
