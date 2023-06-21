@@ -26,5 +26,9 @@ def error_handler(view_func):
             error_logger.error(str(e))
             flash(message=e.description, category='danger')
             return redirect(url_for('home.get_home'))
+        except ConnectionResetError as e:
+            error_logger.error(str(e))
+            flash(message="Ooh , took a nap, sorry lets do that again...", category='danger')
+            return redirect(url_for('home.get_home'))
 
     return wrapped_method

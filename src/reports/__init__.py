@@ -37,12 +37,8 @@ def create_report(title: str, data: dict[str, str | dict[str, str]]):
         if isinstance(subheadings, dict):
             # Subheadings and content
             for subheading, content_text in subheadings.items():
-                subheading_paragraph = Paragraph(subheading, subheading_style)
+                subheading_paragraph = Paragraph(f"<strong>{subheading} : </strong> <em> {content_text}</em>", normal_style)
                 content.append(subheading_paragraph)
-
-                content_paragraph = Paragraph(content_text, normal_style)
-                content.append(content_paragraph)
-                content.append(Spacer(1, 5))
         else:
             content_paragraph = Paragraph(subheadings, normal_style)
             content.append(content_paragraph)
@@ -54,3 +50,6 @@ def create_report(title: str, data: dict[str, str | dict[str, str]]):
     doc.build(content)
     buffer.seek(0)
     return buffer
+
+
+

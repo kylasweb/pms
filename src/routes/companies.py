@@ -4,6 +4,7 @@ from io import BytesIO
 from flask import Blueprint, render_template, request, url_for, redirect, flash, send_file
 from pydantic import ValidationError
 
+from src.reports.bank_account_report import BankAccountPrintParser
 from src.reports.company_report import map_company_to_parser, CompanyPrintParser
 from src.reports import create_report
 from src.logger import init_logger
@@ -137,12 +138,16 @@ async def print_company(user: User, company_id: str):
     user_id = user.user_id
     companies_controller = CompaniesController()
     company_data: Company = await companies_controller.get_company(company_id=company_id, user_id=user_id)
+    company_bank_account: BusinessBankAccount = await companies_controller.get_bank_accounts(user=user,
+                                                                                             company_id=company_id)
     _title = f"{company_data.company_name.upper()} Report"
-    print(company_data)
 
     company_data: CompanyPrintParser = map_company_to_parser(company=company_data)
-
-    document_buffer = create_report(title=_title, data=company_data.to_dict())
+    bank_account_data: BankAccountPrintParser = BankAccountPrintParser(**company_bank_account.dict())
+    company_data_dict = {}
+    company_data_dict.update(company_data.to_dict())
+    company_data_dict.update({"Bank Account": bank_account_data.to_dict()})
+    document_buffer = create_report(title=_title, data=company_data_dict)
 
     return send_file(
         path_or_file=document_buffer,
