@@ -10,6 +10,19 @@ from src.authentication import login_required
 buildings_route = Blueprint('buildings', __name__)
 
 
+async def get_common_context(user: User, building_id: str, property_editor: bool = False):
+    user_data = user.dict()
+    building_property: Property = await company_controller.get_property(user=user, property_id=building_id)
+    property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
+    context = dict(
+        user=user_data,
+        property=building_property.dict(),
+        property_editor=property_editor,
+        units=[unit.dict() for unit in property_units]
+    )
+    return context
+
+
 @buildings_route.get('/admin/buildings')
 @login_required
 async def get_buildings(user: User):
@@ -28,15 +41,7 @@ async def get_building(user: User, building_id: str):
     :param building_id:
     :return:
     """
-    user_data = user.dict()
-
-    building_property: Property = await company_controller.get_property(user=user, property_id=building_id)
-    property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
-    context = dict(user=user_data,
-                   property=building_property.dict(),
-                   property_editor=False,
-                   units=[unit.dict() for unit in property_units])
-
+    context = await get_common_context(user=user, building_id=building_id)
     return render_template('building/building.html', **context)
 
 
@@ -70,33 +75,16 @@ async def do_add_building(user: User, company_id: str):
 @buildings_route.get('/admin/edit-building/<string:building_id>')
 @login_required
 async def edit_building(user: User, building_id: str):
-    user_data = user.dict()
-
-    building: Property = await company_controller.get_property(user=user, property_id=building_id)
-
-    property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
-    context = dict(user=user_data,
-                   property_editor=True,
-                   property=building.dict(),
-                   units=[unit.dict() for unit in property_units])
-
+    context = await get_common_context(user, building_id, property_editor=True)
     return render_template('building/building.html', **context)
 
 
 @buildings_route.post('/admin/edit-building/<string:building_id>')
 @login_required
 async def do_edit_building(user: User, building_id: str):
-    user_data = user.dict()
-
     updated_building: UpdateProperty = UpdateProperty(**request.form)
-
-    building: Property = await company_controller.update_property(user=user, property_details=updated_building)
-    property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
-    context = dict(user=user_data,
-                   property_editor=False,
-                   property=building.dict(),
-                   units=[unit.dict() for unit in property_units])
-
+    _ = await company_controller.update_property(user=user, property_details=updated_building)
+    context = await get_common_context(user=user, building_id=building_id)
     flash(message="Successfully updated Property/Building", category="success")
     return render_template('building/building.html', **context)
 

@@ -6,7 +6,7 @@ from src.database.models.properties import Property, Unit, AddUnit, UpdateProper
 from src.database.sql.properties import PropertyORM, UnitORM
 from src.database.sql import Session
 from src.database.models.users import User
-from src.database.models.companies import Company
+from src.database.models.companies import Company, UpdateCompany
 from src.database.sql.companies import CompanyORM, UserCompanyORM
 from src.controller import error_handler, UnauthorizedError
 
@@ -66,10 +66,39 @@ class CompaniesController:
 
             return response
 
+    async def update_company(self, user: User, company_data: UpdateCompany):
+        """
+
+        :param user:
+        :param company_data:
+        :return:
+        """
+        with Session() as session:
+            user_id = user.user_id
+            company_id = company_data.company_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id, company_id=company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to Update Bank Account")
+            original_company_data: CompanyORM = session.query(CompanyORM).filter(
+                CompanyORM.company_id == company_id).first()
+
+            if original_company_data is None:
+                return None
+
+            # Update original_company_data fields with corresponding values from company_data
+            for field, value in company_data.dict().items():
+                if value is not None:
+                    setattr(original_company_data, field, value)
+            session.commit()
+
+            return UpdateCompany(**original_company_data.to_dict())
+
     @error_handler
     async def update_bank_account(self, user: User, account_details: BusinessBankAccount) -> BusinessBankAccount | None:
         """
-
+        **update_bank_account**
+            will either update or create a new bank account record
         :return:
         """
         with Session() as session:
@@ -79,6 +108,15 @@ class CompaniesController:
                                                                    session=session)
             if not is_company_member:
                 raise UnauthorizedError(description="Not Authorized to Update Bank Account")
+
+            original_bank_account: BankAccountORM = session.query(BankAccountORM).filter(
+                BankAccountORM.account_number == account_details.account_number).first()
+            if original_bank_account:
+                for field, value in account_details.dict().items():
+                    if value is not None:
+                        setattr(original_bank_account, field, value)
+                session.commit()
+                return BusinessBankAccount(**original_bank_account.to_dict())
 
             bank_account_orm: BankAccountORM = BankAccountORM(**account_details.dict())
             session.add(bank_account_orm)

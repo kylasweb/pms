@@ -41,6 +41,17 @@ class UserController:
 
     @staticmethod
     @error_handler
+    async def send_password_reset(email: str) -> dict[str, str] | None:
+        """
+
+        :param email:
+        :return:
+        """
+        pass
+
+
+    @staticmethod
+    @error_handler
     async def post(user: User) -> dict[str, str] | None:
         """
 

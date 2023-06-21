@@ -1,0 +1,45 @@
+
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title"><i class="ti-folder"></i> Properties / Buildings </h3>
+            <div>
+                <a href="{{ url_for('buildings.add_building', company_id=company.company_id) }}"
+                   class="btn btn-sm btn-info mr-2">
+                    <i class="ti-save"></i> Add Property
+                </a>
+            </div>
+        </div>
+        <div class="card-body col-lg-12 col-md-12">
+            {% if properties %}
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Property Name</th>
+                            <th>Landlord</th>
+                            <th class="d-none d-sm-table-cell">Property Type</th>
+                            <th>Total Units</th>
+                            <th class="d-none d-sm-table-cell">Available Units</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for property in properties %}
+                            <tr>
+                                <td><a href="{{ url_for('buildings.get_building', building_id=property.property_id) }}" class="text text-info font-weight-bold">{{ property.name }}</a></td>
+                                <td>{{ property.landlord }}</td>
+                                <td class="d-none d-sm-table-cell">{{ property.property_type }}</td>
+                                <td>{{ property.number_of_units }}</td>
+                                <td class="d-none d-sm-table-cell">{{ property.available_units }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="card-text m-b-2">
+                <p class="text">No properties available for Company: <span class="text-info"><strong><em>{{ company.company_name }}</em></strong></span></p>
+                </div>
+            {% endif %}
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>

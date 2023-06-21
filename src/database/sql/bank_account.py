@@ -7,8 +7,8 @@ from src.database.sql import Base, engine
 class BankAccountORM(Base):
     __tablename__ = 'bank_accounts'
     company_id = Column(String(ID_LEN))
-    account_holder = Column(String(NAME_LEN), primary_key=True)
-    account_number = Column(String(NAME_LEN))
+    account_holder = Column(String(NAME_LEN))
+    account_number = Column(String(NAME_LEN), primary_key=True)
     bank_name = Column(String(NAME_LEN), index=True)
     branch = Column(String(NAME_LEN))
     account_type = Column(String(NAME_LEN))

@@ -21,6 +21,11 @@ class UserORM(Base):
     full_name: str = Column(String(NAME_LEN))
     contact_number: str = Column(String(13))
 
+    @classmethod
+    def create_if_not_table(cls):
+        if not inspect(engine).has_table(cls.__tablename__):
+            Base.metadata.create_all(bind=engine)
+
     def __init__(self, user_id: str, is_tenant: bool, tenant_id: str, username: str, password: str,
                  email: str, full_name: str, contact_number: str):
         self.user_id = user_id
@@ -30,6 +35,9 @@ class UserORM(Base):
         self.username = username
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         self.email = email
+
+    def __bool__(self) -> bool:
+        return bool(self.user_id) and bool(self.username) and bool(self.email)
 
     def to_dict(self) -> dict[str, str | bool]:
         return {
@@ -42,7 +50,6 @@ class UserORM(Base):
             'contact_number': self.contact_number
         }
 
-    @classmethod
-    def create_if_not_table(cls):
-        if not inspect(engine).has_table(cls.__tablename__):
-            Base.metadata.create_all(bind=engine)
+
+
+

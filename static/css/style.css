@@ -4512,3 +4512,9 @@ h6.h1 {
     display: inline-block !important;
   }
 }
+
+
+.modal-body-scrollable {
+  max-height: 400px;
+  overflow-y: scroll;
+}

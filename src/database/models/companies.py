@@ -33,3 +33,17 @@ class Company(BaseModel):
 
     class Config:
         from_orm = True
+
+class UpdateCompany(BaseModel):
+    company_id: str
+    company_name: str
+    description: str
+
+    address_line_1: str | None
+    address_line_2: str | None
+    city: str
+    postal_code: str
+    province: str
+    country: str
+    contact_number: str
+    website: str

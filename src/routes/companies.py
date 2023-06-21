@@ -6,7 +6,7 @@ from src.database.models.properties import Property
 from src.database.models.bank_accounts import BusinessBankAccount
 from src.authentication import login_required
 from src.database.models.users import User
-from src.database.models.companies import Company
+from src.database.models.companies import Company, UpdateCompany
 from src.controller.companies import CompaniesController
 
 companies_route = Blueprint('companies', __name__)
@@ -35,7 +35,8 @@ async def get_company(user: User, company_id: str):
     company: Company = await companies_controller.get_company(company_id=company_id, user_id=user.user_id)
     properties: list[Property] = await companies_controller.get_properties(user=user, company_id=company_id)
 
-    bank_accounts: list[BusinessBankAccount] = await companies_controller.get_bank_accounts(user=user, company_id=company_id)
+    bank_accounts: list[BusinessBankAccount] = await companies_controller.get_bank_accounts(user=user,
+                                                                                            company_id=company_id)
     properties_dict = [prop.dict() for prop in properties if prop] if isinstance(properties, list) else []
     bank_accounts_dicts = [account.dict() for account in bank_accounts if account] if isinstance(bank_accounts,
                                                                                                  list) else []
@@ -73,6 +74,28 @@ async def do_create_company(user: User):
         flash(message="Error creating Company please fill in all required fields", category='danger')
 
     return redirect(url_for('companies.get_companies'))
+
+
+@companies_route.post('/admin/edit-company/<string:company_id>')
+@login_required
+async def do_edit_company(user: User, company_id: str):
+    """
+
+    :param user:
+    :param company_id:
+    :return:
+    """
+    try:
+        company_data: UpdateCompany = UpdateCompany(**request.form)
+    except ValidationError as e:
+        message: str = "Error cannot update Company Data, Invalid Fields"
+        flash(message=message, category="danger")
+        return redirect(url_for('companies.get_company', company_id=company_id))
+
+    company_controller = CompaniesController()
+    updated_company = await company_controller.update_company(user=user, company_data=company_data)
+    flash(message="Successfully Updated Company Data", category="success")
+    return redirect(url_for('companies.get_company', company_id=company_id))
 
 
 @companies_route.post('/admin/company/add-bank-account/<string:company_id>')
