@@ -1,0 +1,32 @@
+<div class="modal fade" id="showAccountModal" tabindex="-1" role="dialog" aria-labelledby="bankAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bankAccountModalLabel">Edit Bank Account Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="#" method="POST" enctype="application/x-www-form-urlencoded">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="bank_name">Bank Name</label>
+                        <input type="text" class="form-control" id="bank_name" name="bank_name" disabled value="{{ bank_account.bank_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="account_number">Account Number</label>
+                        <input type="text" class="form-control" id="account_number" name="account_number" disabled value="{{ bank_account.account_number }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="account_holder">Account Holder Name</label>
+                        <input type="text" class="form-control" id="account_holder" name="account_holder" disabled value="{{ bank_account.account_holder }}">
+                    </div>
+                    <!-- Add more form fields here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

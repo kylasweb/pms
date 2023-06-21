@@ -17,3 +17,16 @@ class BankAccountORM(Base):
     def create_if_not_table(cls):
         if not inspect(engine).has_table(cls.__tablename__):
             Base.metadata.create_all(bind=engine)
+
+    def to_dict(self):
+        """
+        Convert the object to a dictionary representation.
+        """
+        return {
+            'company_id': self.company_id,
+            'account_holder': self.account_holder,
+            'account_number': self.account_number,
+            'bank_name': self.bank_name,
+            'branch': self.branch,
+            'account_type': self.account_type
+        }

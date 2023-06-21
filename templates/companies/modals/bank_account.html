@@ -9,31 +9,32 @@
             </div>
             <form action="{{ url_for('companies.do_add_bank_account', company_id=company.company_id) }}" method="POST" enctype="application/x-www-form-urlencoded">
             <div class="modal-body">
-                    <input type="hidden" value="{{ company.company_id }}" />
+                    <input type="hidden" name="company_id" value="{{ company.company_id }}" />
                     <div class="form-group">
                         <label for="bank_name">Bank Name</label>
-                        <input type="text" class="form-control" id="bank_name" name="bank_name">
+
+                        <input type="text" class="form-control" id="bank_name" name="bank_name" value="{{ bank_account.bank_name }}">
                     </div>
                     <div class="form-group">
                         <label for="account_number">Account Number</label>
-                        <input type="text" class="form-control" id="account_number" name="account_number">
+                        <input type="text" class="form-control" id="account_number" name="account_number" value="{{ bank_account.account_number }}">
                     </div>
                     <div class="form-group">
                         <label for="account_holder">Account Holder Name</label>
-                        <input type="text" class="form-control" id="account_holder" name="account_holder">
+                        <input type="text" class="form-control" id="account_holder" name="account_holder" value="{{ bank_account.account_holder }}">
                     </div>
 
                     <div class="form-group">
                         <label for="branch">Branch</label>
-                        <input type="text" class="form-control" id="branch" name="branch">
+                        <input type="text" class="form-control" id="branch" name="branch" value="{{ bank_account.branch }}">
                     </div>
 
                     <div class="form-group">
                         <label for="account_type">Account Type</label>
                         <select class="form-control" id="account_type" name="account_type">
-                            <option value="savings">Savings</option>
-                            <option value="current">Current</option>
-                            <option value="cheque">Cheque</option>
+                            <option value="savings" {% if bank_account.account_type == 'savings' %}selected{% endif %}>Savings</option>
+                            <option value="current" {% if bank_account.account_type == 'current' %}selected{% endif %}>Current</option>
+                            <option value="cheque" {% if bank_account.account_type == 'cheque' %}selected{% endif %}>Cheque</option>
                         </select>
                     </div>
             </div>

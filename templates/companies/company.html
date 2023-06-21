@@ -11,6 +11,9 @@
                 <a href="#" class="btn btn-sm btn-success mr-2 mr-md-12 mb-2 mb-md-0" data-toggle="modal" data-target="#companyDetailModal">
                     <i class="ti-desktop"></i> Edit
                 </a>
+                <a href="{{ url_for('companies.print_company', company_id=company.company_id) }}" class="btn btn-sm btn-default mr-2 mr-md-12 mb-2 mb-md-0">
+                    <i class="ti-printer"></i> Print
+                </a>
 
             </div>
         </div>
@@ -27,21 +30,26 @@
                     </ul>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Contact Number:</strong> {{ company.contact_number }}</li>
-                        <li class="list-group-item"><strong>Website:</strong> <a href="{{ company.website }}" class="alert-link">{{ company.website }}</a></li>
-                        <li class="list-group-item">
-                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bankAccountModal">
-                                <span class="ti-wallet"></span> Bank Account
-                            </button>
-                        </li>
-                        <div class="alert alert-primary alert-dismissible fade show">
-                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                          <strong>Bank Account!</strong> You can add the bank account details for the company by clicking on the "Bank Account" button.
-                            This will allow you to enter the necessary information for managing financial transactions.
-                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Contact Number:</strong> {{ company.contact_number }}</li>
+                            <li class="list-group-item"><strong>Website:</strong> <a href="{{ company.website }}" class="alert-link">{{ company.website }}</a></li>
 
-                    </ul>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bankAccountModal">
+                                    <span class="ti-wallet"></span> Bank Account
+                                </button>
+                                <button class="btn btn-sm btn-success ml-auto" data-toggle="modal" data-target="#showAccountModal">
+                                    <span class="ti-view-list"></span> Show Bank Account
+                                </button>
+                            </li>
+
+                            <div class="alert alert-primary alert-dismissible fade show">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                              <strong>Bank Account!</strong> You can add the bank account details for the company by clicking on the "Bank Account" button.
+                                This will allow you to enter the necessary information for managing financial transactions.
+                            </div>
+
+                        </ul>
                 </div>
             </div>
         </div>
@@ -55,6 +63,7 @@
 <!--- Modals -->
 <!-- Bank Account Modal -->
 {% include "companies/modals/bank_account.html" %}
+{% include "companies/modals/show_bank_account.html" %}
 <!-- Company Details Editor -->
 {% include "companies/modals/company_editor.html" %}
 

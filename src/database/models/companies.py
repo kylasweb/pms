@@ -34,6 +34,7 @@ class Company(BaseModel):
     class Config:
         from_orm = True
 
+
 class UpdateCompany(BaseModel):
     company_id: str
     company_name: str

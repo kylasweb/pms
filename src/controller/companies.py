@@ -192,7 +192,7 @@ class CompaniesController:
             return [Property(**_prop.to_dict()) for _prop in properties]
 
     @error_handler
-    async def get_bank_accounts(self, user: User, company_id: str) -> list[BusinessBankAccount]:
+    async def get_bank_accounts(self, user: User, company_id: str) -> BusinessBankAccount:
         """
 
         :param user:
@@ -207,10 +207,10 @@ class CompaniesController:
             if not is_company_member:
                 raise UnauthorizedError(description="Not Authorized to access that Bank Account")
 
-            bank_accounts: list[BankAccountORM] = session.query(BankAccountORM).filter(
-                BankAccountORM.company_id == company_id).all()
+            bank_account: BankAccountORM = session.query(BankAccountORM).filter(
+                BankAccountORM.company_id == company_id).first()
 
-            return [BusinessBankAccount(**account.to_dict()) for account in bank_accounts]
+            return BusinessBankAccount(**bank_account.to_dict())
 
     @error_handler
     async def get_property(self, user: User, property_id: str) -> Property:
