@@ -89,18 +89,18 @@
                     <select name="company" id="company" class="form-control">
                         <!-- Populate the company options from a list or database -->
                         {% for company in companies %}
-                            <option value="{{ company.id }}">{{ company.company_name }}</option>
+                            <option value="{{ company.company_id }}">{{ company.company_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
-
                     <label for="building">Building:</label>
                     <select name="building" id="building" class="form-control">
                         <!-- Populate the building options from a list or database -->
+                        <option value=""> Select Company Then Select Building</option>
                         {% for building in buildings %}
-                            <option value="{{ building.id }}">{{ building.name }}</option>
+                            <option value="{{ building.property_id }}">{{ building.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -108,30 +108,69 @@
                 <div class="form-group">
                     <label for="booking_type">Booking Type:</label>
                     <select name="booking_type" id="booking_type" class="form-control">
-                        <option value="daily">Daily</option>
                         <option value="monthly">Monthly</option>
+                        <option value="daily">Daily</option>
                         <option value="hourly">Hourly</option>
                     </select>
                 </div>
-            </div>
 
-                <!-- Show additional details form fields if monthly booking type is selected -->
-                {% if booking_type == "monthly" %}
-                    <!-- Add more input fields here for monthly booking details -->
-                    <!-- Example: -->
+                <div class="form-group">
                     <label for="start_date">Start Date:</label>
-                     <input type="date" name="start_date" id="start_date">
+                     <input type="date" name="start_date" id="start_date" class="form-control">
                     <br>
                     <label for="end_date">End Date:</label>
-                     <input type="date" name="end_date" id="end_date">
-                    <br>
-                {% endif %}
+                     <input type="date" name="end_date" id="end_date" class="form-control">
+                </div>
 
-                <button type="submit" class="btn btn-sm btn-primary"><i class="ti-save"> </i> Create Quote </button>
+
             </div>
+            <!-- footer section -->
+            <div class="card-footer col-lg-12 col-md-12 col-sm-12">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    <i class="ti-save"> </i> Create Quote
+                </button>
+            </div>
+
+            <div class="card-footer col-lg-12 col-md-12 col-sm-12">
+                <!-- Instructions for creating Quotes -->
+<p class="font-weight-bold text-info">Instructions for creating Quotes:</p>
+      <ul class="list-group">
+          <li class="list-group-item"><strong>Fill in the tenant details:</strong>
+          <ul class="list-group">
+            <li>Enter the tenant's name in the "Tenant Name" field.</li>
+            <li>Provide the company name in the "Company Name" field.</li>
+            <li>Enter the tenant's contact number in the "Tenant Cell" field.</li>
+            <li>Provide the tenant's email address in the "Tenant Email" field.</li>
+          </ul>
+        </li>
+          <li class="list-group-item"><strong>Complete the official use section:</strong>
+          <ul class="list-group">
+            <li>Select the company associated with the tenant from the "Company" dropdown list.</li>
+            <li>Choose the building for the tenant from the "Building" dropdown list.
+              <br>Note: You need to select a company before selecting a building.</li>
+            <li>Specify the booking type from the "Booking Type" dropdown list.</li>
+            <li>Enter the start and end dates of the booking using the "Start Date" and "End Date" fields respectively.</li>
+          </ul>
+        </li>
+          <li class="list-group-item"><strong>Once you have filled in all the required information, click the "Create Quote" button located at the bottom of the form (in the card footer section). This will submit the form and generate a quote based on the provided details.</strong></li>
+          <li class="list-group-item text-warning"><strong>After creating the quote, you can perform additional actions from the tenant details section
+          </strong><br>
+              <span class="font-italic text-dark">
+              Printing Lease Agreements / Check In or Out <br />
+              </span>
+          </li>
+      </ul>
+            </div>
+
+            </div>
+
             </form>
 
         </div>
     </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/tenants/quotations.js') }}"></script>
 {% endblock %}

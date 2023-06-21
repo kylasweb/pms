@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, flash
 
 from src.database.models.properties import Property
 from src.database.models.companies import Company
@@ -22,7 +22,7 @@ async def get_tenants(user: User):
     return render_template('tenants/get_tenant.html', **context)
 
 
-@tenants_route.route('/admin/tenant/buildings/<string:company_id>')
+@tenants_route.get('/admin/tenant/buildings/<string:company_id>')
 @login_required
 async def get_buildings(user: User, company_id: str):
 
@@ -50,5 +50,13 @@ async def tenant_rentals(user: User):
     user_data = user.dict()
     context = dict(user=user_data)
     tenant_quote = QuotationForm(**request.form)
-    print(tenant_quote)
+
+    if tenant_quote.booking_type == "monthly":
+        message = """Quote Created a Notification will be sent, via email or cell, 
+        a Lease Agreement was also sent to the Client Remember you can always reprint it later"""
+    else:
+        message = """Quote Created a Notification will be sent, via email or cell... 
+        Remember to Check In the Client on Arrival or on Payment"""
+
+    flash(message=message)
     return render_template('tenants/get_tenant.html', **context)
