@@ -26,3 +26,15 @@ class Tenant(BaseModel):
     address_id: str
     lease_start_date: date
     lease_end_date: date
+
+
+class QuotationForm(BaseModel):
+    tenant_name: str
+    tenant_company: str
+    tenant_cell: str
+    tenant_email: str
+    company: str | None
+    building: str | None
+    booking_type: str | None
+    lease_start_date: date | None = None
+    lease_end_date: date | None = None
