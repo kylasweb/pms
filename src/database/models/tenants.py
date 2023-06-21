@@ -20,6 +20,7 @@ class Tenant(BaseModel):
     tenant_id: str = Field(default_factory=lambda: str(uuid.uuid4()),
                            description="The unique ID of the tenant.")
     name: str
+    company: str
     email: str
     phone_number: str
     address_id: str

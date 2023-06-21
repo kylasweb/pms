@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 
-
+from src.controller.tenant import TenantController
 from src.controller.companies import CompaniesController
 from src.firewall import Firewall
 from src.utils import template_folder, static_folder
@@ -10,6 +10,7 @@ bcrypt = Bcrypt()
 
 firewall = Firewall()
 company_controller = CompaniesController()
+tenant_controller = TenantController()
 
 
 def bootstrapper():
@@ -49,6 +50,8 @@ def create_app(config):
         from src.routes.payments import payments_route
         from src.routes.invoices import invoices_route
         from src.routes.statements import statements_route
+        from src.routes.tenants import tenants_route
+
         from src.routes.auth import auth_route
 
         app.register_blueprint(home_route)
@@ -60,6 +63,7 @@ def create_app(config):
         app.register_blueprint(invoices_route)
         app.register_blueprint(statements_route)
         app.register_blueprint(auth_route)
+        app.register_blueprint(tenants_route)
 
         bootstrapper()
 

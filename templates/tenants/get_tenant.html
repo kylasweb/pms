@@ -1,0 +1,126 @@
+{% extends "layouts/page.html" %}
+
+{% block content %}
+    <!-- Add tabs navigation -->
+    <div class="card">
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="tenant-details-tab" data-toggle="tab" href="#tenant-details">Tenant Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="add-tenant-tab" data-toggle="tab" href="#add-tenant">Add Tenant</a>
+            </li>
+        </ul>
+
+    <!-- Add tab content -->
+    <div class="tab-content">
+        <!-- Tenant Details Tab -->
+        <div class="tab-pane fade show active" id="tenant-details">
+            <!-- Display tenant details in a table -->
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Tenant Name</th>
+                        <th>Company</th>
+                        <th>Building</th>
+                        <th>Booking Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through the list of tenants -->
+                    {% for tenant in tenants %}
+                    <tr>
+                        <td>
+                            <!-- Make tenant name clickable to allow for editing -->
+                            <a href="{{ url_for('tenants.tenant_rentals', tenant_id=tenant.id) }}">{{ tenant.name }}</a>
+                        </td>
+                        <td>{{ tenant.company }}</td>
+                        <td>{{ tenant.building }}</td>
+                        <td>{{ tenant.booking_type }}</td>
+                        <td>
+                            <!-- Change color if tenant is checked out -->
+                            {% if tenant.checked_out %}
+                                <span style="color: red;">Checked Out</span>
+                            {% else %}
+                                <span style="color: green;">Checked In</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add Tenant Tab -->
+        <div class="tab-pane fade" id="add-tenant">
+            <!-- Add tenant details form -->
+            <form action="{{ url_for('tenants.do_add_tenants') }}" method="POST" class="form-horizontal">
+                <h3 class="card-title">Add Tenant</h3>
+                <div class="form-group">
+                    <label>Tenant Name</label>
+                        <input type="text" class="form-control" name="tenant_name">
+                </div>
+                <div class="form-group">
+                    <label>Company Name</label>
+                        <input type="text" class="form-control" name="tenant_company">
+                </div>
+                <div class="form-group">
+                    <label>Tenant Cell</label>
+                        <input type="text" class="form-control" name="tenant_cell">
+                </div>
+
+            <div class="box">
+            <div class="card-header">
+                <h3 class="card-title">Official Use</h3>
+            </div>
+                <div class="form-group">
+                    <label for="company">Company:</label>
+                    <select name="company" id="company" class="form-control">
+                        <!-- Populate the company options from a list or database -->
+                        {% for company in companies %}
+                            <option value="{{ company.id }}">{{ company.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="building">Building:</label>
+                    <select name="building" id="building" class="form-control">
+                        <!-- Populate the building options from a list or database -->
+                        {% for building in buildings %}
+                            <option value="{{ building.id }}">{{ building.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="booking_type">Booking Type:</label>
+                    <select name="booking_type" id="booking_type" class="form-control">
+                        <option value="daily">Daily</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="hourly">Hourly</option>
+                    </select>
+                </div>
+            </div>
+
+                <!-- Show additional details form fields if monthly booking type is selected -->
+                {% if booking_type == "monthly" %}
+                    <!-- Add more input fields here for monthly booking details -->
+                    <!-- Example: -->
+                    <label for="start_date">Start Date:</label>
+                     <input type="date" name="start_date" id="start_date">
+                    <br>
+                    <label for="end_date">End Date:</label>
+                     <input type="date" name="end_date" id="end_date">
+                    <br>
+                {% endif %}
+
+                <button type="submit" class="btn btn-sm btn-primary"><i class="ti-save"> </i> Save </button>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock %}
