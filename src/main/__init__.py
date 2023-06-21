@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 
-from src.controller.tenant import TenantController
 from src.controller.companies import CompaniesController
 from src.firewall import Firewall
 from src.utils import template_folder, static_folder
@@ -10,6 +9,8 @@ bcrypt = Bcrypt()
 
 firewall = Firewall()
 company_controller = CompaniesController()
+
+from src.controller.tenant import TenantController
 tenant_controller = TenantController()
 
 

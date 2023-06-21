@@ -255,6 +255,33 @@ class CompaniesController:
             return [Unit(**prop.to_dict()) for prop in property_units]
 
     @error_handler
+    async def get_un_leased_units(self, user: User, property_id: str) -> list[Unit]:
+        """
+            **get_un_leased_units**
+                given a property id return all units in the property which are not leased
+        :param user:
+        :param property_id:
+        :return:
+        """
+        with Session() as session:
+            user_id = user.user_id
+
+            _property: PropertyORM = session.query(PropertyORM).filter(
+                PropertyORM.property_id == property_id).first()
+
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=_property.company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to access the Property")
+
+            property_units: list[UnitORM] = session.query(UnitORM).filter(UnitORM.property_id == property_id,
+                                                                          UnitORM.is_occupied == False).all()
+
+            return [Unit(**building.to_dict()) for building in property_units
+                    if building] if isinstance(property_units, list) else []
+
+    @error_handler
     async def add_unit(self, user: User, unit_data: AddUnit, property_id: str) -> AddUnit:
         """
 

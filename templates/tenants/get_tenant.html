@@ -98,7 +98,6 @@
                     <label for="building">Building:</label>
                     <select name="building" id="building" class="form-control">
                         <!-- Populate the building options from a list or database -->
-                        <option value=""> Select Company Then Select Building</option>
                         {% for building in buildings %}
                             <option value="{{ building.property_id }}">{{ building.name }}</option>
                         {% endfor %}
@@ -108,6 +107,7 @@
                 <div class="form-group">
                     <label for="booking_type">Booking Type:</label>
                     <select name="booking_type" id="booking_type" class="form-control">
+                        <option value="">Select Booking/Rental Type</option>
                         <option value="monthly">Monthly</option>
                         <option value="daily">Daily</option>
                         <option value="hourly">Hourly</option>
@@ -116,10 +116,10 @@
 
                 <div class="form-group">
                     <label for="start_date">Start Date:</label>
-                     <input type="date" name="start_date" id="start_date" class="form-control">
+                     <input type="date" name="lease_start_date" id="lease_start_date" class="form-control">
                     <br>
                     <label for="end_date">End Date:</label>
-                     <input type="date" name="end_date" id="end_date" class="form-control">
+                     <input type="date" name="lease_end_date" id="lease_end_date" class="form-control">
                 </div>
 
 

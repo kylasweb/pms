@@ -48,8 +48,8 @@ async def do_add_tenants(user: User):
 @login_required
 async def tenant_rentals(user: User):
     user_data = user.dict()
-    context = dict(user=user_data)
     tenant_quote: QuotationForm = QuotationForm(**request.form)
+    quotation = await tenant_controller.create_quotation(user=user, quotation=tenant_quote)
 
     message = """Quote Created and Notification will be sent, via email or cell. 
     

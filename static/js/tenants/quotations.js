@@ -20,9 +20,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Populate building options
                     if (data.length > 0) {
                         buildingSelect.innerHTML = '';
+                        let option = document.createElement('option');
+                        option.value = "";
+                        option.textContent = "Select a Building";
+                        buildingSelect.appendChild(option);
+
                         data.forEach(function (building) {
                             let option = document.createElement('option');
-                            option.value = building.id;
+                            option.value = building.property_id;
                             option.textContent = building.name;
                             buildingSelect.appendChild(option);
                         });
