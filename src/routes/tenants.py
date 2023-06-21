@@ -51,12 +51,11 @@ async def tenant_rentals(user: User):
     context = dict(user=user_data)
     tenant_quote: QuotationForm = QuotationForm(**request.form)
 
-    if tenant_quote.booking_type == "monthly":
-        message = """Quote Created a Notification will be sent, via email or cell, 
-        a Lease Agreement was also sent to the Client Remember you can always reprint it later"""
-    else:
-        message = """Quote Created a Notification will be sent, via email or cell... 
-        Remember to Check In the Client on Arrival or on Payment"""
+    message = """Quote Created and Notification will be sent, via email or cell. 
+    
+    Lease Agreements and a Quotation will be sent via email &
+    Remember you can Reprint Both the Quotation & Lease Agreement from the Tenant Details Section
+    """
 
     flash(message=message, category="success")
     return redirect(url_for('tenants.get_tenants'))
