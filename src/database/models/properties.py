@@ -33,7 +33,7 @@ class Property(BaseModel):
     amenities: str
     landlord: str
     maintenance_contact: str
-    lease_terms: str
+    lease_terms: str  # Monthly, Daily, Hourly
     description: str
     built_year: int
     parking_spots: int
@@ -59,6 +59,7 @@ class Unit(BaseModel):
     property_id: str
     unit_id: str
     is_occupied: bool = Field(default=False)
+    is_booked: bool = Field(default=False)
     rental_amount: int
     tenant_id: str | None = Field(default=None)
     lease_start_date: date | None = Field(default=None)

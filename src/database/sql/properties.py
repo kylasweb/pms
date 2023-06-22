@@ -51,6 +51,7 @@ class UnitORM(Base):
     property_id: str = Column(String(ID_LEN), ForeignKey('properties.property_id'))
     tenant_id: str = Column(String(ID_LEN), ForeignKey('tenants.tenant_id'))
     is_occupied: bool = Column(Boolean)
+    is_booked: bool = Column(Boolean)
     rental_amount: int = Column(Integer)
     lease_start_date: date = Column(Date)
     lease_end_date: date = Column(Date)
@@ -63,8 +64,8 @@ class UnitORM(Base):
         :return: Dictionary representation of the object.
         """
         return {'unit_id': self.unit_id, 'property_id': self.property_id, 'tenant_id': self.tenant_id,
-                'is_occupied': self.is_occupied, 'rental_amount': self.rental_amount, 'unit_area': self.unit_area,
-                'has_reception': self.has_reception,
+                'is_occupied': self.is_occupied, 'is_booked': self.is_booked, 'rental_amount': self.rental_amount,
+                'unit_area': self.unit_area, 'has_reception': self.has_reception,
                 'lease_start_date': self.lease_start_date.isoformat() if self.lease_start_date else None,
                 'lease_end_date': self.lease_end_date.isoformat() if self.lease_end_date else None}
 

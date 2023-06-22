@@ -38,3 +38,7 @@ class QuotationForm(BaseModel):
     booking_type: str | None
     lease_start_date: date | None = None
     lease_end_date: date | None = None
+
+    @property
+    def property_id(self) -> str:
+        return self.company

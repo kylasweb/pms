@@ -83,9 +83,11 @@ async def edit_building(user: User, building_id: str):
 @login_required
 async def do_edit_building(user: User, building_id: str):
     updated_building: UpdateProperty = UpdateProperty(**request.form)
-    _ = await company_controller.update_property(user=user, property_details=updated_building)
+    _property = await company_controller.update_property(user=user, property_details=updated_building)
+    if _property is not None:
+        flash(message="Successfully updated Property/Building", category="success")
+
     context = await get_common_context(user=user, building_id=building_id)
-    flash(message="Successfully updated Property/Building", category="success")
     return render_template('building/building.html', **context)
 
 

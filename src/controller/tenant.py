@@ -1,5 +1,5 @@
 from src.controller import error_handler
-from src.database.models.properties import Unit
+from src.database.models.properties import Unit, Property
 from src.database.models.tenants import Tenant, QuotationForm
 from src.database.models.users import User
 from src.database.sql import Session
@@ -30,6 +30,7 @@ class TenantController:
     @error_handler
     async def create_quotation(self, user: User, quotation: QuotationForm):
         """
+        **create_quotation**
 
         :param user:
         :param quotation:
@@ -37,15 +38,21 @@ class TenantController:
         """
 
         self._logger.info(f"Creating Quotation with : {quotation}")
-
+        property_listed: Property = await company_controller.get_property(user=user, property_id=quotation.property_id)
         property_units: list[Unit] = await company_controller.get_un_leased_units(
             user=user, property_id=quotation.building)
 
-        min_rental_unit: Unit = min([unit for unit in property_units], key=lambda unit: unit.rental_amount)
-        max_rental_unit: Unit = max([unit for unit in property_units], key=lambda unit: unit.rental_amount)
+        min_rental_unit: Unit = min(property_units, key=lambda unit: unit.rental_amount)
+        max_rental_unit: Unit = max(property_units, key=lambda unit: unit.rental_amount)
 
         return await self.do_quote(min_rental_unit, max_rental_unit)
 
     @error_handler
     async def do_quote(self, min_rental_unit: Unit, max_rental_unit: Unit):
-        pass
+        # Perform quotation logic using min_rental_unit and max_rental_unit
+        # Implement the logic for generating the quotation based on the provided rental units
+        # ...
+        # ...
+        quotation = {}
+        # Return the generated quotation
+        return quotation
