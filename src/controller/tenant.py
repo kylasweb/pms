@@ -36,7 +36,6 @@ class TenantController:
         :param quotation:
         :return:
         """
-
         self._logger.info(f"Creating Quotation with : {quotation}")
 
         property_listed: Property = await company_controller.get_property(user=user, property_id=quotation.property_id)
