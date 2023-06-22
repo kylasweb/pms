@@ -75,6 +75,21 @@ class Unit(BaseModel):
             return False
         return value
 
+    @classmethod
+    @validator('is_booked', pre=True)
+    def validate_is_booked(cls, value):
+
+        if not isinstance(value, bool):
+            return False
+        return value
+
+    @classmethod
+    @validator('is_occupied', pre=True)
+    def validate_is_occupied(cls, value):
+        if not isinstance(value, bool):
+            return False
+        return value
+
 
 class AddUnit(BaseModel):
     property_id: str
@@ -82,6 +97,23 @@ class AddUnit(BaseModel):
     rental_amount: int
     unit_area: int
     has_reception: bool
+    is_booked: bool = Field(default=False)
+    is_occupied: bool = Field(default=False)
+
+    @classmethod
+    @validator('is_booked', pre=True)
+    def validate_is_booked(cls, value):
+
+        if not isinstance(value, bool):
+            return False
+        return value
+
+    @classmethod
+    @validator('is_occupied', pre=True)
+    def validate_is_occupied(cls, value):
+        if not isinstance(value, bool):
+            return False
+        return value
 
 
 class UpdateProperty(BaseModel):
