@@ -4,7 +4,7 @@ from pydantic import ValidationError
 
 from src.logger import init_logger
 from src.database.models.auth import Auth, RegisterUser
-from src.database.models.users import User
+from src.database.models.users import User, CreateUser
 from src.controller.auth import UserController
 
 auth_route = Blueprint('auth', __name__)
@@ -32,17 +32,18 @@ async def do_login():
         auth_user = Auth(**request.form)
     except ValidationError as e:
         auth_logger.error(str(e))
-        return await create_response(url_for('auth.get_login'), 'Login failed. Please try again.', 'danger')
+        return await create_response(url_for('auth.get_login'), 'Login failed. Check your username and password.',
+                                     'danger')
 
-    login_user = await auth_controller.login(username=auth_user.username, password=auth_user.password)
-    if login_user and login_user.get('username') == auth_user.username:
+    login_user: User | None = await auth_controller.login(username=auth_user.username, password=auth_user.password)
+    if login_user and login_user.username == auth_user.username:
         response = await create_response(url_for('companies.get_companies'))
         delay = REMEMBER_ME_DELAY if auth_user.remember == "on" else 30
         expiration = datetime.utcnow() + timedelta(minutes=delay)
-        response.set_cookie('auth', value=login_user.get('user_id'), expires=expiration, httponly=True)
+        response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
         return response
     else:
-        return await create_response(url_for('auth.get_login'), 'Login failed. Please try again.', 'danger')
+        return await create_response(url_for('auth.get_login'), 'Login failed. you may not be registered in this system', 'danger')
 
 
 @auth_route.get('/admin/logout')
@@ -61,26 +62,31 @@ async def get_register():
 @auth_route.post('/admin/register')
 async def do_register():
     try:
-        register_user = RegisterUser(**request.form)
+        register_user: RegisterUser = RegisterUser(**request.form)
     except ValidationError as e:
         auth_logger.error(str(e))
         return await create_response(url_for('auth.get_register'), 'Please fill in all the required fields.', 'danger')
 
     user_controller = UserController()
 
-    user_exist = await user_controller.get_by_email(email=register_user.email)
+    user_exist: User | None = await user_controller.get_by_email(email=register_user.email)
+    # user bool test for the conditions necessary to validate the user
     if user_exist:
         flash(message='User Already Exist please login', category='success')
         return await create_response(url_for('auth.get_login'))
+    print(f"registering user : {register_user}")
+    user_data: CreateUser = CreateUser(**register_user.dict(exclude={'terms'}))
 
-    user_data = User(**register_user.dict(exclude={'terms'}))
+    _user_data: User | None = await user_controller.post(user=user_data)
+    if _user_data:
+        flash(message='Successfully logged in', category='success')
+        response: Response = await create_response(url_for('companies.get_companies'))
+        expiration = datetime.utcnow() + timedelta(minutes=30)
+        response.set_cookie('auth', value=user_data.user_id, expires=expiration, httponly=True)
+        return response
 
-    _user_data = await user_controller.post(user=user_data)
-    flash(message='Successfully logged in', category='success')
-    response = await create_response(url_for('companies.get_companies'))
-    expiration = datetime.utcnow() + timedelta(minutes=30)
-    response.set_cookie('auth', value=_user_data.get('user_id'), expires=expiration, httponly=True)
-    return response
+    flash(message='failed to create new user try again later', category='danger')
+    return await create_response(url_for('home.get_home'))
 
 
 @auth_route.get('/admin/password-reset')

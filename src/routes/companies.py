@@ -23,13 +23,13 @@ companies_logger.setLevel(logging.INFO)
 @companies_route.get('/admin/companies')
 @login_required
 async def get_companies(user: User):
-    user_data = user.dict()
+
+    context: dict[str, str] = user.dict() if user else {}
     companies_controller = CompaniesController()
     companies: list[Company] = await companies_controller.get_user_companies(user_id=user.user_id)
     companies_dict = [company.dict() for company in companies if company] if isinstance(companies, list) else []
 
-    context = dict(user=user_data,
-                   companies=companies_dict)
+    context.update(dict(companies=companies_dict))
 
     return render_template('companies/companies.html', **context)
 
@@ -93,13 +93,13 @@ async def do_edit_company(user: User, company_id: str):
     """
     try:
         company_data: UpdateCompany = UpdateCompany(**request.form)
-    except ValidationError as e:
+    except ValidationError:
         message: str = "Error cannot update Company Data, Invalid Fields"
         flash(message=message, category="danger")
         return redirect(url_for('companies.get_company', company_id=company_id))
 
     company_controller = CompaniesController()
-    updated_company = await company_controller.update_company(user=user, company_data=company_data)
+    _ = await company_controller.update_company(user=user, company_data=company_data)
     flash(message="Successfully Updated Company Data", category="success")
     return redirect(url_for('companies.get_company', company_id=company_id))
 
@@ -110,7 +110,7 @@ async def do_add_bank_account(user: User, company_id: str):
     try:
         bank_account_details: BusinessBankAccount = BusinessBankAccount(**request.form)
         if company_id != bank_account_details.company_id:
-            flash(message='Ounch That one hurt ', category="danger")
+            flash(message='Ouch That one hurt ', category="danger")
             return redirect(url_for('home.get_home'))
         companies_controller = CompaniesController()
         account_details = await companies_controller.update_bank_account(user=user,
@@ -145,11 +145,14 @@ async def print_company(user: User, company_id: str):
     _title = f"{company_data.company_name.upper()} Report"
 
     company_data: CompanyPrintParser = map_company_to_parser(company=company_data)
-    bank_account_data: BankAccountPrintParser = BankAccountPrintParser(**company_bank_account.dict())
     company_data_dict = {}
+    if company_bank_account:
+        bank_account_data: BankAccountPrintParser = BankAccountPrintParser(**company_bank_account.dict())
+        company_data_dict.update({"Bank Account": bank_account_data.to_dict()})
+
     company_data_dict.update(company_data.to_dict())
-    company_data_dict.update({"Bank Account": bank_account_data.to_dict()})
-    company_data_dict.update({"Properties": [building.dict() for building in properties_list]})
+    properties_dict = [building.dict() for building in properties_list if building] if isinstance(properties_list, list) else []
+    company_data_dict.update({"Properties": properties_dict})
 
     document_buffer = create_report(title=_title, data=company_data_dict)
 

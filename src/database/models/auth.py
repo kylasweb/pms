@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 class Auth(BaseModel):
     username: str
     password: str
-    remember: str
+    remember: str | None
 
 
 class RegisterUser(BaseModel):

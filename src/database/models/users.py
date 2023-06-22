@@ -1,6 +1,8 @@
+import hmac
 import uuid
 from pydantic import BaseModel, Field
 from enum import Enum
+from src.controller.encryptor import encryptor
 
 
 class UserType(str, Enum):
@@ -24,14 +26,46 @@ class User(BaseModel):
     - full_name (str): The full name of the user.
     - contact_number (str): The contact number of the user.
     """
-    user_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
     is_tenant: bool = Field(default=False)
     tenant_id: str | None
     username: str
-    password: str | None
+    password_hash: str
     email: str
     full_name: str | None
     contact_number: str | None
 
     class Config:
         orm_mode = True
+
+    def __bool__(self) -> bool:
+        return bool(self.user_id) and bool(self.username) and bool(self.password_hash)
+
+    def is_login(self, password: str) -> bool:
+        """
+
+        :param password:
+        :return:
+        """
+        return encryptor.compare_hashes(hash=self.password_hash, password=password)
+
+
+class CreateUser(BaseModel):
+    user_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    is_tenant: bool = Field(default=False)
+    tenant_id: str | None
+    username: str
+    password: str
+    email: str
+    full_name: str | None
+    contact_number: str | None
+
+    @property
+    def password_hash(self):
+        return encryptor.create_hash(password=self.password)
+
+    def to_dict(self) -> dict[str, str | bool]:
+        dict_ = self.dict(exclude={'password'})
+        dict_.update(dict(password_hash=self.password_hash))
+        print(f"Update User : {dict_}")
+        return dict_

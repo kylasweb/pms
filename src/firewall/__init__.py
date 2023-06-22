@@ -6,6 +6,7 @@ import requests
 from CloudFlare import CloudFlare
 from CloudFlare.exceptions import CloudFlareAPIError
 from flask import Flask, request, abort, Response
+from requests import ReadTimeout
 
 from src.logger import init_logger
 from src.config import config_instance
@@ -204,11 +205,14 @@ class Firewall:
         _headers = {'Accept': 'application/json', 'X-Auth-Email': EMAIL}
         try:
             with requests.Session() as send_request:
-                response = send_request.get(url=_uri, headers=_headers)
-                response_data: dict[str, dict[str, str] | list[str]] = response.json()
-                ipv4_cidrs = response_data.get('result', {}).get('ipv4_cidrs', DEFAULT_IPV4)
-                ipv6_cidrs = response_data.get('result', {}).get('ipv6_cidrs', [])
-                return ipv4_cidrs, ipv6_cidrs
+                try:
+                    response = send_request.get(url=_uri, headers=_headers)
+                    response_data: dict[str, dict[str, str] | list[str]] = response.json()
+                    ipv4_cidrs = response_data.get('result', {}).get('ipv4_cidrs', DEFAULT_IPV4)
+                    ipv6_cidrs = response_data.get('result', {}).get('ipv6_cidrs', [])
+                    return ipv4_cidrs, ipv6_cidrs
+                except (ConnectionError, ReadTimeout) as e:
+                    return [], []
 
         except CloudFlareAPIError:
             return [], []

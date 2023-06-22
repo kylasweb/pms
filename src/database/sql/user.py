@@ -1,12 +1,7 @@
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, inspect
-from sqlalchemy.dialects.mysql import ENUM
-from sqlalchemy.orm import relationship
-
-from src.main import bcrypt
-from src.database.sql import Base, engine
-from src.database.models.users import UserType
+from sqlalchemy import Column, String, Boolean, ForeignKey, inspect
 
 from src.database.constants import ID_LEN, NAME_LEN
+from src.database.sql import Base, engine
 
 
 class UserORM(Base):
@@ -26,15 +21,16 @@ class UserORM(Base):
         if not inspect(engine).has_table(cls.__tablename__):
             Base.metadata.create_all(bind=engine)
 
-    def __init__(self, user_id: str, is_tenant: bool, tenant_id: str, username: str, password: str,
+    def __init__(self, user_id: str, is_tenant: bool, tenant_id: str, username: str, password_hash: str,
                  email: str, full_name: str, contact_number: str):
         self.user_id = user_id
         self.tenant_id = tenant_id
         self.is_tenant = is_tenant
-
         self.username = username
-        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+        self.password_hash = password_hash
         self.email = email
+        self.full_name = full_name
+        self.contact_number = contact_number
 
     def __bool__(self) -> bool:
         return bool(self.user_id) and bool(self.username) and bool(self.email)
@@ -46,6 +42,7 @@ class UserORM(Base):
             'tenant_id': self.tenant_id,
             'username': self.username,
             'email': self.email,
+            'password_hash': self.password_hash,
             'full_name': self.full_name,
             'contact_number': self.contact_number
         }

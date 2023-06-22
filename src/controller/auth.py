@@ -1,12 +1,19 @@
-from src.database.models.users import User
+from flask import Flask
+from pydantic import ValidationError
+from sqlalchemy import or_
+
+from src.database.models.users import User, CreateUser
 from src.database.sql import Session
 from src.database.sql.user import UserORM
-from src.controller import error_handler
+from src.controller import error_handler, UnauthorizedError
 
 
 class UserController:
 
     def __init__(self):
+        pass
+
+    def init_app(self, app: Flask):
         pass
 
     @staticmethod
@@ -26,7 +33,7 @@ class UserController:
 
     @staticmethod
     @error_handler
-    async def get_by_email(email: str) -> dict[str, str] | None:
+    async def get_by_email(email: str) -> User | None:
         """
 
         :param email:
@@ -37,7 +44,8 @@ class UserController:
 
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter(UserORM.email == email.casefold()).first()
-            return user_data.to_dict()
+
+            return User(**user_data.to_dict()) if user_data else None
 
     @staticmethod
     @error_handler
@@ -47,25 +55,27 @@ class UserController:
         :param email:
         :return:
         """
+        # TODO please complete the method to send the password reset email
         pass
-
 
     @staticmethod
     @error_handler
-    async def post(user: User) -> dict[str, str] | None:
+    async def post(user: CreateUser) -> User | None:
         """
 
         :param user:
         :return:
         """
         with Session() as session:
-            user_data: UserORM = session.query(UserORM).filter(UserORM.user_id == user.user_id).first()
+            user_data: UserORM = session.query(UserORM).filter(or_(UserORM.user_id == user.user_id,
+                                                                   UserORM.email == user.email)).first()
             if user_data:
                 return None
-            new_user: UserORM = UserORM(**user.dict())
+
+            new_user: UserORM = UserORM(**user.to_dict())
             session.add(new_user)
             session.commit()
-            return user.dict(exclude={'password'})
+            return User(**user_data.to_dict())
 
     @staticmethod
     @error_handler
@@ -88,13 +98,15 @@ class UserController:
 
     @staticmethod
     @error_handler
-    async def login(username: str, password: str) -> dict[str, str] | None:
+    async def login(username: str, password: str) -> User | None:
         with Session() as session:
             user_data: UserORM = session.query(UserORM).filter_by(username=username).first()
-            if not user_data:
-                return None
+            try:
+                if user_data:
+                    user: User = User(**user_data.to_dict())
+                else:
+                    return None
+            except ValidationError as e:
+                raise UnauthorizedError(description="Cannot Login User please check your login details")
 
-            # Perform password validation here (e.g., compare hashes)
-
-            # If password is valid, return the user as a User object
-            return user_data.to_dict()
+            return user if user.is_login(password=password) else None

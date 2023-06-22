@@ -1,17 +1,17 @@
 from flask import Flask
-from flask_bcrypt import Bcrypt
 
+from src.controller.auth import UserController
 from src.controller.companies import CompaniesController
 from src.firewall import Firewall
 from src.utils import template_folder, static_folder
-
-bcrypt = Bcrypt()
-
+from src.controller.encryptor import encryptor
 firewall = Firewall()
 company_controller = CompaniesController()
 
 from src.controller.tenant import TenantController
+
 tenant_controller = TenantController()
+user_controller = UserController()
 
 
 def bootstrapper():
@@ -39,8 +39,10 @@ def create_app(config):
     app.template_folder = template_folder()
     app.static_folder = static_folder()
     app.config['SECRET_KEY'] = config.SECRET_KEY
-    bcrypt.init_app(app=app)
+
     with app.app_context():
+        encryptor.init_app(app=app)
+        user_controller.init_app(app=app)
         firewall.init_app(app=app)
 
         from src.routes.home import home_route
