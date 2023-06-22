@@ -28,7 +28,7 @@ class TenantController:
             return None
 
     @error_handler
-    async def create_quotation(self, user: User, quotation: QuotationForm):
+    async def create_quotation(self, user: User, quotation: QuotationForm) -> dict[str, Unit | Property]:
         """
         **create_quotation**
 
@@ -45,14 +45,8 @@ class TenantController:
         min_rental_unit: Unit = min(property_units, key=lambda unit: unit.rental_amount)
         max_rental_unit: Unit = max(property_units, key=lambda unit: unit.rental_amount)
 
-        return await self.do_quote(min_rental_unit, max_rental_unit)
+        quote: dict[str, Unit | Property] = {'recommended_unit': min_rental_unit,
+                                             'alternate_unit': max_rental_unit,
+                                             'property': property_listed}
 
-    @error_handler
-    async def do_quote(self, min_rental_unit: Unit, max_rental_unit: Unit):
-        # Perform quotation logic using min_rental_unit and max_rental_unit
-        # Implement the logic for generating the quotation based on the provided rental units
-        # ...
-        # ...
-        quotation = {}
-        # Return the generated quotation
-        return quotation
+        return quote
