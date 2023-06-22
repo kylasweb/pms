@@ -27,6 +27,7 @@ class PropertyORM(Base):
             'property_id': self.property_id,
             'company_id': self.company_id,
             'name': self.name,
+            'address': self.address,
             'property_type': self.property_type,
             'number_of_units': self.number_of_units,
             'available_units': self.available_units,
