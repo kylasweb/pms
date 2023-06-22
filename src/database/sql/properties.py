@@ -7,12 +7,12 @@ from src.database.sql import Base, engine
 class PropertyORM(Base):
     __tablename__ = 'properties'
 
-    property_id = Column(String(ID_LEN), primary_key=True)
-    company_id = Column(String(ID_LEN), index=True)
+    property_id: str = Column(String(ID_LEN), primary_key=True)
+    company_id: str = Column(String(ID_LEN), index=True)
     name: str = Column(String(NAME_LEN))
-    property_type = Column(String(NAME_LEN))
-    number_of_units = Column(Integer)
-    available_units: int = Column(Integer)
+    property_type: str = Column(String(NAME_LEN))
+    number_of_units: int = Column(Integer, default=0)
+    available_units: int = Column(Integer, default=0)
     amenities: str = Column(String(255))
     landlord: str = Column(String(64))
     maintenance_contact: str = Column(String(64))

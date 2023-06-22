@@ -137,10 +137,12 @@ async def print_company(user: User, company_id: str):
     """
     user_id = user.user_id
     companies_controller = CompaniesController()
-    company_data: Company = await companies_controller.get_company(company_id=company_id, user_id=user_id)
+    company_data: Company = await companies_controller.get_company(company_id=company_id,
+                                                                   user_id=user_id)
     company_bank_account: BusinessBankAccount = await companies_controller.get_bank_accounts(user=user,
                                                                                              company_id=company_id)
-    properties_list: list[Property] = await companies_controller.get_properties(user=user, company_id=company_id)
+    properties_list: list[Property] = await companies_controller.get_properties(user=user,
+                                                                                company_id=company_id)
 
     _title = f"{company_data.company_name.upper()} Report"
 
@@ -151,7 +153,8 @@ async def print_company(user: User, company_id: str):
         company_data_dict.update({"Bank Account": bank_account_data.to_dict()})
 
     company_data_dict.update(company_data.to_dict())
-    properties_dict = [building.dict() for building in properties_list if building] if isinstance(properties_list, list) else []
+    properties_dict = [building.dict() for building
+                       in properties_list if building] if isinstance(properties_list, list) else []
     company_data_dict.update({"Properties": properties_dict})
 
     document_buffer = create_report(title=_title, data=company_data_dict)

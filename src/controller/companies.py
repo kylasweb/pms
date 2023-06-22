@@ -2,7 +2,7 @@ import uuid
 
 from src.database.sql.bank_account import BankAccountORM
 from src.database.models.bank_accounts import BusinessBankAccount
-from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty
+from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
 from src.database.sql.properties import PropertyORM, UnitORM
 from src.database.sql import Session
 from src.database.models.users import User
@@ -124,7 +124,7 @@ class CompaniesController:
             return account_details
 
     @error_handler
-    async def add_property(self, user: User, _property: Property) -> Property | None:
+    async def add_property(self, user: User, _property: CreateProperty) -> Property | None:
         """
 
         :param user:
@@ -301,6 +301,10 @@ class CompaniesController:
                                                                    session=session)
             if not is_company_member:
                 raise UnauthorizedError(description="Not Authorized to access the Property")
+
+            # Note Adding one more unit number of units and available units
+            _property.number_of_units += 1
+            _property.available_units += 1
 
             unit: UnitORM = UnitORM(**unit_data.dict())
             session.add(unit)

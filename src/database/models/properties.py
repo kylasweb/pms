@@ -24,12 +24,12 @@ class Property(BaseModel):
     - parking_spots (int): The number of parking spots available in the property.
     """
 
-    property_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Property ID")
-    company_id: str | None
+    property_id: str
+    company_id: str
     name: str
     property_type: str
-    number_of_units: int
-    available_units: int
+    number_of_units: int | None
+    available_units: int | None
     amenities: str
     landlord: str
     maintenance_contact: str
@@ -96,3 +96,19 @@ class UpdateProperty(BaseModel):
     description: str | None
     built_year: int | None
     parking_spots: int | None
+
+
+class CreateProperty(BaseModel):
+    property_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Property ID")
+    company_id: str | None
+    name: str
+    property_type: str
+    number_of_units: int | None
+    available_units: int | None
+    amenities: str
+    landlord: str
+    maintenance_contact: str
+    lease_terms: str
+    description: str
+    built_year: int
+    parking_spots: int
