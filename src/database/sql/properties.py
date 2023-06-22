@@ -9,6 +9,7 @@ class PropertyORM(Base):
 
     property_id: str = Column(String(ID_LEN), primary_key=True)
     company_id: str = Column(String(ID_LEN), index=True)
+    address: str = Column(String(255))
     name: str = Column(String(NAME_LEN))
     property_type: str = Column(String(NAME_LEN))
     number_of_units: int = Column(Integer, default=0)

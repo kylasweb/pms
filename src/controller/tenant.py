@@ -47,6 +47,7 @@ class TenantController:
 
         quote: dict[str, Unit | Property] = {'recommended_unit': min_rental_unit,
                                              'alternate_unit': max_rental_unit,
-                                             'property': property_listed}
+                                             'property': property_listed
+                                             }
 
         return quote

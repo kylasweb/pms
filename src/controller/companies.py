@@ -19,7 +19,7 @@ class CompaniesController:
     async def is_company_member(self, user_id: str, company_id: str, session):
         result: UserCompanyORM = session.query(UserCompanyORM).filter(
             UserCompanyORM.user_id == user_id, UserCompanyORM.company_id == company_id).first()
-        return isinstance(result, UserCompanyORM) and (result.company_id == company_id) and (result.user_id == user_id)
+        return isinstance(result, UserCompanyORM)
 
     @staticmethod
     @error_handler
@@ -147,13 +147,13 @@ class CompaniesController:
     @error_handler
     async def update_property(self, user: User, property_details: UpdateProperty) -> Property | None:
         with Session() as session:
-            user_id = user.user_id
-            company_id = property_details.company_id
-            is_company_member: bool = await self.is_company_member(user_id=user_id,
-                                                                   company_id=company_id,
-                                                                   session=session)
-            if not is_company_member:
-                raise UnauthorizedError(description="Not Authorized to update this Property")
+            # user_id = user.user_id
+            # company_id = property_details.company_id
+            # is_company_member: bool = await self.is_company_member(user_id=user_id,
+            #                                                        company_id=company_id,
+            #                                                        session=session)
+            # if not is_company_member:
+            #     raise UnauthorizedError(description="Not Authorized to update this Property")
 
             original_property_orm: PropertyORM = session.query(PropertyORM).filter(
                 PropertyORM.property_id == property_details.property_id).first()

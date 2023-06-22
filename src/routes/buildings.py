@@ -82,10 +82,14 @@ async def edit_building(user: User, building_id: str):
 @buildings_route.post('/admin/edit-building/<string:building_id>')
 @login_required
 async def do_edit_building(user: User, building_id: str):
-    updated_building: UpdateProperty = UpdateProperty(**request.form)
-    _property = await company_controller.update_property(user=user, property_details=updated_building)
-    if _property is not None:
-        flash(message="Successfully updated Property/Building", category="success")
+    try:
+        updated_building: UpdateProperty = UpdateProperty(**request.form)
+        _property = await company_controller.update_property(user=user, property_details=updated_building)
+        if _property is not None:
+            flash(message="Successfully updated Property/Building", category="success")
+    except ValidationError as e:
+        print(f"error {str(e)}")
+        flash(message="Error updating Property/Building...", category="danger")
 
     context = await get_common_context(user=user, building_id=building_id)
     return render_template('building/building.html', **context)

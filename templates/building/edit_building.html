@@ -1,6 +1,10 @@
+
+
+
+
 <form class="row m-b-2" action="{{ url_for('buildings.do_edit_building', building_id=property.property_id) }}" method="POST">
     <input type="hidden" name="property_id" value="{{ property.property_id }}" />
-
+    <input type="hidden" name="company_id" value="{{ property.company_id }}" />
 <div class="card-footer col-sm-12 col-lg-6 col-md-6">
     <div class="card-header">
         <h3 class="card-title">Editing ...</h3>

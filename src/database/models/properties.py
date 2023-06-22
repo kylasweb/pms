@@ -27,6 +27,8 @@ class Property(BaseModel):
     property_id: str
     company_id: str
     name: str
+    description: str
+    address: str | None
     property_type: str
     number_of_units: int | None
     available_units: int | None
@@ -34,7 +36,6 @@ class Property(BaseModel):
     landlord: str
     maintenance_contact: str
     lease_terms: str  # Monthly, Daily, Hourly
-    description: str
     built_year: int
     parking_spots: int
 
@@ -85,16 +86,15 @@ class AddUnit(BaseModel):
 
 class UpdateProperty(BaseModel):
     property_id: str
-    company_id: str | None
-    name: str | None
+    company_id: str
+    name: str
+    description: str | None
+    address: str | None
     property_type: str | None
-    number_of_units: int | None
-    available_units: int | None
     amenities: str | None
     landlord: str | None
     maintenance_contact: str | None
     lease_terms: str | None
-    description: str | None
     built_year: int | None
     parking_spots: int | None
 
