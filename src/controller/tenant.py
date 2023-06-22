@@ -38,10 +38,11 @@ class TenantController:
         """
 
         self._logger.info(f"Creating Quotation with : {quotation}")
+
         property_listed: Property = await company_controller.get_property(user=user, property_id=quotation.property_id)
         property_units: list[Unit] = await company_controller.get_un_leased_units(
             user=user, property_id=quotation.building)
-
+        # TODO - create a smarter recommendation algorithm for quotations
         min_rental_unit: Unit = min(property_units, key=lambda unit: unit.rental_amount)
         max_rental_unit: Unit = max(property_units, key=lambda unit: unit.rental_amount)
 
