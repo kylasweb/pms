@@ -69,7 +69,7 @@ class LeaseAgreementNotifier:
         return message, subject
 
     @staticmethod
-    async def get_client_data( agreement: LeaseAgreement):
+    async def get_client_data(agreement: LeaseAgreement):
         property_ = await company_controller.get_company_internal(property_id=agreement.property_id)
         company = await company_controller.get_company_internal(company_id=property_.company_id)
         tenant = await tenant_controller.get_tenant_by_id(tenant_id=agreement.tenant_id)
@@ -100,8 +100,21 @@ class LeaseAgreementNotifier:
         ]
         return expired_agreements
 
+    async def send_notice_to_admin(self, agreement: LeaseAgreement):
+        """
+        **send_notice_to_admin**
+            admin notices will also be visible on
+            the web application as messages
+
+        :param agreement:
+        :return:
+        """
+
+        pass
+
     async def send_notifications(self, agreement: LeaseAgreement):
         await self.send_tenant_email(agreement=agreement)
+        await self.send_notice_to_admin(agreement=agreement)
 
     async def process_expired_agreements(self):
         """find expired lease agreements"""
@@ -109,19 +122,10 @@ class LeaseAgreementNotifier:
         expired_agreements = await self.check_expired_agreements()
         for agreement in expired_agreements:
             await self.send_notifications(agreement=agreement)
-            await self.clear_unit_for_booking(agreement)
 
         expiring_agreements = await self.check_agreements_about_to_expire()
         for agreement in expiring_agreements:
             await self.send_notifications(agreement=agreement)
-
-    async def clear_unit_for_booking(self, agreement: LeaseAgreement):
-        """
-
-        :param agreement:
-        :return:
-        """
-        pass
 
 
 if __name__ == "__main__":
