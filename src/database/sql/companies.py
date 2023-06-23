@@ -49,6 +49,7 @@ class UserCompanyORM(Base):
     id: str = Column(String(ID_LEN), primary_key=True)
     company_id: str = Column(String(ID_LEN), index=True)
     user_id: str = Column(String(ID_LEN), index=True)
+    user_level: str = Column(String(NAME_LEN), default="admin")
 
     @classmethod
     def create_if_not_table(cls):

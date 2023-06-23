@@ -61,10 +61,9 @@ async def get_company(user: User, company_id: str):
 @login_required
 async def get_create_company(user: User):
     user_data = user.dict()
-    notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
+    notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
-    notifications_dicts = [notice.dict() for
-                           notice in notifications_list if notice] if isinstance(notifications_list, list) else []
+    notifications_dicts = [notice.dict() for notice in notifications.unread_notification]
 
     context = dict(user=user_data, notifications_list=notifications_dicts)
 

@@ -210,6 +210,16 @@ class CompaniesController:
                 PropertyORM.property_id == property_id).first()
             return Property(**property_.to_dict())
 
+    async def user_company_id(self, company_id: str) -> list[UserCompanyORM]:
+        """
+
+        :param company_id:
+        :return:
+        """
+        with Session() as session:
+            users_for_company: list[UserCompanyORM] = session.query(UserCompanyORM).filter(UserCompanyORM.company_id == company_id).all()
+            return users_for_company
+
     @error_handler
     async def get_bank_accounts(self, user: User, company_id: str) -> BusinessBankAccount:
         """

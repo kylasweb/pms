@@ -22,7 +22,7 @@ def get_admin_notices(user:User, user_id: str):
     """
     notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user_id, user=user)
 
-    return render_template('notifications/notifications.html', notifications=notifications_list.notifications)
+    return render_template('notifications/notifications_all.html', notifications=notifications_list.notifications)
 
 
 
