@@ -26,6 +26,19 @@ class TenantController:
             if isinstance(tenant, TenantORM):
                 return Tenant(**tenant.to_dict())
             return None
+    @staticmethod
+    @error_handler
+    async def get_tenant_by_id(tenant_id: str) -> Tenant | None:
+        """
+
+        :param tenant_id:
+        :return:
+        """
+        with Session() as session:
+            tenant = session.query(TenantORM).filter(TenantORM.tenant_id == tenant_id).first()
+            if isinstance(tenant, TenantORM):
+                return Tenant(**tenant.to_dict())
+            return None
 
     @error_handler
     async def create_quotation(self, user: User, quotation: QuotationForm) -> dict[str, Unit | Property]:

@@ -49,6 +49,12 @@ class CompaniesController:
             company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
             return Company(**company_orm.to_dict()) if company_orm else None
 
+    @error_handler
+    async def get_company_internal(company_id: str) -> Company | None:
+        with Session() as session:
+            company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
+            return Company(**company_orm.to_dict()) if company_orm else None
+
     @staticmethod
     @error_handler
     async def create_company(company: Company, user: User) -> Company:
@@ -190,6 +196,18 @@ class CompaniesController:
             properties: list[PropertyORM] = session.query(PropertyORM).filter(
                 PropertyORM.company_id == company_id).all()
             return [Property(**_prop.to_dict()) for _prop in properties]
+
+    @error_handler
+    async def get_property_by_id_internal(self, property_id: str) -> list[Property]:
+        """
+
+        :param property_id:
+        :return:
+        """
+        with Session() as session:
+            property_: PropertyORM = session.query(PropertyORM).filter(
+                PropertyORM.property_id == property_id).first()
+            return Property(**property_.to_dict())
 
     @error_handler
     async def get_bank_accounts(self, user: User, company_id: str) -> BusinessBankAccount:

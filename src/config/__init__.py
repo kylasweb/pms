@@ -29,6 +29,21 @@ class Logging(BaseSettings):
         env_file = '.env.development'
         env_file_encoding = 'utf-8'
 
+class ResendSettings(BaseSettings):
+    API_KEY: str = Field(..., env="RESEND_API_KEY")
+    from_: str = Field(default="norespond@rental-manager.site")
+    class Config:
+        env_file = '.env.development'
+        env_file_encoding = 'utf-8'
+
+
+class EmailSettings(BaseSettings):
+    RESEND: ResendSettings = ResendSettings()
+
+    class Config:
+        env_file = '.env.development'
+        env_file_encoding = 'utf-8'
+
 
 class Settings(BaseSettings):
     APP_NAME: str = Field(default='rental and property manager')
@@ -36,6 +51,7 @@ class Settings(BaseSettings):
     CLIENT_SECRET: str = Field(..., env="CLIENT_SECRET")
     MYSQL_SETTINGS: MySQLSettings = MySQLSettings()
     CLOUDFLARE_SETTINGS: CloudFlareSettings = CloudFlareSettings()
+    EMAIL_SETTINGS: EmailSettings = EmailSettings()
     DEVELOPMENT_SERVER_NAME: str = Field(default="DESKTOP-T9V7F59")
     LOGGING: Logging = Logging()
     HOST_ADDRESSES: str = Field(..., env='HOST_ADDRESSES')
