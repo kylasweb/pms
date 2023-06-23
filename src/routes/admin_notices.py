@@ -11,7 +11,6 @@ notices_route = Blueprint('notices', __name__)
 
 
 
-
 @notices_route.get('/admin/user/<string:user_id>')
 @login_required
 def get_admin_notices(user: User, user_id: str):
@@ -20,6 +19,7 @@ def get_admin_notices(user: User, user_id: str):
     :param user_id:
     :return:
     """
+
 
 
 
