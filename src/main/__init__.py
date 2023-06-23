@@ -5,6 +5,7 @@ from src.controller.companies import CompaniesController
 from src.firewall import Firewall
 from src.utils import template_folder, static_folder
 from src.controller.encryptor import encryptor
+from src.controller.notifications_controller import NotificationsController
 firewall = Firewall()
 company_controller = CompaniesController()
 
@@ -12,7 +13,7 @@ from src.controller.tenant import TenantController
 
 tenant_controller = TenantController()
 user_controller = UserController()
-
+notifications_controller = NotificationsController()
 
 def bootstrapper():
     from src.database.sql.address import AddressORM
@@ -21,6 +22,7 @@ def bootstrapper():
     from src.database.sql.companies import UserCompanyORM, CompanyORM
     from src.database.sql.properties import PropertyORM, UnitORM
     from src.database.sql.bank_account import BankAccountORM
+    from src.database.sql.notifications import NotificationORM
 
     AddressORM.create_if_not_table()
     TenantORM.create_if_not_table()
@@ -31,6 +33,7 @@ def bootstrapper():
     PropertyORM.create_if_not_table()
     UnitORM.create_if_not_table()
     BankAccountORM.create_if_not_table()
+    NotificationORM.create_if_not_table()
 
 
 def create_app(config):

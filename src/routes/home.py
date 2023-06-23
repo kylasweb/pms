@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template
 
+from src.main import notifications_controller
+from src.database.models.notifications import NotificationsModel
 from src.database.models.users import User
 from src.authentication import user_details
 
@@ -11,8 +13,12 @@ home_route = Blueprint('home', __name__)
 async def get_home(user: User):
     if user:
         user_data = user.dict()
-        context = dict(user=user_data)
+        notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
+        notifications_dicts: list[dict[str, str | bool]] = [notice.dict() for notice in notifications_list
+                                                           if notice] if isinstance(notifications_list, list) else []
+
+        context = dict(user=user_data, notifications_list=notifications_dicts)
+
     else:
         context = {}
-
     return render_template('index.html', **context)

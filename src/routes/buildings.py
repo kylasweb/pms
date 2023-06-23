@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
-from src.main import company_controller
+from src.database.models.notifications import NotificationsModel
+from src.main import company_controller, notifications_controller
 from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
 from src.database.models.companies import Company
 from src.database.models.users import User
@@ -14,10 +15,15 @@ async def get_common_context(user: User, building_id: str, property_editor: bool
     user_data = user.dict()
     building_property: Property = await company_controller.get_property(user=user, property_id=building_id)
     property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
+    notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
+
+    notifications_dicts = [notice.dict() for
+                           notice in notifications_list if notice] if isinstance(notifications_list, list) else []
     context = dict(
         user=user_data,
         property=building_property.dict(),
         property_editor=property_editor,
+        notifications_list=notifications_dicts,
         units=[unit.dict() for unit in property_units]
     )
     return context
@@ -27,8 +33,12 @@ async def get_common_context(user: User, building_id: str, property_editor: bool
 @login_required
 async def get_buildings(user: User):
     user_data = user.dict()
-    context = dict(user=user_data)
+    notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
+    notifications_dicts = [notice.dict() for
+                           notice in notifications_list if notice] if isinstance(notifications_list, list) else []
+
+    context = dict(user=user_data, notifications_list=notifications_dicts)
     return render_template('building/buildings.html', **context)
 
 
@@ -51,8 +61,13 @@ async def add_building(user: User, company_id: str):
     user_data = user.dict()
 
     company: Company = await company_controller.get_company(company_id=company_id, user_id=user.user_id)
+    notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
+
+    notifications_dicts = [notice.dict() for
+                           notice in notifications_list if notice] if isinstance(notifications_list, list) else []
+
     context = dict(user=user_data,
-                   company=company.dict())
+                   company=company.dict(), notifications_list=notifications_dicts)
 
     return render_template('building/add_building.html', **context)
 

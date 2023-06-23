@@ -4,6 +4,8 @@ from io import BytesIO
 from flask import Blueprint, render_template, request, url_for, redirect, flash, send_file
 from pydantic import ValidationError
 
+from src.main import notifications_controller
+from src.database.models.notifications import NotificationsModel
 from src.reports.bank_account_report import BankAccountPrintParser
 from src.reports.company_report import map_company_to_parser, CompanyPrintParser
 from src.reports import create_report
@@ -59,7 +61,12 @@ async def get_company(user: User, company_id: str):
 @login_required
 async def get_create_company(user: User):
     user_data = user.dict()
-    context = dict(user=user_data)
+    notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
+
+    notifications_dicts = [notice.dict() for
+                           notice in notifications_list if notice] if isinstance(notifications_list, list) else []
+
+    context = dict(user=user_data, notifications_list=notifications_dicts)
 
     return render_template('companies/create_company.html', **context)
 

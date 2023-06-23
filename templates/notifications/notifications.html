@@ -1,0 +1,29 @@
+<div class="dropdown dib">
+    <div class="header-icon" data-toggle="dropdown">
+        <i class="ti-bell"></i>
+        <div class="drop-down dropdown-menu dropdown-menu-right">
+            <div class="dropdown-content-heading">
+                <span class="text-left">Recent Notifications</span>
+            </div>
+            <div class="dropdown-content-body">
+                <ul>
+                    {% for notification in notifications_list %}
+                    <li>
+                        <a href="#">
+                            <img class="pull-left m-r-10 avatar-img" src="{{ notification.image }}" alt="" />
+                            <div class="notification-content">
+                                <small class="notification-timestamp pull-right">{{ notification.time_created }}</small>
+                                <div class="notification-heading">{{ notification.title }}</div>
+                                <div class="notification-text">{{ notification.message }}</div>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                    <li class="text-center">
+                        <a href="#" class="more-link">See All</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

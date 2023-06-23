@@ -49,6 +49,7 @@ class CompaniesController:
             company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
             return Company(**company_orm.to_dict()) if company_orm else None
 
+    @staticmethod
     @error_handler
     async def get_company_internal(company_id: str) -> Company | None:
         with Session() as session:
@@ -153,13 +154,13 @@ class CompaniesController:
     @error_handler
     async def update_property(self, user: User, property_details: UpdateProperty) -> Property | None:
         with Session() as session:
-            # user_id = user.user_id
-            # company_id = property_details.company_id
-            # is_company_member: bool = await self.is_company_member(user_id=user_id,
-            #                                                        company_id=company_id,
-            #                                                        session=session)
-            # if not is_company_member:
-            #     raise UnauthorizedError(description="Not Authorized to update this Property")
+            user_id = user.user_id
+            company_id = property_details.company_id
+            is_company_member: bool = await self.is_company_member(user_id=user_id,
+                                                                   company_id=company_id,
+                                                                   session=session)
+            if not is_company_member:
+                raise UnauthorizedError(description="Not Authorized to update this Property")
 
             original_property_orm: PropertyORM = session.query(PropertyORM).filter(
                 PropertyORM.property_id == property_details.property_id).first()
@@ -198,7 +199,7 @@ class CompaniesController:
             return [Property(**_prop.to_dict()) for _prop in properties]
 
     @error_handler
-    async def get_property_by_id_internal(self, property_id: str) -> list[Property]:
+    async def get_property_by_id_internal(self, property_id: str) -> Property:
         """
 
         :param property_id:
