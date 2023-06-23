@@ -27,6 +27,20 @@ class LeaseAgreement(BaseModel):
     deposit_amount: float
     is_active: bool
 
+    @property
+    def days_left(self):
+        """
+            number of days left until lease expiry
+        :return:
+        """
+        today = date.today()
+        if today < self.start_date:
+            return (self.end_date - self.start_date).days
+        elif today > self.end_date:
+            return 0
+        else:
+            return (self.end_date - today).days
+
 
 class LeaseAgreementTemplate(BaseModel):
     """
