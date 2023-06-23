@@ -9,7 +9,7 @@ class LeaseController:
         pass
 
     @error_handler
-    def get_all_active_lease_agreements(self) -> list[LeaseAgreement]:
+    async def get_all_active_lease_agreements(self) -> list[LeaseAgreement]:
         with Session() as session:
             lease_agreements: list[LeaseAgreementORM] = session.query(LeaseAgreementORM).filter(
                 LeaseAgreementORM.is_active == True).all()

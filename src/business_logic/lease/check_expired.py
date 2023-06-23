@@ -101,7 +101,7 @@ class LeaseAgreementNotifier:
             agreement
             for agreement in self.agreements
             if agreement.end_date < today
-        ]
+        ] if isinstance(self.agreements, list) else []
         return expired_agreements
 
     async def send_notice_to_company_admins(self, agreement: LeaseAgreement):

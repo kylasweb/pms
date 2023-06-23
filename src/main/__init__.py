@@ -15,7 +15,8 @@ tenant_controller = TenantController()
 user_controller = UserController()
 notifications_controller = NotificationsController()
 
-
+from src.controller.lease_controller import LeaseController
+lease_agreement_controller = LeaseController()
 
 def bootstrapper():
     from src.database.sql.address import AddressORM
