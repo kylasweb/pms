@@ -6,7 +6,31 @@
             <div class='card-header'>
                 <h3 class="card-title">Notifications</h3>
             </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-title">
+                    <h4>Notice Board </h4>
+                </div>
+                <div class="recent-comment m-t-15">
+                    {% for notification in notifications.notifications %}
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#"><img class="media-object" src="{{ url_for('static', filename='images/avatar/1.jpg') }}" alt="..."></a>
+                            </div>
+                            <div class="media-body">
+                                {% if notification.is_read %}
+                                    <h4 class="media-heading color-primary">{{ notification.title }}</h4>
+                                {% else %}
+                                    <h4 class="media-heading color-info">{{ notification.title }}</h4>
+                                {% endif %}
+                                <p>{{ notification.message }}</p>
+                                <p class="comment-date">{{ notification.time_created }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- /# card -->
+        </div>
     </div>
-
-
 {% endblock %}

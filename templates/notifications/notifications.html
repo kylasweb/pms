@@ -20,7 +20,8 @@
                     </li>
                     {% endfor %}
                     <li class="text-center">
-                        <a href="#" class="more-link">See All</a>
+{#                        <a href="{{ url_for('notices.get_all') }}" class="text-info">See All</a>#}
+                        <a href="#" id="notifications_see_all" >See All</a>
                     </li>
                 </ul>
             </div>

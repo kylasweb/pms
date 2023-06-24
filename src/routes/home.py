@@ -11,10 +11,14 @@ home_route = Blueprint('home', __name__)
 @home_route.get('/')
 @user_details
 async def get_home(user: User):
+    """
+    :param user:
+    :return:
+    """
     if user:
         user_data = user.dict()
         notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
-        notifications_dicts = [notice.dict() for notice in notifications.unread_notification]
+        notifications_dicts = [notice.dict() for notice in notifications.unread_notification if notice] if notifications else []
 
         context = dict(user=user_data, notifications_list=notifications_dicts)
 

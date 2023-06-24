@@ -22,7 +22,6 @@ class LeaseAgreementORM(Base):
             Base.metadata.create_all(bind=engine)
 
 
-
 class LeaseAgreementTemplate(Base):
     __tablename__ = 'lease_agreement_template'
 

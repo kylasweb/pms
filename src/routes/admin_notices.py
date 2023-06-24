@@ -11,18 +11,14 @@ from src.authentication import login_required
 notices_route = Blueprint('notices', __name__)
 
 
-
-@notices_route.get('/admin/user/<string:user_id>')
+@notices_route.get('/admin/notifications')
 @login_required
-def get_admin_notices(user:User, user_id: str):
+async def get_all(user: User):
     """
-
-    :param user_id:
     :return:
     """
-    notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user_id, user=user)
+    notifications_list: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
-    return render_template('notifications/notifications_all.html', notifications=notifications_list.notifications)
+    notifications_dicts = [notice.dict() for notice in notifications_list.all_notifications] if notifications_list else []
 
-
-
+    return render_template('notifications/notifications_all.html', notifications_list=notifications_dicts)

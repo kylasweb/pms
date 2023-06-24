@@ -11,7 +11,7 @@ class NotificationsController:
 
     @staticmethod
     @error_handler
-    async def get_user_notifications(user_id: str) -> NotificationsModel:
+    async def get_user_notifications(user_id: str) -> NotificationsModel | None:
         """
 
         :param user_id:
@@ -21,6 +21,7 @@ class NotificationsController:
             notifications: list[NotificationORM] = session.query(NotificationORM).filter(
                 NotificationORM.user_id == user_id).all()
             notifications_ = [Notification(**notification.dict()) for notification in notifications]
-
-            notifications_list: NotificationsModel = NotificationsModel(**dict(notifications=notifications_))
-            return notifications_list
+            if notifications_:
+                notifications_list: NotificationsModel = NotificationsModel(**dict(notifications=notifications_))
+                return notifications_list
+            return  None

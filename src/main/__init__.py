@@ -63,8 +63,9 @@ def create_app(config):
         from src.routes.invoices import invoices_route
         from src.routes.statements import statements_route
         from src.routes.tenants import tenants_route
-        from src.cron.routes import cron_route
+        from src.routes.admin_notices import notices_route
 
+        from src.cron.routes import cron_route
         from src.routes.auth import auth_route
 
         app.register_blueprint(home_route)
@@ -78,6 +79,7 @@ def create_app(config):
         app.register_blueprint(auth_route)
         app.register_blueprint(tenants_route)
         app.register_blueprint(cron_route)
+        app.register_blueprint(notices_route)
 
         bootstrapper()
 

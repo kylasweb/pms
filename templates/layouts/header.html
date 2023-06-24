@@ -18,7 +18,7 @@
                                     <i class="ti-angle-down f-s-10"></i>
                                 </span>
                                 {% else %}
-                                    <a href="{{ url_for('auth.get_login') }}" class="user-avatar">login
+                                    <a href="#" class="user-avatar">login
                                         <i class="ti-user"></i>
                                     </a>
                                 {% endif %}
@@ -28,7 +28,7 @@
                                         <ul>
                                             {% if user %}
                                             <li>
-                                                <a href="#">
+                                                <a href="#" id="profile_link">
                                                     <i class="ti-user"></i>
                                                     <span>Profile</span>
                                                 </a>
@@ -53,15 +53,15 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ url_for('auth.do_logout') }}">
-                                                    <i class="ti-power-off"></i>
+                                                <a href="#">
+                                                    <i class="ti-power-off" id="logout_link"></i>
                                                     <span>Logout</span>
                                                 </a>
                                             </li>
                                             {% else %}
                                             <li>
-                                                <a href="{{ url_for('auth.get_login') }}">
-                                                    <i class="ti-user"></i>
+                                                <a href="#">
+                                                    <i class="ti-user" id="login_link"></i>
                                                     <span>login</span>
                                                 </a>
                                             </li>
