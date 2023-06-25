@@ -12,7 +12,7 @@
                     <h4>Notice Board </h4>
                 </div>
                 <div class="recent-comment m-t-15">
-                    {% for notification in notifications.notifications %}
+                    {% for notification in notifications_list %}
                         <div class="media">
                             <div class="media-left">
                                 <a href="#"><img class="media-object" src="{{ url_for('static', filename='images/avatar/1.jpg') }}" alt="..."></a>
