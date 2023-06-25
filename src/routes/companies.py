@@ -31,7 +31,10 @@ async def get_companies(user: User):
     companies: list[Company] = await companies_controller.get_user_companies(user_id=user.user_id)
     companies_dict = [company.dict() for company in companies if company] if isinstance(companies, list) else []
 
-    context.update(dict(companies=companies_dict))
+    notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
+    notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
+
+    context.update(dict(companies=companies_dict, notifications_list=notifications_dicts))
 
     return render_template('companies/companies.html', **context)
 
@@ -49,10 +52,14 @@ async def get_company(user: User, company_id: str):
     properties_dict = [prop.dict() for prop in properties if prop] if isinstance(properties, list) else []
     bank_accounts_dicts = bank_accounts.dict() if bank_accounts else {}
 
+    notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
+    notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
+
     context = dict(user=user_data,
                    company=company.dict() if isinstance(company, Company) else {},
                    properties=properties_dict,
-                   bank_account=bank_accounts_dicts)
+                   bank_account=bank_accounts_dicts,
+                   notifications_list=notifications_dicts)
 
     return render_template('companies/company.html', **context)
 
@@ -63,7 +70,7 @@ async def get_create_company(user: User):
     user_data = user.dict()
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
-    notifications_dicts = [notice.dict() for notice in notifications.unread_notification]
+    notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
 
     context = dict(user=user_data, notifications_list=notifications_dicts)
 

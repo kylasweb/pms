@@ -17,7 +17,7 @@ async def get_common_context(user: User, building_id: str, property_editor: bool
     property_units: list[Unit] = await company_controller.get_property_units(user=user, property_id=building_id)
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
-    notifications_dicts = [notice.dict() for notice in notifications.unread_notification]
+    notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
 
     context = dict(
         user=user_data,
@@ -35,7 +35,7 @@ async def get_buildings(user: User):
     user_data = user.dict()
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
-    notifications_dicts = [notice.dict() for notice in notifications.unread_notification]
+    notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
 
     context = dict(user=user_data, notifications_list=notifications_dicts)
     return render_template('building/buildings.html', **context)
@@ -62,7 +62,7 @@ async def add_building(user: User, company_id: str):
     company: Company = await company_controller.get_company(company_id=company_id, user_id=user.user_id)
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
-    notifications_dicts = [notice.dict() for notice in notifications.unread_notification]
+    notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
 
     context = dict(user=user_data,
                    company=company.dict(), notifications_list=notifications_dicts)

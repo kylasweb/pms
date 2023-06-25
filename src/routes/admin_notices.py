@@ -1,14 +1,11 @@
 from datetime import datetime
 
-from flask import Blueprint, render_template, flash, redirect, url_for, request
-from pydantic import ValidationError
+from flask import Blueprint, render_template
 
-from src.database.models.notifications import NotificationsModel, Notification
-from src.main import company_controller, notifications_controller
-from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
-from src.database.models.companies import Company
-from src.database.models.users import User
 from src.authentication import login_required
+from src.database.models.notifications import NotificationsModel, Notification
+from src.database.models.users import User
+from src.main import notifications_controller
 
 notices_route = Blueprint('notices', __name__)
 
