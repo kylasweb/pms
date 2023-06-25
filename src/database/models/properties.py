@@ -59,6 +59,7 @@ class Unit(BaseModel):
 
     property_id: str
     unit_id: str
+    unit_number: str
     is_occupied: bool = Field(default=False)
     is_booked: bool = Field(default=False)
     rental_amount: int
@@ -94,6 +95,7 @@ class Unit(BaseModel):
 class AddUnit(BaseModel):
     property_id: str
     unit_id: str
+    unit_number: str
     rental_amount: int
     unit_area: int
     has_reception: bool

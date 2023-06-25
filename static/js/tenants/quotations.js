@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const company_selector = document.getElementById("company");
+    const company_selector = document.getElementById("company_id");
     const booking_type_selector = document.getElementById('booking_type');
     company_selector.addEventListener("change", function () {
         let companyId = company_selector.value;
@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function() {
         let buildingSelect = document.getElementById("building");
 
         // Reset building options
-        buildingSelect.innerHTML = '<option value="">Select a company first</option>';
+        buildingSelect.innerHTML = '<option value="">Select a company_id first</option>';
 
-        // Fetch buildings for the selected company
+        // Fetch buildings for the selected company_id
         const request_resource = '/admin/tenant/buildings/' + companyId;
         console.log(companyId)
         if (companyId) {

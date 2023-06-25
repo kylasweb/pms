@@ -50,6 +50,7 @@ class UnitORM(Base):
     __tablename__ = 'units'
 
     unit_id: str = Column(String(ID_LEN), primary_key=True)
+    unit_number: str = Column(String(ID_LEN))
     property_id: str = Column(String(ID_LEN), ForeignKey('properties.property_id'))
     tenant_id: str = Column(String(ID_LEN), ForeignKey('tenants.tenant_id'))
     is_occupied: bool = Column(Boolean, default=False)
@@ -65,7 +66,7 @@ class UnitORM(Base):
         Convert the UnitORM object to a dictionary.
         :return: Dictionary representation of the object.
         """
-        return {'unit_id': self.unit_id, 'property_id': self.property_id, 'tenant_id': self.tenant_id,
+        return {'unit_id': self.unit_id, 'unit_number': self.unit_number, 'property_id': self.property_id, 'tenant_id': self.tenant_id,
                 'is_occupied': self.is_occupied, 'is_booked': self.is_booked, 'rental_amount': self.rental_amount,
                 'unit_area': self.unit_area, 'has_reception': self.has_reception,
                 'lease_start_date': self.lease_start_date.isoformat() if self.lease_start_date else None,

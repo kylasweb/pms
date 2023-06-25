@@ -1,6 +1,6 @@
 """
     checks for expired lease agreements -
-    create in app notices to the administrator for the company in which
+    create in app notices to the administrator for the company_id in which
     the agreement has expired
 
     inform the client of this situation
@@ -113,10 +113,10 @@ class LeaseAgreementNotifier:
         :param agreement: LeaseAgreement object
         :return: None
         """
-        # Retrieve the company ID from the property
+        # Retrieve the company_id ID from the property
         company, property_, tenant, unit_ = await self.get_client_data(agreement)
 
-        # Retrieve the admin user ID for the company
+        # Retrieve the admin user ID for the company_id
         user_company_list: list[UserCompanyORM] = await company_controller.user_company_id(
             company_id=property_.company_id)
 

@@ -26,7 +26,7 @@ async def get_tenants(user: User):
 @login_required
 async def get_buildings(user: User, company_id: str):
 
-    # Query the database or perform any necessary logic to fetch the buildings based on the company ID
+    # Query the database or perform any necessary logic to fetch the buildings based on the company_id ID
 
     buildings: list[Property] = await company_controller.get_properties(user=user, company_id=company_id)
 

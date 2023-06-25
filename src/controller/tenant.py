@@ -26,6 +26,7 @@ class TenantController:
             if isinstance(tenant, TenantORM):
                 return Tenant(**tenant.to_dict())
             return None
+
     @staticmethod
     @error_handler
     async def get_tenant_by_id(tenant_id: str) -> Tenant | None:
@@ -39,6 +40,12 @@ class TenantController:
             if isinstance(tenant, TenantORM):
                 return Tenant(**tenant.to_dict())
             return None
+
+    @error_handler
+    async def get_un_booked_tenants(self) -> list[Tenant]:
+        with Session() as session:
+            tenants_list: list[TenantORM] = session.query(TenantORM).filter(TenantORM.is_renting == False).all()
+            return [Tenant(**tenant.dict()) for tenant in tenants_list if tenant] if tenants_list else []
 
     @error_handler
     async def create_quotation(self, user: User, quotation: QuotationForm) -> dict[str, Unit | Property]:

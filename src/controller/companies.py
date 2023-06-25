@@ -44,7 +44,7 @@ class CompaniesController:
                                                                     user_id=user_id,
                                                                     session=session)
             if not _is_company_member:
-                raise UnauthorizedError('You are not authorized to access this company')
+                raise UnauthorizedError('You are not authorized to access this company_id')
 
             company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
             return Company(**company_orm.to_dict()) if company_orm else None
@@ -59,8 +59,8 @@ class CompaniesController:
     @staticmethod
     @error_handler
     async def create_company(company: Company, user: User) -> Company:
-        # Perform necessary operations to create the company
-        # For example, you can save the company data in a database
+        # Perform necessary operations to create the company_id
+        # For example, you can save the company_id data in a database
         # and associate it with the user
         with Session() as session:
             # TODO Check if payment is already made

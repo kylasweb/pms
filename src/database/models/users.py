@@ -16,7 +16,7 @@ class User(BaseModel):
 
     Attributes:
     - user_id (str): The ID of the user.
-    - company_id (str): The ID of the company associated with the user.
+    - company_id (str): The ID of the company_id associated with the user.
     - is_tenant (bool): Indicates if the user is a tenant.
     - tenant_id (str): The ID of the tenant associated with the user.
     - user_type (UserType): The type of user.

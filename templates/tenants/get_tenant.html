@@ -87,7 +87,7 @@
                 <div class="form-group">
                     <label for="company">Company:</label>
                     <select name="company" id="company" class="form-control">
-                        <!-- Populate the company options from a list or database -->
+                        <!-- Populate the company_id options from a list or database -->
                         {% for company in companies %}
                             <option value="{{ company.company_id }}">{{ company.company_name }}</option>
                         {% endfor %}

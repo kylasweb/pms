@@ -55,3 +55,15 @@ class UserCompanyORM(Base):
     def create_if_not_table(cls):
         if not inspect(engine).has_table(cls.__tablename__):
             Base.metadata.create_all(bind=engine)
+
+
+class TenantCompanyORM(Base):
+    __tablename__ = 'tenant_company'
+    id: str = Column(String(ID_LEN), primary_key=True)
+    company_id: str = Column(String(ID_LEN), index=True)
+    tenant_id: str = Column(String(ID_LEN), index=True)
+
+    @classmethod
+    def create_if_not_table(cls):
+        if not inspect(engine).has_table(cls.__tablename__):
+            Base.metadata.create_all(bind=engine)

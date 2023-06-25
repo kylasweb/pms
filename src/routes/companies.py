@@ -129,7 +129,7 @@ async def do_add_bank_account(user: User, company_id: str):
                                                                          account_details=bank_account_details)
         companies_logger.info(account_details)
 
-        flash(message="successfully updated company bank account details", category="success")
+        flash(message="successfully updated company_id bank account details", category="success")
 
     except ValidationError as e:
         companies_logger.error(str(e))

@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
+from src.database.models.tenants import Tenant
 from src.database.models.notifications import NotificationsModel
-from src.main import company_controller, notifications_controller
+from src.main import company_controller, notifications_controller, tenant_controller
 from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
 from src.database.models.companies import Company
 from src.database.models.users import User
@@ -127,10 +128,13 @@ async def do_add_unit(user: User, building_id: str):
 async def get_unit(user: User, building_id: str, unit_id: str):
 
     unit_data: Unit = await company_controller.get_unit(user=user, building_id=building_id, unit_id=unit_id)
+    tenants_list: list[Tenant] = await tenant_controller.get_un_booked_tenants()
+
     if unit_data is None:
         flash(message="Could not find Unit with that ID", category="danger")
         redirect(url_for('buildings.get_building', building_id=building_id))
 
-    return render_template('building/units/unit.html', unit=unit_data)
+    context = {'unit': unit_data, 'tenants': tenants_list}
+    return render_template('building/units/unit.html', **context)
 
 

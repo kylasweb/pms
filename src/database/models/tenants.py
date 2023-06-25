@@ -19,11 +19,14 @@ class Tenant(BaseModel):
 
     tenant_id: str = Field(default_factory=lambda: str(uuid.uuid4()),
                            description="The unique ID of the tenant.")
-    name: str
-    company: str
-    email: str
-    phone_number: str
     address_id: str
+
+    name: str
+    company_id: str
+    email: str
+    cell: str
+    is_renting: bool = Field(default=False)
+
     lease_start_date: date
     lease_end_date: date
 

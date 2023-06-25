@@ -27,7 +27,7 @@ def create_report(title: str, data: dict[str, str | dict[str, str] | list[dict[s
     title = Paragraph(f"<u>{title}</u>", title_styles)
     content.append(title)
     content.append(Spacer(1, 20))
-    # Iterate over the company details and add them to the content list
+    # Iterate over the company_id details and add them to the content list
     heading = "Company Details"
     heading_paragraph = Paragraph(heading, heading_style)
     content.append(heading_paragraph)

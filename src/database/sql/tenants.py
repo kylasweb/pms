@@ -10,9 +10,10 @@ class TenantORM(Base):
     tenant_id: str = Column(String(ID_LEN), primary_key=True)
     address_id: str = Column(String(ID_LEN), ForeignKey('addresses.address_id'))
     name: str = Column(String(NAME_LEN))
-    company: str = Column(String(NAME_LEN))
+    company_id: str = Column(String(ID_LEN))
     email: str = Column(String(256))
     cell: str = Column(String(13))
+    is_renting: bool = Column(Boolean, default=False)
     lease_start_date: date = Column(Date)
     lease_end_date: date = Column(Date)
 
@@ -31,9 +32,10 @@ class TenantORM(Base):
             'tenant_id': self.tenant_id,
             'address_id': self.address_id,
             'name': self.name,
-            'company': self.company,
+            'company_id_id': self.company_id,
             'email': self.email,
             'cell': self.cell,
+            'is_renting': self.is_renting,
             'lease_start_date': str(self.lease_start_date),
             'lease_end_date': str(self.lease_end_date)
         }
