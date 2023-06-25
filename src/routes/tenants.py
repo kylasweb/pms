@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
 
 from src.database.models.properties import Property
 from src.database.models.companies import Company
-from src.database.models.tenants import QuotationForm
+from src.database.models.tenants import QuotationForm, Tenant, CreateTenant
 from src.main import tenant_controller, company_controller
 from src.authentication import login_required
 from src.database.models.users import User
@@ -40,6 +40,8 @@ async def get_buildings(user: User, company_id: str):
 async def do_add_tenants(user: User):
     user_data = user.dict()
     context = dict(user=user_data)
+    new_tenant = CreateTenant(**request.form)
+    tenant_added = await tenant_controller.create_tenant(user_id=user.user_id, tenant=new_tenant)
 
     return render_template('tenants/get_tenant.html', **context)
 

@@ -8,14 +8,14 @@ class TenantORM(Base):
     __tablename__ = 'tenants'
 
     tenant_id: str = Column(String(ID_LEN), primary_key=True)
-    address_id: str = Column(String(ID_LEN), ForeignKey('addresses.address_id'))
+    address_id: str = Column(String(ID_LEN), nullable=True)
     name: str = Column(String(NAME_LEN))
-    company_id: str = Column(String(ID_LEN))
+    company_id: str = Column(String(ID_LEN), nullable=True)
     email: str = Column(String(256))
     cell: str = Column(String(13))
     is_renting: bool = Column(Boolean, default=False)
-    lease_start_date: date = Column(Date)
-    lease_end_date: date = Column(Date)
+    lease_start_date: date = Column(Date, nullable=True)
+    lease_end_date: date = Column(Date, nullable=True)
 
     @classmethod
     def create_if_not_table(cls):
@@ -32,7 +32,7 @@ class TenantORM(Base):
             'tenant_id': self.tenant_id,
             'address_id': self.address_id,
             'name': self.name,
-            'company_id_id': self.company_id,
+            'company_id': self.company_id,
             'email': self.email,
             'cell': self.cell,
             'is_renting': self.is_renting,

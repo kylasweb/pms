@@ -17,18 +17,29 @@ class Tenant(BaseModel):
     - lease_end_date (date): The end date of the lease.
     """
 
-    tenant_id: str = Field(default_factory=lambda: str(uuid.uuid4()),
-                           description="The unique ID of the tenant.")
+    tenant_id: str
     address_id: str
-
     name: str
+    id_number: str
     company_id: str
     email: str
     cell: str
-    is_renting: bool = Field(default=False)
-
+    is_renting: bool
     lease_start_date: date
     lease_end_date: date
+
+
+class CreateTenant(BaseModel):
+    tenant_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="The unique ID of the tenant.")
+    address_id: str | None
+    name: str
+    company_id: str | None
+    id_number: str
+    email: str
+    cell: str
+    is_renting: bool = Field(default=False)
+    lease_start_date: date | None
+    lease_end_date: date | None
 
 
 class QuotationForm(BaseModel):

@@ -27,6 +27,7 @@ def bootstrapper():
     from src.database.sql.bank_account import BankAccountORM
     from src.database.sql.notifications import NotificationORM
     from src.database.sql.lease import LeaseAgreementORM, LeaseAgreementTemplate
+    from src.database.sql.companies import TenantCompanyORM
 
     AddressORM.create_if_not_table()
     TenantORM.create_if_not_table()
@@ -40,6 +41,8 @@ def bootstrapper():
     NotificationORM.create_if_not_table()
     LeaseAgreementORM.create_if_not_table()
     LeaseAgreementTemplate.create_if_not_table()
+
+    TenantCompanyORM.create_if_not_table()
 
 
 def create_app(config):

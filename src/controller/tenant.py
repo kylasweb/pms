@@ -1,6 +1,6 @@
 from src.controller import error_handler
 from src.database.models.properties import Unit, Property
-from src.database.models.tenants import Tenant, QuotationForm
+from src.database.models.tenants import Tenant, QuotationForm, CreateTenant
 from src.database.models.users import User
 from src.database.sql import Session
 from src.database.sql.tenants import TenantORM
@@ -71,3 +71,34 @@ class TenantController:
                                              }
 
         return quote
+
+    @staticmethod
+    @error_handler
+    async def create_tenant(tenant: CreateTenant) -> Tenant:
+        """
+
+        :param tenant:
+        :return:
+        """
+        with Session() as session:
+            tenant_orm: TenantORM = TenantORM(**tenant.dict())
+            session.add(tenant_orm)
+            session.commit()
+            return Tenant(**tenant_orm.to_dict())
+
+    @staticmethod
+    @error_handler
+    async def update_tenant(tenant: Tenant) -> Tenant:
+        with Session() as session:
+            tenant_orm: TenantORM = session.query(TenantORM).filter(TenantORM.tenant_id == tenant.tenant_id).first()
+
+            if tenant_orm:
+                # Update the fields in tenant_orm based on the values in tenant
+                for field in tenant.__dict__:
+                    if field in tenant_orm.__dict__ and tenant.__dict__[field] is not None:
+                        setattr(tenant_orm, field, tenant.__dict__[field])
+
+                # Commit the changes to the database
+                session.commit()
+
+        return Tenant(**tenant_orm.to_dict())

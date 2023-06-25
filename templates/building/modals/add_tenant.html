@@ -1,0 +1,41 @@
+<!-- Add Tenant Modal -->
+<div class="modal fade" id="addTenantModal" tabindex="-1" aria-labelledby="addTenantModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTenantModalLabel">Add Tenant</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <form id="addTenantForm"
+                      method="POST"
+                      action="{{ url_for('tenants.do_add_tenants') }}"
+                      enctype="application/x-www-form-urlencoded" >
+                    
+            <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="tenantName" class="form-label">Names</label>
+                        <input type="text" class="form-control" id="tenantName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_number" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="id_number" name="id_number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tenantEmail" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="tenantEmail" name="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tenantCell" class="form-label">Cell:</label>
+                        <input type="text" class="form-control" id="tenantCell" name="cell">
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Tenant</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
