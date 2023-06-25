@@ -120,3 +120,17 @@ async def do_add_unit(user: User, building_id: str):
     except ValidationError as e:
         flash(message="To Add a Unit please Fill in all Fields", category="danger")
     return redirect(url_for('buildings.get_building', building_id=building_id))
+
+
+@buildings_route.get('/admin/building/<string:building_id>/unit/<string:unit_id>')
+@login_required
+async def get_unit(user: User, building_id: str, unit_id: str):
+
+    unit_data: Unit = await company_controller.get_unit(user=user, building_id=building_id, unit_id=unit_id)
+    if unit_data is None:
+        flash(message="Could not find Unit with that ID", category="danger")
+        redirect(url_for('buildings.get_building', building_id=building_id))
+
+    return render_template('building/units/unit.html', unit=unit_data)
+
+

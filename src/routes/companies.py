@@ -1,21 +1,20 @@
 import logging
-from io import BytesIO
 
 from flask import Blueprint, render_template, request, url_for, redirect, flash, send_file
 from pydantic import ValidationError
 
-from src.main import notifications_controller
+from src.authentication import login_required
+from src.controller.companies import CompaniesController
+from src.database.models.bank_accounts import BusinessBankAccount
+from src.database.models.companies import Company, UpdateCompany
 from src.database.models.notifications import NotificationsModel
+from src.database.models.properties import Property
+from src.database.models.users import User
+from src.logger import init_logger
+from src.main import notifications_controller
+from src.reports import create_report
 from src.reports.bank_account_report import BankAccountPrintParser
 from src.reports.company_report import map_company_to_parser, CompanyPrintParser
-from src.reports import create_report
-from src.logger import init_logger
-from src.database.models.properties import Property
-from src.database.models.bank_accounts import BusinessBankAccount
-from src.authentication import login_required
-from src.database.models.users import User
-from src.database.models.companies import Company, UpdateCompany
-from src.controller.companies import CompaniesController
 
 companies_route = Blueprint('companies', __name__)
 companies_logger = init_logger('companies_logger')

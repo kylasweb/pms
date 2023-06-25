@@ -339,3 +339,20 @@ class CompaniesController:
             session.add(unit)
             session.commit()
             return unit_data
+
+    @error_handler
+    async def get_unit(self, user: User, building_id: str, unit_id: str) -> Unit | None:
+        """
+
+        :param user:
+        :param unit_id:
+        :return:
+        """
+        with Session() as session:
+            unit_data: UnitORM = session.query(UnitORM).filter(
+                UnitORM.property_id == building_id, UnitORM.unit_id == unit_id).first()
+            if unit_data is None:
+                return None
+            return Unit(**unit_data.to_dict())
+
+

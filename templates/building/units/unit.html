@@ -1,0 +1,168 @@
+{% extends "layouts/page.html" %}
+
+{% block content %}
+<div class="card">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#unit-details">
+                <span class="font-weight-bold">
+                    Unit Details
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#book-unit">
+                <span class="font-weight-bold">
+                    Create Booking/Rental
+                </span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="unit-details">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-bold">Unit Details</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                    Unit ID:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    {{ unit.unit_id }}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                    Is Occupied:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    {{ unit.is_occupied }}
+                                </div>
+                            </div>
+
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                    Rental Amount:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    R {{ unit.rental_amount }}
+                                </div>
+                            </div>
+                        </li>
+
+                        {% if unit.is_occupied %}
+                            <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                    Tenant ID:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    {{ unit.tenant_id }}
+                                </div>
+                            </div>
+                            </li>
+                            <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                    Lease Start Date:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    {{ unit.lease_start_date }}
+                                </div>
+                            </div>
+                            </li>
+                            <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                    Lease End Date:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    {{ unit.lease_end_date }}
+                                </div>
+                            </div>
+                            </li>
+                        {% endif %}
+
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                    Unit Area:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    {{ unit.unit_area }} sq Metres
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                                   Has Reception:
+                                </div>
+                                <div class="col-6 text-left font-weight-bold font-italic text-info">
+                                    {{ unit.has_reception }}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="book-unit">
+            <div class="card">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold">Create Booking / Rental</h3>
+            </div>
+            <div class="card-footer">
+                <form action="/unit/{{ unit.unit_id }}/book" method="post">
+                    <div class="mb-3">
+                        <label for="tenant-dropdown" class="form-label">Select Tenant:</label>
+                        <select class="form-control" id="tenant-dropdown" name="tenant_id" required>
+                            <option value="" selected disabled>Select a tenant</option>
+                            {% for tenant in tenants %}
+                            <option value="{{ tenant.id }}">{{ tenant.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lease-start-date" class="form-label">Lease Start Date:</label>
+                        <input type="date" class="form-control" id="lease-start-date" name="lease_start_date" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lease-end-date" class="form-label">Lease End Date:</label>
+                        <input type="date" class="form-control" id="lease-end-date" name="lease_end_date" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="font-weight-bold">
+                            <i class="ti-save"> </i>
+                            Update
+                        </span>
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <span class="font-weight-bold">
+                            <i class="ti-close"> </i>
+                            Cancel
+                        </span>
+                    </button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
