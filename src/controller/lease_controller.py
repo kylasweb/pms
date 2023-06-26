@@ -14,3 +14,16 @@ class LeaseController:
             lease_agreements: list[LeaseAgreementORM] = session.query(LeaseAgreementORM).filter(
                 LeaseAgreementORM.is_active == True).all()
             return [LeaseAgreement(**lease.dict()) for lease in lease_agreements]
+
+    @error_handler
+    async def create_lease_agreement(self, lease: LeaseAgreement) -> LeaseAgreement:
+        """
+
+        :param lease:
+        :return:
+        """
+        with Session() as session:
+            lease_orm: LeaseAgreementORM = LeaseAgreementORM(**lease.dict())
+            session.add(lease_orm)
+            session.commit()
+            return LeaseAgreement(**lease.dict())

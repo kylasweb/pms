@@ -24,8 +24,8 @@ class LeaseAgreement(BaseModel):
     unit_id: str
     start_date: date
     end_date: date
-    rent_amount: float
-    deposit_amount: float
+    rent_amount: int
+    deposit_amount: int
     is_active: bool
 
     @property

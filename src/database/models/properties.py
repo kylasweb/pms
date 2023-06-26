@@ -57,13 +57,13 @@ class Unit(BaseModel):
     - has_reception (bool): Indicates if the unit has a reception area.
     """
 
+    tenant_id: str | None = Field(default=None)
     property_id: str
     unit_id: str
     unit_number: str
     is_occupied: bool = Field(default=False)
     is_booked: bool = Field(default=False)
     rental_amount: int
-    tenant_id: str | None = Field(default=None)
     lease_start_date: date | None = Field(default=None)
     lease_end_date: date | None = Field(default=None)
     unit_area: int

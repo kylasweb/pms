@@ -45,7 +45,7 @@ class TenantController:
     async def get_un_booked_tenants(self) -> list[Tenant]:
         with Session() as session:
             tenants_list: list[TenantORM] = session.query(TenantORM).filter(TenantORM.is_renting == False).all()
-            return [Tenant(**tenant.dict()) for tenant in tenants_list if tenant] if tenants_list else []
+            return [Tenant(**tenant.to_dict()) for tenant in tenants_list if tenant] if tenants_list else []
 
     @error_handler
     async def create_quotation(self, user: User, quotation: QuotationForm) -> dict[str, Unit | Property]:
@@ -74,9 +74,10 @@ class TenantController:
 
     @staticmethod
     @error_handler
-    async def create_tenant(tenant: CreateTenant) -> Tenant:
+    async def create_tenant(user_id: str, tenant: CreateTenant) -> Tenant:
         """
 
+        :param user_id:
         :param tenant:
         :return:
         """
@@ -84,11 +85,11 @@ class TenantController:
             tenant_orm: TenantORM = TenantORM(**tenant.dict())
             session.add(tenant_orm)
             session.commit()
-            return Tenant(**tenant_orm.to_dict())
+            return tenant
 
     @staticmethod
     @error_handler
-    async def update_tenant(tenant: Tenant) -> Tenant:
+    async def update_tenant(tenant: Tenant) -> Tenant | None:
         with Session() as session:
             tenant_orm: TenantORM = session.query(TenantORM).filter(TenantORM.tenant_id == tenant.tenant_id).first()
 
@@ -97,8 +98,10 @@ class TenantController:
                 for field in tenant.__dict__:
                     if field in tenant_orm.__dict__ and tenant.__dict__[field] is not None:
                         setattr(tenant_orm, field, tenant.__dict__[field])
-
+                session.add(tenant_orm)
                 # Commit the changes to the database
                 session.commit()
+                session.refresh(tenant_orm)
 
-        return Tenant(**tenant_orm.to_dict())
+                return Tenant(**tenant_orm.to_dict())
+            return None

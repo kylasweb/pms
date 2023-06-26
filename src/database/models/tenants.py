@@ -1,6 +1,6 @@
 import uuid
 from datetime import date
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 class Tenant(BaseModel):
@@ -18,15 +18,29 @@ class Tenant(BaseModel):
     """
 
     tenant_id: str
-    address_id: str
+    address_id: str | None
     name: str
     id_number: str
-    company_id: str
+    company_id: str | None
     email: str
     cell: str
     is_renting: bool
-    lease_start_date: date
-    lease_end_date: date
+    lease_start_date: date | None
+    lease_end_date: date | None
+
+    @classmethod
+    @validator("lease_start_date", pre=True)
+    def validate_lease_start_date(cls, value):
+        if not isinstance(value, date):
+            return None
+        return value
+
+    @classmethod
+    @validator("lease_end_date", pre=True)
+    def validate_lease_end_date(cls, value):
+        if not isinstance(value, date):
+            return None
+        return value
 
 
 class CreateTenant(BaseModel):

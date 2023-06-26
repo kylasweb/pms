@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
+from src.database.models.lease import LeaseAgreement
 from src.database.models.tenants import Tenant
 from src.database.models.notifications import NotificationsModel
-from src.main import company_controller, notifications_controller, tenant_controller
+from src.main import company_controller, notifications_controller, tenant_controller, lease_agreement_controller
 from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
 from src.database.models.companies import Company
 from src.database.models.users import User
@@ -126,7 +127,6 @@ async def do_add_unit(user: User, building_id: str):
 @buildings_route.get('/admin/building/<string:building_id>/unit/<string:unit_id>')
 @login_required
 async def get_unit(user: User, building_id: str, unit_id: str):
-
     unit_data: Unit = await company_controller.get_unit(user=user, building_id=building_id, unit_id=unit_id)
     tenants_list: list[Tenant] = await tenant_controller.get_un_booked_tenants()
 
@@ -138,3 +138,38 @@ async def get_unit(user: User, building_id: str, unit_id: str):
     return render_template('building/units/unit.html', **context)
 
 
+@buildings_route.post('/admin/building/<string:building_id>/unit/<string:unit_id>')
+@login_required
+async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str):
+    tenant_rental = Unit(**request.form)
+
+    updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=tenant_rental)
+
+    tenant: Tenant = await tenant_controller.get_tenant_by_id(tenant_id=tenant_rental.tenant_id)
+    tenant.is_renting = True
+    tenant.lease_start_date = tenant_rental.lease_start_date
+    tenant.lease_end_date = tenant_rental.lease_end_date
+    updated_tenant = await tenant_controller.update_tenant(tenant=tenant)
+
+    # TODO use a deposit amount Multiplier - should be set by Admin
+    deposit_amount = tenant_rental.rental_amount * 2
+    # TODO - create a LeaseAgreement
+
+    lease_agreement = dict(property_id=tenant_rental.property_id,
+                           tenant_id=tenant_rental.tenant_id,
+                           unit_id=tenant_rental.unit_id,
+                           start_date=tenant_rental.lease_start_date,
+                           end_date=tenant_rental.lease_end_date,
+                           rent_amount=tenant_rental.rental_amount,
+                           deposit_amount=tenant_rental.rental_amount * 2,
+                           is_active=True)
+
+    lease: LeaseAgreement = await lease_agreement_controller.create_lease_agreement(lease=lease_agreement)
+
+    context = {'user': user.dict(),
+               'tenant': updated_tenant.dict(),
+               'unit': updated_unit.dict(),
+               'lease': lease.dict()}
+
+    flash(message='Lease Agreement created Successfully', category="success")
+    return render_template('tenants/official/tenant_rental_result.html', **context)

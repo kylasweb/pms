@@ -210,7 +210,9 @@ class CompaniesController:
                 PropertyORM.property_id == property_id).first()
             return Property(**property_.to_dict())
 
-    async def user_company_id(self, company_id: str) -> list[UserCompanyORM]:
+    @staticmethod
+    @error_handler
+    async def user_company_id(company_id: str) -> list[UserCompanyORM]:
         """
 
         :param company_id:
@@ -344,6 +346,7 @@ class CompaniesController:
     async def get_unit(self, user: User, building_id: str, unit_id: str) -> Unit | None:
         """
 
+        :param building_id:
         :param user:
         :param unit_id:
         :return:
@@ -355,4 +358,25 @@ class CompaniesController:
                 return None
             return Unit(**unit_data.to_dict())
 
+    @error_handler
+    async def update_unit(self, user_id: str, unit_data: Unit) -> Unit | None:
+        """
 
+        :param user_id:
+        :param unit_data:
+        :return:
+        """
+        with Session() as session:
+            unit_orm: UnitORM = session.query(UnitORM).filter(UnitORM.unit_id == unit_data.unit_id, UnitORM.property_id == unit_data.property_id).first()
+
+            if unit_orm:
+                # Update the fields in tenant_orm based on the values in tenant
+                for field in unit_data.__dict__:
+                    if field in unit_orm.__dict__ and unit_data.__dict__[field] is not None:
+                        setattr(unit_orm, field, unit_data.__dict__[field])
+
+                # Commit the changes to the database
+                session.commit()
+
+                return Unit(**unit_orm.to_dict())
+            return None
