@@ -168,6 +168,7 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
     building: Property = await company_controller.get_property_by_id_internal(property_id=building_id)
     building.available_units -= 1
     updated_building: Property = await company_controller.update_property(user=user, property_details=building)
+    print(f'Updated Building : {updated_building}')
 
     context = {'user': user.dict(),
                'tenant': updated_tenant.dict(),
