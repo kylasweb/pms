@@ -8,7 +8,7 @@
             </div>
                 <form id="addTenantForm"
                       method="POST"
-                      action="{{ url_for('tenants.do_add_tenants') }}"
+                      action="{{ url_for('tenants.do_add_tenants', building_id=unit.property_id, unit_id=unit.unit_id) }}"
                       enctype="application/x-www-form-urlencoded" >
                     
             <div class="modal-body">

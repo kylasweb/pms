@@ -35,15 +35,15 @@ async def get_buildings(user: User, company_id: str):
     return jsonify(buildings_dicts)
 
 
-@tenants_route.post('/admin/add-tenants')
+@tenants_route.post('/admin/add-tenants/<string:building_id>/<string:unit_id>')
 @login_required
-async def do_add_tenants(user: User):
+async def do_add_tenants(user: User, building_id: str, unit_id: str):
     user_data = user.dict()
     context = dict(user=user_data)
     new_tenant = CreateTenant(**request.form)
     tenant_added = await tenant_controller.create_tenant(user_id=user.user_id, tenant=new_tenant)
-
-    return render_template('tenants/get_tenant.html', **context)
+    flash(message="Tenant Successfully added - Continue to create a lease for tenant", category='success')
+    return redirect(url_for('buildings.get_unit', building_id=building_id, unit_id=unit_id))
 
 
 @tenants_route.post('/admin/tenant-rentals')

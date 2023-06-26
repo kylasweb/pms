@@ -165,11 +165,15 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
                            is_active=True)
 
     lease: LeaseAgreement = await lease_agreement_controller.create_lease_agreement(lease=lease_agreement)
+    building: Property = await company_controller.get_property_by_id_internal(property_id=building_id)
+    building.available_units -= 1
+    updated_building: Property = await company_controller.update_property(user=user, property_details=building)
 
     context = {'user': user.dict(),
                'tenant': updated_tenant.dict(),
                'unit': updated_unit.dict(),
-               'lease': lease.dict()}
+               'lease': lease.dict(),
+               'building': updated_building.dict()}
 
     flash(message='Lease Agreement created Successfully', category="success")
     return render_template('tenants/official/tenant_rental_result.html', **context)

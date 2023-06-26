@@ -44,7 +44,7 @@
                                     Is Occupied:
                                 </div>
                                 <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.is_occupied }}
+                                    {{ True if unit.tenant_id else False }}
                                 </div>
                             </div>
 
@@ -60,7 +60,7 @@
                             </div>
                         </li>
 
-                        {% if unit.is_occupied %}
+                        {% if unit.tenant_id %}
                             <li class="list-group-item">
                             <div class="row">
                                 <div class="col-lg-3 col-sm-6 text-left font-weight-bold">

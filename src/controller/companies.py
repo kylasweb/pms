@@ -174,7 +174,6 @@ class CompaniesController:
                     setattr(original_property_orm, field, value)
 
             # Commit the changes to the database
-            print(f"Updating Property : {original_property_orm.to_dict()}")
             session.commit()
             return Property(**original_property_orm.to_dict())
 
