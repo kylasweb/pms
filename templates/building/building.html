@@ -78,11 +78,8 @@
                         <th>Unit Number</th>
                         <th>Is Occupied</th>
                         <th>Rental Amount</th>
-                        <th class="d-none d-sm-table-cell">Tenant ID</th>
-                        <th class="d-none d-sm-table-cell">Lease Start Date</th>
-                        <th class="d-none d-sm-table-cell">Lease End Date</th>
+                        <th class="d-none d-sm-table-cell">Leased</th>
                         <th class="d-none d-sm-table-cell">Unit Area</th>
-                        <th class="d-none d-sm-table-cell">Has Reception</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,11 +88,8 @@
                             <td><a href="{{ url_for('buildings.get_unit', building_id=unit.property_id, unit_id=unit.unit_id) }}" class="alert-link"> {{ unit.unit_number }}</a></td>
                             <td>{{ unit.is_occupied }}</td>
                             <td>{{ unit.rental_amount }}</td>
-                            <td class="d-none d-sm-table-cell">{{ unit.tenant_id }}</td>
-                            <td class="d-none d-sm-table-cell">{{ unit.lease_start_date }}</td>
-                            <td class="d-none d-sm-table-cell">{{ unit.lease_end_date }}</td>
+                            <td>{{ True if unit.tenant_id else False }}</td>
                             <td class="d-none d-sm-table-cell">{{ unit.unit_area }}</td>
-                            <td class="d-none d-sm-table-cell">{{ unit.has_reception }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -114,7 +108,7 @@
                         <input type="hidden" name="property_id" value="{{ property.property_id }}">
                         <div class="form-group">
                             <label for="unit_id">Unit Number:</label>
-                            <input class="form-control" type="text" name="unit_id">
+                            <input class="form-control" type="text" name="unit_number">
                         </div>
 
                         <div class="form-group">
