@@ -19,7 +19,8 @@ class LeaseController:
     @error_handler
     async def create_lease_agreement(self, lease: CreateLeaseAgreement) -> LeaseAgreement:
         """
-
+            **create_lease_agreement**
+                create lease agreement
         :param lease:
         :return:
         """
@@ -28,7 +29,7 @@ class LeaseController:
                 lease_orm: LeaseAgreementORM = LeaseAgreementORM(**lease.dict())
                 session.add(lease_orm)
                 session.commit()
-                return LeaseAgreement(**lease_orm.to_dict())
+                return LeaseAgreement(**lease.dict())
             except Exception as e:
                 self._logger.error(str(e))
             return None
@@ -37,6 +38,7 @@ class LeaseController:
     async def calculate_deposit_amount(rental_amount: int) -> int:
         """
             **calculate_deposit_amount**
+                calculate deposit amount
 
         :param rental_amount:
         :return:
