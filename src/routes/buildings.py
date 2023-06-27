@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
-from logger import init_logger
+from src.logger import init_logger
 from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 from src.database.models.tenants import Tenant
 from src.database.models.notifications import NotificationsModel

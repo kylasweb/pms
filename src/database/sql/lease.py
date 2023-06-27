@@ -9,6 +9,7 @@ class LeaseAgreementORM(Base):
     __tablename__ = 'lease_agreement'
     agreement_id: str = Column(String(ID_LEN), primary_key=True, unique=True)
     property_id: str = Column(String(ID_LEN))
+    unit_id: str = Column(String(ID_LEN))
     tenant_id: str = Column(String(ID_LEN))
     start_date: date = Column(Date)
     end_date: date = Column(Date)
@@ -20,6 +21,19 @@ class LeaseAgreementORM(Base):
     def create_if_not_table(cls):
         if not inspect(engine).has_table(cls.__tablename__):
             Base.metadata.create_all(bind=engine)
+
+    def to_dict(self) -> dict[str, str | date | bool | int]:
+        return {
+            'agreement_id': self.agreement_id,
+            'property_id': self.property_id,
+            'unit_id': self.unit_id,
+            'tenant_id': self.tenant_id,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'rent_amount': self.rent_amount,
+            'deposit_amount': self.deposit_amount,
+            'is_active': self.is_active
+        }
 
 
 class LeaseAgreementTemplate(Base):
@@ -36,3 +50,11 @@ class LeaseAgreementTemplate(Base):
         if not inspect(engine).has_table(cls.__tablename__):
             Base.metadata.create_all(bind=engine)
 
+    def to_dict(self) -> dict[str, str | bool]:
+        return {
+            'template_id': self.template_id,
+            'property_id': self.property_id,
+            'template_name': self.template_name,
+            'template_text': self.template_text,
+            'is_default': self.is_default
+        }
