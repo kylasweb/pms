@@ -1,7 +1,7 @@
 from src.database.sql import Session
 from src.controller import error_handler
 from src.database.sql.lease import LeaseAgreementORM
-from src.database.models.lease import LeaseAgreement
+from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 
 
 class LeaseController:
@@ -16,7 +16,7 @@ class LeaseController:
             return [LeaseAgreement(**lease.dict()) for lease in lease_agreements]
 
     @error_handler
-    async def create_lease_agreement(self, lease: LeaseAgreement) -> LeaseAgreement:
+    async def create_lease_agreement(self, lease: CreateLeaseAgreement) -> LeaseAgreement:
         """
 
         :param lease:

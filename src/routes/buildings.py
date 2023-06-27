@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
-from src.database.models.lease import LeaseAgreement
+from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 from src.database.models.tenants import Tenant
 from src.database.models.notifications import NotificationsModel
 from src.main import company_controller, notifications_controller, tenant_controller, lease_agreement_controller
@@ -155,16 +155,27 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
     deposit_amount = tenant_rental.rental_amount * 2
     # TODO - create a LeaseAgreement
 
-    lease_agreement = dict(property_id=tenant_rental.property_id,
-                           tenant_id=tenant_rental.tenant_id,
-                           unit_id=tenant_rental.unit_id,
-                           start_date=tenant_rental.lease_start_date,
-                           end_date=tenant_rental.lease_end_date,
-                           rent_amount=tenant_rental.rental_amount,
-                           deposit_amount=tenant_rental.rental_amount * 2,
-                           is_active=True)
+    lease_dict: dict[str, str] = dict(property_id=tenant_rental.property_id,
+                                      tenant_id=tenant_rental.tenant_id,
+                                      unit_id=tenant_rental.unit_id,
+                                      start_date=tenant_rental.lease_start_date,
+                                      end_date=tenant_rental.lease_end_date,
+                                      rent_amount=tenant_rental.rental_amount,
+                                      deposit_amount=tenant_rental.rental_amount * 2,
+                                      is_active=True)
+    try:
+        lease_: CreateLeaseAgreement = CreateLeaseAgreement(**lease_dict)
+    except ValidationError as e:
+        print(str(e))
+        flash(message=f"Validation error : {str(e)}", category="danger")
+        return redirect(url_for('buildings.get_unit', building_id=building_id, unit_id=unit_id))
+    try:
+        lease: LeaseAgreement = await lease_agreement_controller.create_lease_agreement(lease=lease_)
+    except ValidationError as e:
+        print(str(e))
+        flash(message=f"Validation error : {str(e)}", category="danger")
+        return redirect(url_for('buildings.get_unit', building_id=building_id, unit_id=unit_id))
 
-    lease: LeaseAgreement = await lease_agreement_controller.create_lease_agreement(lease=lease_agreement)
     building: Property = await company_controller.get_property_by_id_internal(property_id=building_id)
     building.available_units -= 1
     updated_building: Property = await company_controller.update_property(user=user, property_details=building)

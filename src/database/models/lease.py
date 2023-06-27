@@ -18,7 +18,7 @@ class LeaseAgreement(BaseModel):
     - is_active (bool): Indicates if the lease agreement is currently active.
     """
 
-    agreement_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Agreement ID")
+    agreement_id: str
     property_id: str
     tenant_id: str
     unit_id: str
@@ -41,6 +41,18 @@ class LeaseAgreement(BaseModel):
             return 0
         else:
             return (self.end_date - today).days
+
+
+class CreateLeaseAgreement(BaseModel):
+    agreement_id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Agreement ID")
+    property_id: str
+    tenant_id: str
+    unit_id: str
+    start_date: date
+    end_date: date
+    rent_amount: int
+    deposit_amount: int
+    is_active: bool
 
 
 class LeaseAgreementTemplate(BaseModel):
