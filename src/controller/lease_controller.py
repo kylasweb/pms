@@ -31,7 +31,7 @@ class LeaseController:
                 session.commit()
                 return LeaseAgreement(**lease.dict())
             except Exception as e:
-                self._logger.error(str(e))
+                self._logger.error(f"Error creating Lease Agreement:  {str(e)}")
             return None
 
     @staticmethod
