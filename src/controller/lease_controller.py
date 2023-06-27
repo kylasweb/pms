@@ -23,7 +23,22 @@ class LeaseController:
         :return:
         """
         with Session() as session:
-            lease_orm: LeaseAgreementORM = LeaseAgreementORM(**lease.dict())
-            session.add(lease_orm)
-            session.commit()
-            return LeaseAgreement(**lease.dict())
+            try:
+                lease_orm: LeaseAgreementORM = LeaseAgreementORM(**lease.dict())
+                session.add(lease_orm)
+                session.commit()
+                return LeaseAgreement(**lease_orm.to_dict())
+            except Exception as e:
+                print(e)
+            return None
+
+    @staticmethod
+    async def calculate_deposit_amount(rental_amount: int) -> int:
+        """
+            **calculate_deposit_amount**
+
+        :param rental_amount:
+        :return:
+        """
+        # TODO - calculate deposit amount based on user profile settings
+        return rental_amount * 2

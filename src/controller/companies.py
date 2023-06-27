@@ -205,8 +205,7 @@ class CompaniesController:
         :return:
         """
         with Session() as session:
-            property_: PropertyORM = session.query(PropertyORM).filter(
-                PropertyORM.property_id == property_id).first()
+            property_: PropertyORM = session.query(PropertyORM).filter(PropertyORM.property_id == property_id).first()
             return Property(**property_.to_dict())
 
     @staticmethod

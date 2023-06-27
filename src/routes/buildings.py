@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
+from logger import init_logger
 from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 from src.database.models.tenants import Tenant
 from src.database.models.notifications import NotificationsModel
@@ -11,6 +12,7 @@ from src.database.models.users import User
 from src.authentication import login_required
 
 buildings_route = Blueprint('buildings', __name__)
+buildings_logger = init_logger("Buildings-Router")
 
 
 async def get_common_context(user: User, building_id: str, property_editor: bool = False):
@@ -141,9 +143,12 @@ async def get_unit(user: User, building_id: str, unit_id: str):
 @buildings_route.post('/admin/building/<string:building_id>/unit/<string:unit_id>')
 @login_required
 async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str):
+    context = dict()
     tenant_rental = Unit(**request.form)
-
     updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=tenant_rental)
+
+    if updated_unit:
+        context.update(dict(unit=updated_unit.dict()))
 
     tenant: Tenant = await tenant_controller.get_tenant_by_id(tenant_id=tenant_rental.tenant_id)
     tenant.is_renting = True
@@ -151,9 +156,11 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
     tenant.lease_end_date = tenant_rental.lease_end_date
     updated_tenant = await tenant_controller.update_tenant(tenant=tenant)
 
-    # TODO use a deposit amount Multiplier - should be set by Admin
-    deposit_amount = tenant_rental.rental_amount * 2
-    # TODO - create a LeaseAgreement
+    if updated_tenant:
+        context.update(dict(tenant=updated_tenant.dict()))
+
+    deposit_amount = await lease_agreement_controller.calculate_deposit_amount(
+        rental_amount=tenant_rental.rental_amount)
 
     lease_dict: dict[str, str] = dict(property_id=tenant_rental.property_id,
                                       tenant_id=tenant_rental.tenant_id,
@@ -161,24 +168,21 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
                                       start_date=tenant_rental.lease_start_date,
                                       end_date=tenant_rental.lease_end_date,
                                       rent_amount=tenant_rental.rental_amount,
-                                      deposit_amount=tenant_rental.rental_amount * 2,
+                                      deposit_amount=deposit_amount,
                                       is_active=True)
+
     try:
         lease_: CreateLeaseAgreement = CreateLeaseAgreement(**lease_dict)
-    except ValidationError as e:
-        print(str(e))
-        flash(message=f"Validation error : {str(e)}", category="danger")
-        return redirect(url_for('buildings.get_unit', building_id=building_id, unit_id=unit_id))
-    try:
         lease: LeaseAgreement = await lease_agreement_controller.create_lease_agreement(lease=lease_)
     except ValidationError as e:
-        print(str(e))
+        buildings_logger.error(f"Error creating Lease Agreement : {str(e)}")
         flash(message=f"Validation error : {str(e)}", category="danger")
         return redirect(url_for('buildings.get_unit', building_id=building_id, unit_id=unit_id))
-
-    building: Property = await company_controller.get_property_by_id_internal(property_id=building_id)
-    building.available_units -= 1
-    updated_building: Property = await company_controller.update_property(user=user, property_details=building)
+    if lease:
+        context.update(dict())
+    building_: Property = await company_controller.get_property_by_id_internal(property_id=building_id)
+    building_.available_units -= 1
+    updated_building: Property = await company_controller.update_property(user=user, property_details=building_)
     print(f'Updated Building : {updated_building}')
 
     context = {'user': user.dict(),
