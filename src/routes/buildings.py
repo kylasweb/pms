@@ -143,7 +143,7 @@ async def get_unit(user: User, building_id: str, unit_id: str):
 @buildings_route.post('/admin/building/<string:building_id>/unit/<string:unit_id>')
 @login_required
 async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str):
-    context = dict()
+    context = dict(user=user.dict())
     tenant_rental = Unit(**request.form)
     updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=tenant_rental)
 
@@ -184,12 +184,8 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
     building_.available_units -= 1
     updated_building: Property = await company_controller.update_property(user=user, property_details=building_)
     print(f'Updated Building : {updated_building}')
-
-    context = {'user': user.dict(),
-               'tenant': updated_tenant.dict(),
-               'unit': updated_unit.dict(),
-               'lease': lease.dict(),
-               'building': updated_building.dict()}
+    if updated_building:
+        context.update(dict(building= updated_building.dict()))
 
     flash(message='Lease Agreement created Successfully', category="success")
     return render_template('tenants/official/tenant_rental_result.html', **context)

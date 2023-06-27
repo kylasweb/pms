@@ -1,3 +1,4 @@
+from src.logger import init_logger
 from src.database.sql import Session
 from src.controller import error_handler
 from src.database.sql.lease import LeaseAgreementORM
@@ -6,7 +7,7 @@ from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 
 class LeaseController:
     def __init__(self):
-        pass
+        self._logger = init_logger(self.__class__.__name__)
 
     @error_handler
     async def get_all_active_lease_agreements(self) -> list[LeaseAgreement]:
@@ -29,7 +30,7 @@ class LeaseController:
                 session.commit()
                 return LeaseAgreement(**lease_orm.to_dict())
             except Exception as e:
-                print(e)
+                self._logger.error(str(e))
             return None
 
     @staticmethod
