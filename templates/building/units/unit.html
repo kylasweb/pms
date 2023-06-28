@@ -23,7 +23,10 @@
         <div class="tab-pane fade show active" id="unit-details">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title font-weight-bold">Unit Details</h3>
+                    <h3 class="card-title font-weight-bold">
+                        <i class="ti-home"> </i>
+                        Unit Details
+                    </h3>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -61,16 +64,6 @@
                         </li>
 
                         {% if unit.tenant_id %}
-                            <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Tenant ID:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.tenant_id }}
-                                </div>
-                            </div>
-                            </li>
                             <li class="list-group-item">
                             <div class="row">
                                 <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
@@ -122,7 +115,7 @@
         <div class="tab-pane fade" id="book-unit">
             <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="card-title font-weight-bold">Create Booking / Rental</h3>
+                <h3 class="card-title font-weight-bold"> <i class="ti-save"> </i> Create Booking / Rental </h3>
                 <div>
                 <button id="add-unit-btn" class="btn btn-sm btn-primary mr-2" data-toggle="modal" data-target="#addTenantModal">
                     <i class="ti-save"></i> Add Tenant
