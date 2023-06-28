@@ -23,8 +23,8 @@
             <a href="{{ url_for('companies.get_company', company_id=property.company_id) }}" class="btn btn-sm btn-warning">
                 <i class="ti-desktop"> </i> Company
             </a>
-
-            <a href="{{ url_for('buildings.edit_building', building_id=property.property_id) }}" class="btn btn-sm btn-success">
+            {#    {{ url_for('buildings.edit_building', building_id=property.property_id) }}#}
+            <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editPropertyDialog">
                 <i class="ti-desktop"> </i> Edit
             </a>
         </div>
@@ -131,10 +131,12 @@
         </div>
 
 
-
         </div>
         </div>
     </div>
+
+{% include "building/modals/edit_property.html" %}
+
 {% endblock %}
 
 {% block scripts %}

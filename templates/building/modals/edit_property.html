@@ -1,0 +1,70 @@
+<div id="editPropertyDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editPropertyDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="{{ url_for('buildings.do_edit_building', building_id=property.property_id) }}" method="POST">
+                <input type="hidden" name="property_id" value="{{ property.property_id }}" />
+                <input type="hidden" name="company_id" value="{{ property.company_id }}" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPropertyDialogLabel">Property Editor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input class="form-control" type="text" name="name" value="{{ property.name }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description">{{ property.description }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input class="form-control" type="text" name="address" value="{{ property.address }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="property_type">Property Type</label>
+                                <input class="form-control" type="text" name="property_type" value="{{ property.property_type }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="amenities">Amenities</label>
+                                <input class="form-control" type="text" name="amenities" value="{{ property.amenities }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="landlord">Landlord</label>
+                                <input class="form-control" type="text" name="landlord" value="{{ property.landlord }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="maintenance_contact">Maintenance</label>
+                                <input class="form-control" type="text" name="maintenance_contact" value="{{ property.maintenance_contact }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="lease_terms">Lease Terms</label>
+                                <textarea class="form-control" name="lease_terms">{{ property.lease_terms }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="built_year">Built Year</label>
+                                <input class="form-control" type="number" name="built_year" value="{{ property.built_year }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="parking_spots">Parking Spots</label>
+                                <input class="form-control" type="number" name="parking_spots" value="{{ property.parking_spots }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit"><i class="ti-save"></i> Update</button>
+                    <a href="{{ url_for('buildings.get_building', building_id=property.property_id) }}" class="btn btn-danger">
+                        <i class="ti-close"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
