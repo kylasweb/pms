@@ -3,12 +3,14 @@ from pydantic import BaseModel, Field
 
 class BusinessBankAccount(BaseModel):
     """
-    company_id = Column(String(ID_LEN))
-    account_holder = Column(String(NAME_LEN), primary_key=True)
-    account_number = Column(String(NAME_LEN))
-    bank_name = Column(String(NAME_LEN), index=True)
-    branch = Column(String(NAME_LEN))
-    account_type = Column(String(NAME_LEN))
+    BusinessBankAccount
+
+    - company_id = Column(String(ID_LEN))
+    - account_holder = Column(String(NAME_LEN), primary_key=True)
+    - account_number = Column(String(NAME_LEN))
+    - bank_name = Column(String(NAME_LEN), index=True)
+    - branch = Column(String(NAME_LEN))
+    - account_type = Column(String(NAME_LEN))
 
     """
     company_id: str
