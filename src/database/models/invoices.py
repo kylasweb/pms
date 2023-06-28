@@ -4,6 +4,15 @@ from src.database.tools import create_invoice_number
 
 
 class Customer(BaseModel):
+    """
+    The Customer class represents a customer and has the following properties:
+
+        Attributes
+        - customer_id: A string representing the unique identifier for the customer.
+        - name: A string representing the name of the customer.
+        - email: A string representing the email address of the customer.
+        - tel: A string representing the telephone number of the customer.
+    """
     customer_id: str
     name: str
     email: str
@@ -11,6 +20,14 @@ class Customer(BaseModel):
 
 
 class InvoicedItems(BaseModel):
+    """
+    The InvoicedItems class represents items that are invoiced and has the following properties:
+
+        Attributes
+        - description: A string representing the description of the invoiced item.
+        - multiplier: An integer representing the quantity or multiplier of the invoiced item.
+        - amount: An integer representing the unit price or amount of the invoiced item.
+    """
     description: str
     multiplier: int
     amount: int
