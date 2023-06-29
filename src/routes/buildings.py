@@ -239,6 +239,7 @@ async def delete_billed_item(user: User, property_id: str, item_number: str):
     :param item_number:
     :return:
     """
-    billed_item: CreateInvoicedItem = company_controller.delete_billed_item(property_id=property_id,
-                                                                            item_number=item_number)
-    return billed_item
+    billed_item: CreateInvoicedItem = await company_controller.delete_billed_item(property_id=property_id,
+                                                                                  item_number=item_number)
+    flash(message="Billable Item Deleted", category="success")
+    return redirect(url_for("buildings.get_building", building_id=property_id))
