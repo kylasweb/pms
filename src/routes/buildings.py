@@ -151,6 +151,13 @@ async def get_unit(user: User, building_id: str, unit_id: str):
 @buildings_route.post('/admin/building/<string:building_id>/unit/<string:unit_id>')
 @login_required
 async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str):
+    """
+        add_tenant_to_building_unit
+    :param user:
+    :param building_id:
+    :param unit_id:
+    :return:
+    """
     context = dict(user=user.dict())
     tenant_rental = Unit(**request.form)
     updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=tenant_rental)
@@ -203,6 +210,7 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
 @login_required
 async def billable_items(user: User):
     """
+    **billable_items**
 
     :param user:
     :return:
@@ -218,6 +226,7 @@ async def billable_items(user: User):
 @login_required
 async def get_billed_item(user: User, property_id: str, item_number: str):
     """
+    **get_billed_item**
 
     :param user:
     :param property_id:
@@ -233,6 +242,8 @@ async def get_billed_item(user: User, property_id: str, item_number: str):
 @login_required
 async def delete_billed_item(user: User, property_id: str, item_number: str):
     """
+    **delete_billed_item**
+
 
     :param user:
     :param property_id:
