@@ -290,7 +290,8 @@ async def create_billing_charge(user: User):
     flash(message="Billing Charge Added to Unit", category="success")
     return redirect(url_for("buildings.get_building", building_id=unit_charge_item.property_id))
 
-@buildings_route.post('/admin/building/delete-charge/<string:charge_id>')
+
+@buildings_route.get('/admin/building/delete-charge/<string:charge_id>')
 @login_required
 async def delete_charge(User: User, charge_id: str):
     """
@@ -299,5 +300,8 @@ async def delete_charge(User: User, charge_id: str):
     :param charge_id:
     :return:
     """
-    deleted_charge_item = await company_controller.delete_unit_charge(charge_id=charge_id)
-
+    deleted_charge_item: CreateUnitCharge = await company_controller.delete_unit_charge(charge_id=charge_id)
+    # get_unit
+    flash(message="Charge Successfully Deleted", category="success")
+    return redirect(url_for("buildings.get_unit", building_id=deleted_charge_item.property_id,
+                            unit_id=deleted_charge_item.unit_id))
