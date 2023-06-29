@@ -245,7 +245,7 @@ async def delete_billed_item(user: User, property_id: str, item_number: str):
     return redirect(url_for("buildings.get_building", building_id=property_id))
 
 
-@buildings_route.get('/admin/building/create-charge')
+@buildings_route.post('/admin/building/create-charge')
 @login_required
 async def create_billing_charge(user: User):
     """
