@@ -109,3 +109,14 @@ class Invoice(BaseModel):
         There will be a 5% interest charge per month on late invoices.
         """
         return _notes
+
+
+class CreateUserCharge(BaseModel):
+    charge_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    property_id: str
+    tenant_id: str
+    unit_id: str
+    item_number: str
+    amount: int
+    date_of_entry: date = Field(default_factory=lambda : str(uuid.uuid4()))
+    is_invoiced: bool = Field(default=False)

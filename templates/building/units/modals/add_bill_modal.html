@@ -13,10 +13,10 @@
       <span class="font-weight-bold text-black">Used to create Bills for Property Units - This allows for variable billing for items such as Electricity
       and Water
       </span>
-        <form action="/add-bill" method="POST">
-            <input type="hidden" class="form-control" id="propertyId" name="property_id" required>
-            <input type="hidden" class="form-control" id="tenantId" name="tenant_id" required>
-            <input type="hidden" class="form-control" id="unitId" name="unit_id" required>
+        <form action="{{ url_for('buildings.create_billing_charge') }}" method="POST">
+            <input type="hidden" class="form-control" id="property_id" name="property_id" required>
+            <input type="hidden" class="form-control" id="tenant_id" name="tenant_id" required>
+            <input type="hidden" class="form-control" id="unit_id" name="unit_id" required>
           <div class="form-group">
               <select class="form-control" id="item_number" name="item_number">
                   <option value="">Select Billable Item</option>

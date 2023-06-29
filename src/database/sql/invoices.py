@@ -74,8 +74,10 @@ class UserChargesORM(Base):
     property_id: str = Column(String(ID_LEN))
     tenant_id: str = Column(String(ID_LEN))
     unit_id: str = Column(String(ID_LEN))
-    amount_entry: int = Column(Integer)
+    item_number: str = Column(String(ID_LEN))
+    amount: int = Column(Integer)
     date_of_entry: date = Column(Date)
+    is_invoiced: bool = Column(Boolean, default=False)
 
     @classmethod
     def create_if_not_table(cls):
