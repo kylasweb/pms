@@ -22,6 +22,7 @@
                     <td>Rate</td>
                     <td>Units</td>
                     <td>Total</td>
+                    <td>Action</td>
                 </tr>
             </thead>
             <tbody>
@@ -31,6 +32,12 @@
                     <td>{{ charged_item.item.multiplier }}</td>
                     <td>{{ charged_item.amount }}</td>
                     <td>R {{ charged_item.item.multiplier * charged_item.amount }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-danger"
+                                href="{{ url_for('buildings.delete_charge', charge_id=charged_item.charge_id) }}">
+                            Remove
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
