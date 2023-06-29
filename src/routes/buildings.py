@@ -249,6 +249,7 @@ async def delete_billed_item(user: User, property_id: str, item_number: str):
 @login_required
 async def create_billing_charge(user: User):
     """
+    **create_billing_charge**
 
     :param user:
     :return:
