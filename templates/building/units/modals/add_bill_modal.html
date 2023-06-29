@@ -14,9 +14,9 @@
       and Water
       </span>
         <form action="{{ url_for('buildings.create_billing_charge') }}" method="POST">
-            <input type="hidden" class="form-control" id="property_id" name="property_id" required>
-            <input type="hidden" class="form-control" id="tenant_id" name="tenant_id" required>
-            <input type="hidden" class="form-control" id="unit_id" name="unit_id" required>
+            <input type="hidden" class="form-control" id="property_id" name="property_id" value="{{ unit.property_id }}">
+            <input type="hidden" class="form-control" id="tenant_id" name="tenant_id" value="{{ unit.tenant_id }}">
+            <input type="hidden" class="form-control" id="unit_id" name="unit_id" value="{{ unit.unit_id }}">
           <div class="form-group">
               <select class="form-control" id="item_number" name="item_number">
                   <option value="">Select Billable Item</option>

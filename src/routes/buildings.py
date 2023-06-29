@@ -267,6 +267,7 @@ async def create_billing_charge(user: User):
 
     """
     unit_charge_item: CreateUnitCharge = CreateUnitCharge(**request.form)
+    print(f"Unit Charge: {unit_charge_item}")
     created_bill = await company_controller.create_unit_bill_charge(charge_item=unit_charge_item)
     flash(message="Billing Charge Added to Unit", category="success")
     return redirect(url_for("buildings.get_building", building_id=unit_charge_item.property_id))

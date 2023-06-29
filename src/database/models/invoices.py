@@ -118,5 +118,5 @@ class CreateUnitCharge(BaseModel):
     unit_id: str
     item_number: str
     amount: int
-    date_of_entry: date = Field(default_factory=lambda : str(uuid.uuid4()))
+    date_of_entry: date = Field(default_factory=lambda: datetime.now().date())
     is_invoiced: bool = Field(default=False)
