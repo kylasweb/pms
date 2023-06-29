@@ -10,6 +10,16 @@
                 </span>
             </a>
         </li>
+
+        {% if  unit.tenant_id %}
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#monthly-charges">
+                <span class="font-weight-bold">
+                    Monthly Charges
+                </span>
+            </a>
+        </li>
+        {% else %}
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#book-unit">
                 <span class="font-weight-bold">
@@ -17,6 +27,8 @@
                 </span>
             </a>
         </li>
+        {% endif %}
+
     </ul>
 
     <div class="tab-content">
@@ -32,19 +44,16 @@
                             <i class="ti-briefcase"> </i>
                             Property Details
                         </a>
-                        <a class="btn btn-sm btn-warning font-weight-bold text-white" data-toggle="modal" data-target="#addBillModal">
-                            <i class="ti-money"> </i>
-                            Add Bill
-                        </a>
                     </div>
                 </div>
+
                 {% include "building/units/tables/unit_details.html" %}
-                {% if charged_items %}
-                    {% include "building/units/tables/applied_charges.html" %}
-                {% endif %}
+
             </div>
         </div>
-
+        <div class="tab-pane fade" id="monthly-charges">
+                {% include "building/units/tables/applied_charges.html" %}
+        </div>
         <div class="tab-pane fade" id="book-unit">
             <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">

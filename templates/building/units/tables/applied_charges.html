@@ -1,28 +1,39 @@
 
 <div class="card">
-<div class="card-header">
-    <h3 class="card-title">Monthly Charges</h3>
-</div>
-<div class="card-footer">
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <td>Description</td>
-                <td>Rate</td>
-                <td>Units</td>
-                <td>Total</td>
-            </tr>
-        </thead>
-        <tbody>
-        {% for charged_item in charged_items %}
-            <tr>
-                <td>{{ charged_item.item.description }}</td>
-                <td>{{ charged_item.item.multiplier }}</td>
-                <td>{{ charged_item.amount }}</td>
-                <td>R {{ charged_item.item.multiplier * charged_item.amount }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="card-header  d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Monthly Charges</h3>
+
+        <div>
+        <a class="btn btn-sm btn-warning font-weight-bold text-white" data-toggle="modal" data-target="#addBillModal">
+            <i class="ti-money"> </i>
+            Add Bill
+        </a>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <span class="card-content font-weight-bold text-info">
+            Use Add Bill to add rates and bills to a unit before invoices are created
+        </span>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Description</td>
+                    <td>Rate</td>
+                    <td>Units</td>
+                    <td>Total</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for charged_item in charged_items %}
+                <tr>
+                    <td>{{ charged_item.item.description }}</td>
+                    <td>{{ charged_item.item.multiplier }}</td>
+                    <td>{{ charged_item.amount }}</td>
+                    <td>R {{ charged_item.item.multiplier * charged_item.amount }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
