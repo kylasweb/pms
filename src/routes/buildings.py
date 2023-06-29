@@ -23,8 +23,8 @@ async def get_common_context(user: User, building_id: str, property_editor: bool
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
     notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
-    billable_items: list[BillableItem] = await company_controller.get_billable_items(building_id=building_id)
-    billable_dicts = [bill.dict() for bill in billable_items if bill] if billable_items else []
+    billable_items_: list[BillableItem] = await company_controller.get_billable_items(building_id=building_id)
+    billable_dicts = [bill.dict() for bill in billable_items_ if bill and not bill.deleted] if billable_items_ else []
 
     context = dict(
         user=user_data,
