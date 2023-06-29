@@ -293,4 +293,11 @@ async def create_billing_charge(user: User):
 @buildings_route.post('/admin/building/delete-charge/<string:charge_id>')
 @login_required
 async def delete_charge(User: User, charge_id: str):
-    pass
+    """
+
+    :param User:
+    :param charge_id:
+    :return:
+    """
+    deleted_charge_item = await company_controller.delete_unit_charge(charge_id=charge_id)
+

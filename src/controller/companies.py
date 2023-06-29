@@ -451,6 +451,20 @@ class CompaniesController:
             return charge_item
 
     @error_handler
+    async def delete_unit_charge(self, charge_id: str) -> CreateUnitCharge:
+        """
+
+        :return:
+        """
+        with Session() as session:
+            charge_item_orm: UserChargesORM = session.query(UserChargesORM).filter(UserChargesORM.charge_id == charge_id).first()
+            _unit_charge = CreateUnitCharge(**charge_item_orm.to_dict())
+            if charge_item_orm:
+                session.delete(charge_item_orm)
+                session.commit()
+            return _unit_charge
+
+    @error_handler
     async def get_charged_items(self, building_id: str, unit_id: str):
         """
 
