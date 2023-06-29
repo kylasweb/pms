@@ -39,6 +39,9 @@
                     </div>
                 </div>
                 {% include "building/units/tables/unit_details.html" %}
+                {% if charged_items %}
+                    {% include "building/units/tables/applied_charges.html" %}
+                {% endif %}
             </div>
         </div>
 

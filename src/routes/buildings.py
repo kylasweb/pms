@@ -140,12 +140,30 @@ async def get_unit(user: User, building_id: str, unit_id: str):
     billable_items_: list[BillableItem] = await company_controller.get_billable_items(building_id=building_id)
     billable_dicts: list[dict[str, str | int]] = [item.dict()
                                                   for item in billable_items_ if item] if billable_items else []
+
+    charged_items_dicts = await build_charge_items(building_id, unit_id)
+
     if unit_data is None:
         flash(message="Could not find Unit with that ID", category="danger")
         redirect(url_for('buildings.get_building', building_id=building_id))
 
-    context = {'unit': unit_data, 'tenants': tenants_list, 'billable_items': billable_dicts}
+    context = {'unit': unit_data, 'tenants': tenants_list, 'billable_items': billable_dicts,
+               'charged_items': charged_items_dicts}
     return render_template('building/units/unit.html', **context)
+
+
+async def build_charge_items(building_id, unit_id):
+    charged_items = await company_controller.get_charged_items(building_id=building_id, unit_id=unit_id)
+
+    charged_items_dicts = [item.dict() for item in charged_items if item] if charged_items else []
+    response_data = []
+    for item in charged_items_dicts:
+        _data = item
+        billable_item: BillableItem = await company_controller.get_item_by_number(item_number=item.get('item_number'))
+        _data["item"] = billable_item.dict()
+        response_data.append(_data)
+
+    return response_data
 
 
 @buildings_route.post('/admin/building/<string:building_id>/unit/<string:unit_id>')
@@ -252,7 +270,7 @@ async def delete_billed_item(user: User, property_id: str, item_number: str):
     """
     billed_item: CreateInvoicedItem = await company_controller.delete_billed_item(property_id=property_id,
                                                                                   item_number=item_number)
-    flash(message="Billable Item Deleted", category="success")
+    flash(message=f"Billable Item : {billed_item.description} Deleted", category="success")
     return redirect(url_for("buildings.get_building", building_id=property_id))
 
 
@@ -268,6 +286,6 @@ async def create_billing_charge(user: User):
     """
     unit_charge_item: CreateUnitCharge = CreateUnitCharge(**request.form)
     print(f"Unit Charge: {unit_charge_item}")
-    created_bill = await company_controller.create_unit_bill_charge(charge_item=unit_charge_item)
+    _ = await company_controller.create_unit_bill_charge(charge_item=unit_charge_item)
     flash(message="Billing Charge Added to Unit", category="success")
     return redirect(url_for("buildings.get_building", building_id=unit_charge_item.property_id))

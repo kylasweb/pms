@@ -21,7 +21,9 @@
               <select class="form-control" id="item_number" name="item_number">
                   <option value="">Select Billable Item</option>
                   {% for item in billable_items %}
-                    <option value="{{ item.item_number }}"> {{ item.description }}</option>
+                    <option value="{{ item.item_number }}">
+                        {{ item.description }}, <span class="font-weight-bold font-italic text-info">Charge Per Unit = {{ item.multiplier }}</span>
+                    </option>
                   {% endfor %}
               </select>
           </div>

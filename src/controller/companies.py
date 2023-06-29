@@ -450,4 +450,26 @@ class CompaniesController:
             session.commit()
             return charge_item
 
+    @error_handler
+    async def get_charged_items(self, building_id: str, unit_id: str):
+        """
 
+        :param building_id:
+        :param unit_id:
+        :return:
+        """
+        with Session() as session:
+            charged_items = session.query(UserChargesORM).filter(UserChargesORM.property_id == building_id,
+                                                                 UserChargesORM.unit_id == unit_id).all()
+            return [CreateUnitCharge(**charge.to_dict()) for charge in charged_items if charge] if charged_items else []
+
+    @error_handler
+    async def get_item_by_number(self, item_number: str) -> BillableItem:
+        """
+
+        :param item_number:
+        :return:
+        """
+        with Session() as session:
+            billable_item: ItemsORM = session.query(ItemsORM).filter(ItemsORM.item_number == item_number).first()
+            return BillableItem(**billable_item.to_dict())

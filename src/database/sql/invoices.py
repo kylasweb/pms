@@ -83,3 +83,20 @@ class UserChargesORM(Base):
     def create_if_not_table(cls):
         if not inspect(engine).has_table(cls.__tablename__):
             Base.metadata.create_all(bind=engine)
+
+    def to_dict(self) -> dict[str, str | date | int | bool]:
+        """
+        Converts the instance attributes to a dictionary.
+
+        :return: A dictionary representation of the instance.
+        """
+        return {
+            "charge_id": self.charge_id,
+            "property_id": self.property_id,
+            "tenant_id": self.tenant_id,
+            "unit_id": self.unit_id,
+            "item_number": self.item_number,
+            "amount": self.amount,
+            "date_of_entry": self.date_of_entry,
+            "is_invoiced": self.is_invoiced
+        }
