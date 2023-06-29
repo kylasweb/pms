@@ -40,7 +40,8 @@ class ItemsORM(Base):
     property_id: str = Column(String(ID_LEN))
     item_number: str = Column(String(ID_LEN), primary_key=True)
     description: str = Column(String(255))
-    multiplier: int = Column(Integer)
+    multiplier: int = Column(Integer, default=1)
+    deleted: int = Column(Boolean, default=False)
 
     @classmethod
     def create_if_not_table(cls):
@@ -57,7 +58,8 @@ class ItemsORM(Base):
             "property_id": self.property_id,
             "item_number": self.item_number,
             "description": self.description,
-            "multiplier": self.multiplier
+            "multiplier": self.multiplier,
+            "deleted": self.deleted
         }
 
 
@@ -71,6 +73,7 @@ class UserChargesORM(Base):
     charge_id: str = Column(String(ID_LEN), primary_key=True)
     property_id: str = Column(String(ID_LEN))
     tenant_id: str = Column(String(ID_LEN))
+    unit_id: str = Column(String(ID_LEN))
     amount_entry: int = Column(Integer)
     date_of_entry: date = Column(Date)
 

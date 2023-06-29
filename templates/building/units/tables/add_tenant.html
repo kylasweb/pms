@@ -1,0 +1,44 @@
+<div class="card-footer">
+                <form action="{{ url_for('buildings.add_tenant_to_building_unit', building_id=unit.property_id, unit_id=unit.unit_id) }}" method="post">
+                <!-- including Unit Data on Form -->
+                    <input type="hidden" name="property_id" value="{{ unit.property_id }}" />
+                    <input type="hidden" name="unit_id" value="{{ unit.unit_id }}" />
+                    <input type="hidden" name="unit_number" value="{{ unit.unit_number }}" />
+                    <input type="hidden" name="rental_amount" value="{{ unit.rental_amount }}" />
+                    <input type="hidden" name="unit_area" value="{{ unit.unit_area }}" />
+                    <input type="hidden" name="has_reception" value="{{ unit.has_reception }}" />
+                <!--- Done --->
+                    <div class="mb-3">
+                        <label for="tenant-dropdown" class="form-label">Select Tenant:</label>
+                        <select class="form-control" id="tenant-dropdown" name="tenant_id" required>
+                            <option value="" selected disabled>Select a tenant</option>
+                            {% for tenant in tenants %}
+                                <option value="{{ tenant.tenant_id }}">{{ tenant.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lease-start-date" class="form-label">Lease Start Date:</label>
+                        <input type="date" class="form-control" id="lease_start_date" name="lease_start_date" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lease-end-date" class="form-label">Lease End Date:</label>
+                        <input type="date" class="form-control" id="lease_end_date" name="lease_end_date" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="font-weight-bold">
+                            <i class="ti-save"> </i>
+                            Update
+                        </span>
+                    </button>
+                    <button type="reset" class="btn btn-danger">
+                        <span class="font-weight-bold">
+                            <i class="ti-close"> </i>
+                            Cancel
+                        </span>
+                    </button>
+                </form>
+            </div>

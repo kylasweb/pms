@@ -413,7 +413,16 @@ class CompaniesController:
     async def get_billed_item(self, property_id: str, item_number: str):
         with Session() as session:
             billable_orm: ItemsORM = session.query(ItemsORM).filter(ItemsORM.property_id == property_id,
-                                                                    ItemsORM.item_number == item_number).first()
+                                                                    ItemsORM.item_number == item_number,
+                                                                    ItemsORM.deleted == False).first()
+            return CreateInvoicedItem(**billable_orm.to_dict())
+
+    @error_handler
+    async def delete_billed_item(self, property_id: str, item_number: str):
+        with Session() as session:
+            billable_orm: ItemsORM = session.query(ItemsORM).filter(ItemsORM.property_id == property_id).first()
+            billable_orm.deleted = True
+            session.commit()
             return CreateInvoicedItem(**billable_orm.to_dict())
 
     @error_handler

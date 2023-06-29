@@ -137,12 +137,14 @@ async def do_add_unit(user: User, building_id: str):
 async def get_unit(user: User, building_id: str, unit_id: str):
     unit_data: Unit = await company_controller.get_unit(user=user, building_id=building_id, unit_id=unit_id)
     tenants_list: list[Tenant] = await tenant_controller.get_un_booked_tenants()
-
+    billable_items_: list[BillableItem] = await company_controller.get_billable_items(building_id=building_id)
+    billable_dicts: list[dict[str, str | int]] = [item.dict()
+                                                  for item in billable_items_ if item] if billable_items else []
     if unit_data is None:
         flash(message="Could not find Unit with that ID", category="danger")
         redirect(url_for('buildings.get_building', building_id=building_id))
 
-    context = {'unit': unit_data, 'tenants': tenants_list}
+    context = {'unit': unit_data, 'tenants': tenants_list, 'billable_items': billable_dicts}
     return render_template('building/units/unit.html', **context)
 
 
@@ -222,7 +224,21 @@ async def get_billed_item(user: User, property_id: str, item_number: str):
     :param item_number:
     :return:
     """
-    billed_item: CreateInvoicedItem = company_controller.get_billed_item(property_id=property_id, item_number=item_number)
+    billed_item: CreateInvoicedItem = company_controller.get_billed_item(property_id=property_id,
+                                                                         item_number=item_number)
     return billed_item
 
 
+@buildings_route.get('/admin/building/delete-billed-item/<string:property_id>/<string:item_number>')
+@login_required
+async def delete_billed_item(user: User, property_id: str, item_number: str):
+    """
+
+    :param user:
+    :param property_id:
+    :param item_number:
+    :return:
+    """
+    billed_item: CreateInvoicedItem = company_controller.delete_billed_item(property_id=property_id,
+                                                                            item_number=item_number)
+    return billed_item

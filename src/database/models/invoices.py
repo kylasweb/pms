@@ -46,6 +46,7 @@ class CreateInvoicedItem(BaseModel):
     property_id: str
     description: str
     multiplier: int
+    deleted: bool = Field(default=False)
 
 
 class BillableItem(BaseModel):
@@ -53,6 +54,7 @@ class BillableItem(BaseModel):
     property_id: str
     description: str
     multiplier: int
+    deleted: bool
 
 
 class Invoice(BaseModel):

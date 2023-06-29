@@ -1,0 +1,37 @@
+
+<!-- Modal -->
+<div class="modal fade" id="addBillModal" tabindex="-1" role="dialog" aria-labelledby="addBillModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addBillModalLabel">Add Bill to Unit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <span class="font-weight-bold text-black">Used to create Bills for Property Units - This allows for variable billing for items such as Electricity
+      and Water
+      </span>
+        <form action="/add-bill" method="POST">
+            <input type="hidden" class="form-control" id="propertyId" name="property_id" required>
+            <input type="hidden" class="form-control" id="tenantId" name="tenant_id" required>
+            <input type="hidden" class="form-control" id="unitId" name="unit_id" required>
+          <div class="form-group">
+              <select class="form-control" id="item_number" name="item_number">
+                  <option value="">Select Billable Item</option>
+                  {% for item in billable_items %}
+                    <option value="{{ item.item_number }}"> {{ item.description }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="amountEntry" class="label font-weight-bold">Amount / Units / Meter Readings Used</label>
+            <input type="number" class="form-control" id="amount" name="amount" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

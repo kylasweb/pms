@@ -22,92 +22,23 @@
     <div class="tab-content">
         <div class="tab-pane fade show active" id="unit-details">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title font-weight-bold">
                         <i class="ti-home"> </i>
                         Unit Details
                     </h3>
+                    <div>
+                        <a href="{{ url_for('buildings.get_building', building_id=unit.property_id) }}" class="btn btn-sm btn-primary font-weight-bold text-white">
+                            <i class="ti-briefcase"> </i>
+                            Property Details
+                        </a>
+                        <a class="btn btn-sm btn-warning font-weight-bold text-white" data-toggle="modal" data-target="#addBillModal">
+                            <i class="ti-money"> </i>
+                            Add Bill
+                        </a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group">
-
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Unit Number:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.unit_number }}
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Is Occupied:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ True if unit.tenant_id else False }}
-                                </div>
-                            </div>
-
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Rental Amount:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    R {{ unit.rental_amount }}
-                                </div>
-                            </div>
-                        </li>
-
-                        {% if unit.tenant_id %}
-                            <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Lease Start Date:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.lease_start_date }}
-                                </div>
-                            </div>
-                            </li>
-                            <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Lease End Date:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.lease_end_date }}
-                                </div>
-                            </div>
-                            </li>
-                        {% endif %}
-
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Unit Area:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.unit_area }} sq Metres
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                   Has Reception:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.has_reception }}
-                                </div>
-                            </div>
-                        </li>
-                    </ul>s
-                </div>
+                {% include "building/units/tables/unit_details.html" %}
             </div>
         </div>
 
@@ -122,54 +53,13 @@
                 </div>
 
             </div>
-            <div class="card-footer">
-                <form action="{{ url_for('buildings.add_tenant_to_building_unit', building_id=unit.property_id, unit_id=unit.unit_id) }}" method="post">
-                <!-- including Unit Data on Form -->
-                    <input type="hidden" name="property_id" value="{{ unit.property_id }}" />
-                    <input type="hidden" name="unit_id" value="{{ unit.unit_id }}" />
-                    <input type="hidden" name="unit_number" value="{{ unit.unit_number }}" />
-                    <input type="hidden" name="rental_amount" value="{{ unit.rental_amount }}" />
-                    <input type="hidden" name="unit_area" value="{{ unit.unit_area }}" />
-                    <input type="hidden" name="has_reception" value="{{ unit.has_reception }}" />
-                <!--- Done --->
-                    <div class="mb-3">
-                        <label for="tenant-dropdown" class="form-label">Select Tenant:</label>
-                        <select class="form-control" id="tenant-dropdown" name="tenant_id" required>
-                            <option value="" selected disabled>Select a tenant</option>
-                            {% for tenant in tenants %}
-                                <option value="{{ tenant.tenant_id }}">{{ tenant.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="lease-start-date" class="form-label">Lease Start Date:</label>
-                        <input type="date" class="form-control" id="lease_start_date" name="lease_start_date" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="lease-end-date" class="form-label">Lease End Date:</label>
-                        <input type="date" class="form-control" id="lease_end_date" name="lease_end_date" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <span class="font-weight-bold">
-                            <i class="ti-save"> </i>
-                            Update
-                        </span>
-                    </button>
-                    <button type="reset" class="btn btn-danger">
-                        <span class="font-weight-bold">
-                            <i class="ti-close"> </i>
-                            Cancel
-                        </span>
-                    </button>
-                </form>
-            </div>
+            {% include "building/units/tables/add_tenant.html" %}
             </div>
         </div>
     </div>
 </div>
 
 {% include "building/modals/add_tenant.html" %}
+{% include "building/units/modals/add_bill_modal.html" %}
+
 {% endblock %}
