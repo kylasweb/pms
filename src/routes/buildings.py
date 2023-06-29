@@ -135,8 +135,15 @@ async def do_add_unit(user: User, building_id: str):
 @buildings_route.get('/admin/building/<string:building_id>/unit/<string:unit_id>')
 @login_required
 async def get_unit(user: User, building_id: str, unit_id: str):
+    context = {}
     unit_data: Unit = await company_controller.get_unit(user=user, building_id=building_id, unit_id=unit_id)
-    tenants_list: list[Tenant] = await tenant_controller.get_un_booked_tenants()
+    if unit_data.tenant_id:
+        tenant_data: Tenant = await tenant_controller.get_tenant_by_id(tenant_id=unit_data.tenant_id)
+        context.update({'tenant': tenant_data.dict()})
+    else:
+        tenants_list: list[Tenant] = await tenant_controller.get_un_booked_tenants()
+        context.update({'tenants': tenants_list})
+
     billable_items_: list[BillableItem] = await company_controller.get_billable_items(building_id=building_id)
     billable_dicts: list[dict[str, str | int]] = [item.dict()
                                                   for item in billable_items_ if item] if billable_items else []
@@ -147,8 +154,9 @@ async def get_unit(user: User, building_id: str, unit_id: str):
         flash(message="Could not find Unit with that ID", category="danger")
         redirect(url_for('buildings.get_building', building_id=building_id))
 
-    context = {'unit': unit_data, 'tenants': tenants_list, 'billable_items': billable_dicts,
-               'charged_items': charged_items_dicts}
+    context.update({'unit': unit_data, 'billable_items': billable_dicts,
+                    'charged_items': charged_items_dicts})
+
     return render_template('building/units/unit.html', **context)
 
 
