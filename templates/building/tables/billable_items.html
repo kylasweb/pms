@@ -1,0 +1,19 @@
+<div class="card-body">
+    <table class="table table-responsive table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Multiplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Insert table rows dynamically based on data from the database -->
+            {% for item in billable_items %}
+            <tr>
+                <td><a href="{{ url_for('buildings.get_billed_item', property_id=item.property_id, item_number=item.item_number) }}">{{ item.description }}</a></td>
+                <td>{{ item.multiplier }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

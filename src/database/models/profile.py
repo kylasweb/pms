@@ -9,5 +9,6 @@ class Profile(BaseModel):
             such us - deposit multiplier
 
     """
-    deposit_multiplier: float = Field(..., description="Multiplier for calculating deposit amount")
+    deposit_multiplier: float = Field(default="2")
+    currency: str = Field(default="R")
 

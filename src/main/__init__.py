@@ -30,6 +30,9 @@ def bootstrapper():
     from src.database.sql.notifications import NotificationORM
     from src.database.sql.lease import LeaseAgreementORM, LeaseAgreementTemplate
     from src.database.sql.companies import TenantCompanyORM
+    from src.database.sql.invoices import InvoiceORM
+    from src.database.sql.invoices import ItemsORM
+    from src.database.sql.invoices import UserChargesORM
 
     AddressORM.create_if_not_table()
     TenantORM.create_if_not_table()
@@ -45,6 +48,10 @@ def bootstrapper():
     LeaseAgreementTemplate.create_if_not_table()
 
     TenantCompanyORM.create_if_not_table()
+
+    InvoiceORM.create_if_not_table()
+    ItemsORM.create_if_not_table()
+    UserChargesORM.create_if_not_table()
 
 
 def create_app(config):

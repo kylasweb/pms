@@ -11,6 +11,9 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#units-list"><strong>Units List</strong></a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#billable"><strong>Billable Items</strong></a>
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -20,37 +23,22 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title"><strong>{{ property.name }}</strong></h3>
                     <div>
+
                         <a href="{{ url_for('companies.get_company', company_id=property.company_id) }}" class="btn btn-sm btn-warning">
                             <i class="ti-desktop"> </i> Company
                         </a>
-                        {#    {{ url_for('buildings.edit_building', building_id=property.property_id) }}#}
+                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addItemModal">
+                            <i class="ti-money"> </i>
+                            Billable Items
+                        </button>
                         <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editPropertyDialog">
                             <i class="ti-desktop"> </i> Edit
                         </a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="card-body col-sm-12 col-lg-6 col-md-6">
-                        <ul class="list-group">
-                        <li class="list-group-item"><strong>Name:</strong> <span class="text-right">{{ property.name }}</span></li>
-                        <li class="list-group-item"><strong>Location:</strong> <span class="text-right">{{ property.address }}</span></li>
-                        <li class="list-group-item"><strong>Property Type:</strong> <span class="text-right">{{ property.property_type }}</span></li>
-                        <li class="list-group-item"><strong>Number of Units:</strong> <span class="text-right">{{ property.number_of_units }}</span></li>
-                        <li class="list-group-item"><strong>Available Units:</strong> <span class="text-right">{{ property.available_units }}</span></li>
-                        <li class="list-group-item"><strong>Amenities:</strong> <span class="text-right">{{ property.amenities }}</span></li>
-                        </ul>
-                    </div>
-                    <div class="card-body col-sm-12 col-lg-6 col-md-6">
-                        <ul class="list-group">
-                            <li class="list-group-item"><strong>Landlord:</strong> <span class="text-right">{{ property.landlord }}</span></li>
-                        <li class="list-group-item"><strong>Maintenance Contact:</strong> <span class="text-right">{{ property.maintenance_contact }}</span></li>
-                        <li class="list-group-item"><strong>Lease Terms:</strong> <span class="text-right">{{ property.lease_terms }}</span></li>
-                        <li class="list-group-item"><strong>Description:</strong> <span class="text-right">{{ property.description }}</span></li>
-                        <li class="list-group-item"><strong>Built Year:</strong> <span class="text-right">{{ property.built_year }}</span></li>
-                        <li class="list-group-item"><strong>Parking Spots:</strong> <span class="text-right">{{ property.parking_spots }}</span></li>
-                        </ul>
-                    </div>
-                </div>
+
+                {% include "building/tables/property_description.html" %}
+
                     <!-- include the building / Property Editor form here -->
                     {% if property_editor %}
                         {% include 'building/edit_building.html' %}
@@ -70,29 +58,21 @@
                 </div>
             </div>
             </div>
-            <div class="card-body ">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Unit Number</th>
-                            <th>Is Occupied</th>
-                            <th>Rental Amount</th>
-                            <th class="d-none d-sm-table-cell">Leased</th>
-                            <th class="d-none d-sm-table-cell">Unit Area</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for unit in units %}
-                            <tr>
-                                <td><a href="{{ url_for('buildings.get_unit', building_id=unit.property_id, unit_id=unit.unit_id) }}" class="alert-link"> {{ unit.unit_number }}</a></td>
-                                <td>{{ unit.is_occupied }}</td>
-                                <td>{{ unit.rental_amount }}</td>
-                                <td>{{ True if unit.tenant_id else False }}</td>
-                                <td class="d-none d-sm-table-cell">{{ unit.unit_area }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            {% include "building/tables/unit_list.html" %}
+        </div>
+
+        <div id="billable" class="tab-pane fade">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title"> Billable Items</h3>
+                    <div>
+                        <button class="btn btn-sm btn-primary"
+                                data-toggle="modal"
+                                data-target="#addItemModal"> Add Billable Item</button>
+                    </div>
+
+                </div>
+                {% include "building/tables/billable_items.html" %}
             </div>
         </div>
     </div>
@@ -100,9 +80,6 @@
 {# tab includes #}
 {% include "building/modals/add_unit.html" %}
 {% include "building/modals/edit_property.html" %}
+{% include "building/modals/charged_items.html" %}
 
 {% endblock %}
-
-{#{% block scripts %}#}
-{#    <script src="{{ url_for('static', filename='js/property/manager.js') }}"></script>#}
-{#{% endblock %}#}

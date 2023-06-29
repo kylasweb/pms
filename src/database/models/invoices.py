@@ -1,3 +1,5 @@
+import uuid
+
 from pydantic import BaseModel, Field
 from datetime import date, datetime
 from src.database.tools import create_invoice_number
@@ -13,10 +15,10 @@ class Customer(BaseModel):
         - email: A string representing the email address of the customer.
         - tel: A string representing the telephone number of the customer.
     """
-    customer_id: str
+    tenant_id: str
     name: str
     email: str
-    tel: str
+    cell: str
 
 
 class InvoicedItems(BaseModel):
@@ -28,6 +30,8 @@ class InvoicedItems(BaseModel):
         - multiplier: An integer representing the quantity or multiplier of the invoiced item.
         - amount: An integer representing the unit price or amount of the invoiced item.
     """
+    property_id: str
+    item_number: str
     description: str
     multiplier: int
     amount: int
@@ -35,6 +39,20 @@ class InvoicedItems(BaseModel):
     @property
     def sub_total(self) -> int:
         return self.amount * self.multiplier
+
+
+class CreateInvoicedItem(BaseModel):
+    item_number: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    property_id: str
+    description: str
+    multiplier: int
+
+
+class BillableItem(BaseModel):
+    item_number: str
+    property_id: str
+    description: str
+    multiplier: int
 
 
 class Invoice(BaseModel):
@@ -61,6 +79,8 @@ class Invoice(BaseModel):
     date_issued: date
     due_date: date
     items: list[InvoicedItems]
+    invoice_sent: bool
+    invoice_printed: bool
 
     @property
     def total_amount(self) -> int:

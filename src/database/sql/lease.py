@@ -1,6 +1,7 @@
 from datetime import date
-from sqlalchemy import Column, Date, Float, Boolean, String, Integer, Text, inspect
-from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy import Column, Date, Boolean, String, Integer, Text, inspect
+
 from src.database.constants import ID_LEN, NAME_LEN
 from src.database.sql import Base, engine
 
@@ -16,6 +17,7 @@ class LeaseAgreementORM(Base):
     rent_amount: int = Column(Integer)
     deposit_amount: int = Column(Integer)
     is_active: bool = Column(Boolean)
+    payment_period: str = Column(String(NAME_LEN))
 
     @classmethod
     def create_if_not_table(cls):

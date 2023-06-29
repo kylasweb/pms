@@ -27,6 +27,7 @@ class LeaseAgreement(BaseModel):
     rent_amount: int
     deposit_amount: int
     is_active: bool
+    payment_period: str
 
     @property
     def days_left(self):
@@ -53,6 +54,7 @@ class CreateLeaseAgreement(BaseModel):
     rent_amount: int
     deposit_amount: int
     is_active: bool
+    payment_period: str
 
 
 class LeaseAgreementTemplate(BaseModel):

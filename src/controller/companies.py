@@ -1,5 +1,7 @@
 import uuid
 
+from src.database.sql.invoices import ItemsORM
+from src.database.models.invoices import CreateInvoicedItem, BillableItem
 from src.database.sql.bank_account import BankAccountORM
 from src.database.models.bank_accounts import BusinessBankAccount
 from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
@@ -48,6 +50,18 @@ class CompaniesController:
 
             company_orm = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
             return Company(**company_orm.to_dict()) if company_orm else None
+
+    @error_handler
+    async def internal_company_id_to_user_id(self, company_id: str) -> UserCompanyORM:
+        """
+
+        :param company_id:
+        :return:
+        """
+        with Session() as session:
+            user_company: UserCompanyORM = session.query(UserCompanyORM).filter(
+                UserCompanyORM.company_id == company_id).filter()
+            return user_company
 
     @staticmethod
     @error_handler
@@ -217,7 +231,8 @@ class CompaniesController:
         :return:
         """
         with Session() as session:
-            users_for_company: list[UserCompanyORM] = session.query(UserCompanyORM).filter(UserCompanyORM.company_id == company_id).all()
+            users_for_company: list[UserCompanyORM] = session.query(UserCompanyORM).filter(
+                UserCompanyORM.company_id == company_id).all()
             return users_for_company
 
     @error_handler
@@ -365,7 +380,8 @@ class CompaniesController:
         :return:
         """
         with Session() as session:
-            unit_orm: UnitORM = session.query(UnitORM).filter(UnitORM.unit_id == unit_data.unit_id, UnitORM.property_id == unit_data.property_id).first()
+            unit_orm: UnitORM = session.query(UnitORM).filter(UnitORM.unit_id == unit_data.unit_id,
+                                                              UnitORM.property_id == unit_data.property_id).first()
 
             if unit_orm:
                 # Update the fields in tenant_orm based on the values in tenant
@@ -378,3 +394,35 @@ class CompaniesController:
 
                 return Unit(**unit_orm.to_dict())
             return None
+
+    @error_handler
+    async def create_billable_item(self, billable_item: CreateInvoicedItem) -> CreateInvoicedItem:
+        """
+        **create_billable_item**
+
+        :param billable_item:
+        :return:
+        """
+        with Session() as session:
+            billable_orm: ItemsORM = ItemsORM(**billable_item.dict())
+            session.add(billable_orm)
+            session.commit()
+            return billable_item
+
+    @error_handler
+    async def get_billed_item(self, property_id: str, item_number: str):
+        with Session() as session:
+            billable_orm: ItemsORM = session.query(ItemsORM).filter(ItemsORM.property_id == property_id,
+                                                                    ItemsORM.item_number == item_number).first()
+            return CreateInvoicedItem(**billable_orm.to_dict())
+
+    @error_handler
+    async def get_billable_items(self, building_id: str) -> list[BillableItem]:
+        """
+
+        :param building_id:
+        :return:
+        """
+        with Session() as session:
+            billable_list: list[ItemsORM] = session.query(ItemsORM).filter(ItemsORM.property_id == building_id).all()
+            return [BillableItem(**item.to_dict()) for item in billable_list]

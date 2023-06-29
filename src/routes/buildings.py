@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
+from src.database.models.invoices import CreateInvoicedItem, BillableItem
 from src.logger import init_logger
 from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 from src.database.models.tenants import Tenant
@@ -22,13 +23,16 @@ async def get_common_context(user: User, building_id: str, property_editor: bool
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
 
     notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
+    billable_items: list[BillableItem] = await company_controller.get_billable_items(building_id=building_id)
+    billable_dicts = [bill.dict() for bill in billable_items if bill] if billable_items else []
 
     context = dict(
         user=user_data,
         property=building_property.dict(),
         property_editor=property_editor,
         notifications_list=notifications_dicts,
-        units=[unit.dict() for unit in property_units]
+        units=[unit.dict() for unit in property_units],
+        billable_items=billable_dicts
     )
     return context
 
@@ -54,7 +58,9 @@ async def get_building(user: User, building_id: str):
     :param building_id:
     :return:
     """
-    context = await get_common_context(user=user, building_id=building_id)
+    context = await get_common_context(user=user,
+                                       building_id=building_id)
+
     return render_template('building/building.html', **context)
 
 
@@ -185,7 +191,38 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
     updated_building: Property = await company_controller.update_property(user=user, property_details=building_)
     print(f'Updated Building : {updated_building}')
     if updated_building:
-        context.update(dict(building= updated_building.dict()))
+        context.update(dict(building=updated_building.dict()))
 
     flash(message='Lease Agreement created Successfully', category="success")
     return render_template('tenants/official/tenant_rental_result.html', **context)
+
+
+@buildings_route.post('/admin/building/billable')
+@login_required
+async def billable_items(user: User):
+    """
+
+    :param user:
+    :return:
+    """
+    billable_item: CreateInvoicedItem = CreateInvoicedItem(**request.form)
+    print(f"BILLABLE ITEMS : {billable_item}")
+    billable_item: CreateInvoicedItem = await company_controller.create_billable_item(billable_item=billable_item)
+    flash(message="Billable Item Added to building", category="success")
+    return redirect(url_for("buildings.get_building", building_id=billable_item.property_id))
+
+
+@buildings_route.post('/admin/building/billed-item/<string:property_id>/<string:item_number>')
+@login_required
+async def get_billed_item(user: User, property_id: str, item_number: str):
+    """
+
+    :param user:
+    :param property_id:
+    :param item_number:
+    :return:
+    """
+    billed_item: CreateInvoicedItem = company_controller.get_billed_item(property_id=property_id, item_number=item_number)
+    return billed_item
+
+
