@@ -53,6 +53,10 @@
                             <i class="ti-briefcase"> </i>
                             Property Details
                         </a>
+                        <button class="btn btn-sm btn-warning">
+                            <i class="ti-pencil"> </i>
+                            Edit
+                        </button>
                     </div>
                 </div>
                 {% include "building/units/tables/unit_details.html" %}
@@ -82,5 +86,5 @@
 
 {% include "building/modals/add_tenant.html" %}
 {% include "building/units/modals/add_bill_modal.html" %}
-
+{% include "building/units/modals/edit_unit.html" %}
 {% endblock %}
