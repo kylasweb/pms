@@ -1,17 +1,20 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Tenant Details</h3>
+        <h3 class="card-title">
+            <span class="font-weight-bold font-italic">Tenant Details</span>
+        </h3>
     </div>
     <div class="card-body">
-        <p><strong>Tenant ID:</strong> {{ tenant.tenant_id }}</p>
-        <p><strong>Name:</strong> {{ tenant.name }}</p>
-        <p><strong>ID Number:</strong> {{ tenant.id_number }}</p>
-        <p><strong>Company ID:</strong> {% if tenant.company_id %}{{ tenant.company_id }}{% else %}N/A{% endif %}</p>
-        <p><strong>Email:</strong> {{ tenant.email }}</p>
-        <p><strong>Cell:</strong> {{ tenant.cell }}</p>
-        <p><strong>Is Renting:</strong> {% if tenant.is_renting %}Yes{% else %}No{% endif %}</p>
-        <p><strong>Lease Start Date:</strong> {% if tenant.lease_start_date %}{{ tenant.lease_start_date }}{% else %}N/A{% endif %}</p>
-        <p><strong>Lease End Date:</strong> {% if tenant.lease_end_date %}{{ tenant.lease_end_date }}{% else %}N/A{% endif %}</p>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Name:</strong> {{ tenant.name }}</li>
+        <li class="list-group-item"><strong>ID Number:</strong> {{ tenant.id_number }}</li>
+        <li class="list-group-item"><strong>Company ID:</strong> {% if tenant.company_id %}{{ tenant.company_id }}{% else %}N/A{% endif %}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ tenant.email }}</li>
+        <li class="list-group-item"><strong>Cell:</strong> {{ tenant.cell }}</li>
+        <li class="list-group-item"><strong>Is Renting:</strong> {% if tenant.is_renting %}Yes{% else %}No{% endif %}</li>
+        <li class="list-group-item"><strong>Lease Start Date:</strong> {% if tenant.lease_start_date %}{{ tenant.lease_start_date }}{% else %}N/A{% endif %}</li>
+        <li class="list-group-item"><strong>Lease End Date:</strong> {% if tenant.lease_end_date %}{{ tenant.lease_end_date }}{% else %}N/A{% endif %}</li>
+    </ul>
     </div>
 </div>
