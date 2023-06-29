@@ -1,7 +1,7 @@
 import uuid
 
-from src.database.sql.invoices import ItemsORM
-from src.database.models.invoices import CreateInvoicedItem, BillableItem
+from src.database.sql.invoices import ItemsORM, UserChargesORM
+from src.database.models.invoices import CreateInvoicedItem, BillableItem, CreateUnitCharge
 from src.database.sql.bank_account import BankAccountORM
 from src.database.models.bank_accounts import BusinessBankAccount
 from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
@@ -436,3 +436,18 @@ class CompaniesController:
             billable_list: list[ItemsORM] = session.query(ItemsORM).filter(ItemsORM.property_id == building_id,
                                                                            ItemsORM.deleted == False).all()
             return [BillableItem(**item.to_dict()) for item in billable_list]
+
+    @error_handler
+    async def create_unit_bill_charge(self, charge_item: CreateUnitCharge) -> CreateUnitCharge:
+        """
+
+        :param charge_item:
+        :return:
+        """
+        with Session() as session:
+            charge_item_orm: UserChargesORM = UserChargesORM(**charge_item.dict())
+            session.add(charge_item_orm)
+            session.commit()
+            return charge_item
+
+

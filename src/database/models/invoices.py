@@ -111,7 +111,7 @@ class Invoice(BaseModel):
         return _notes
 
 
-class CreateUserCharge(BaseModel):
+class CreateUnitCharge(BaseModel):
     charge_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     property_id: str
     tenant_id: str

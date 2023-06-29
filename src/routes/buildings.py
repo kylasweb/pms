@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from pydantic import ValidationError
 
-from src.database.models.invoices import CreateInvoicedItem, BillableItem, CreateUserCharge
+from src.database.models.invoices import CreateInvoicedItem, BillableItem, CreateUnitCharge
 from src.logger import init_logger
 from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 from src.database.models.tenants import Tenant
@@ -255,7 +255,7 @@ async def create_billing_charge(user: User):
     :return:
 
     """
-    unit_charge_item: CreateUserCharge = CreateUserCharge(**request.form)
-    created_bill = await company_controller.create_charge(charge_item=unit_charge_item)
+    unit_charge_item: CreateUnitCharge = CreateUnitCharge(**request.form)
+    created_bill = await company_controller.create_unit_bill_charge(charge_item=unit_charge_item)
     flash(message="Billing Charge Added to Unit", category="success")
     return redirect(url_for("buildings.get_building", building_id=unit_charge_item.property_id))
