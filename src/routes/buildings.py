@@ -191,10 +191,10 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
     """
     context = dict(user=user.dict())
     tenant_rental = Unit(**request.form)
-    updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=tenant_rental)
+    _updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=tenant_rental)
 
-    if updated_unit:
-        context.update(dict(unit=updated_unit.dict()))
+    if _updated_unit:
+        context.update(dict(unit=_updated_unit.dict()))
 
     tenant: Tenant = await tenant_controller.get_tenant_by_id(tenant_id=tenant_rental.tenant_id)
     tenant.is_renting = True
@@ -235,6 +235,19 @@ async def add_tenant_to_building_unit(user: User, building_id: str, unit_id: str
 
     flash(message='Lease Agreement created Successfully', category="success")
     return render_template('tenants/official/tenant_rental_result.html', **context)
+
+
+@buildings_route.post('/admin/update-tenant-unit/<string:building_id>/unit/<string:unit_id>')
+@login_required
+async def update_tenant_to_building_unit(user: User, building_id: str, unit_id: str):
+    """
+
+    :param unit_id:
+    :param building_id:
+    :param user:
+    :return:
+    """
+    pass
 
 
 @buildings_route.post('/admin/building/billable')
@@ -344,4 +357,3 @@ async def updated_unit(user: User, unit_id: str):
     return redirect(url_for("buildings.get_unit",
                             building_id=update_unit_model.property_id,
                             unit_id=update_unit_model.unit_id), code=302)
-

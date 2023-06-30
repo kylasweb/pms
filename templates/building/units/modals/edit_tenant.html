@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{ url_for('buildings.add_tenant_to_building_unit', building_id=unit.property_id, unit_id=unit.unit_id) }}" method="post">
+        <form action="{{ url_for('buildings.update_tenant_to_building_unit', building_id=unit.property_id, unit_id=unit.unit_id) }}" method="post">
           <!-- including Unit Data on Form -->
           <input type="hidden" name="property_id" value="{{ unit.property_id }}" />
           <input type="hidden" name="unit_id" value="{{ unit.unit_id }}" />
