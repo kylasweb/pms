@@ -10,7 +10,56 @@
       <div class="modal-body">
         <span class="font-weight-bold text-black">Used to edit Unit Details</span>
         <form action="#" method="POST">
-
+          <div class="form-group">
+            <label for="property_id">Property ID</label>
+            <input type="text" class="form-control" id="property_id" name="property_id" required>
+          </div>
+          <div class="form-group">
+            <label for="unit_id">Unit ID</label>
+            <input type="text" class="form-control" id="unit_id" name="unit_id" required>
+          </div>
+          <div class="form-group">
+            <label for="unit_number">Unit Number</label>
+            <input type="text" class="form-control" id="unit_number" name="unit_number" required>
+          </div>
+          <div class="form-group">
+            <label for="is_occupied">Is Occupied</label>
+            <select class="form-control" id="is_occupied" name="is_occupied">
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="is_booked">Is Booked</label>
+            <select class="form-control" id="is_booked" name="is_booked">
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rental_amount">Rental Amount</label>
+            <input type="number" class="form-control" id="rental_amount" name="rental_amount" required>
+          </div>
+          <div class="form-group">
+            <label for="lease_start_date">Lease Start Date</label>
+            <input type="date" class="form-control" id="lease_start_date" name="lease_start_date">
+          </div>
+          <div class="form-group">
+            <label for="lease_end_date">Lease End Date</label>
+            <input type="date" class="form-control" id="lease_end_date" name="lease_end_date">
+          </div>
+          <div class="form-group">
+            <label for="unit_area">Unit Area (sqft)</label>
+            <input type="number" class="form-control" id="unit_area" name="unit_area" required>
+          </div>
+          <div class="form-group">
+            <label for="has_reception">Has Reception</label>
+            <select class="form-control" id="has_reception" name="has_reception">
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
         </form>
       </div>
     </div>

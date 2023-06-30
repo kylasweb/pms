@@ -1,79 +1,86 @@
-  <div class="card-body">
-                    <ul class="list-group">
+<div class="card-body">
+<div class="card-footer">
+    <span class="card-content font-weight-bold font-italic text-info">
+        In order to change Rent and Extend  Lease please use Edit
+    </span>
+</div>
 
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Unit Number:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.unit_number }}
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Is Occupied:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ True if unit.tenant_id else False }}
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Rental Amount:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    R {{ unit.rental_amount }}
-                                </div>
-                            </div>
-                        </li>
+<ul class="list-group">
 
-                        {% if unit.tenant_id %}
-                            <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Lease Start Date:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.lease_start_date }}
-                                </div>
-                            </div>
-                            </li>
-                            <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Lease End Date:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.lease_end_date }}
-                                </div>
-                            </div>
-                            </li>
-                        {% endif %}
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                Unit Number:
+            </div>
+            <div class="col-6 text-left font-weight-bold font-italic text-info">
+                {{ unit.unit_number }}
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                Is Occupied:
+            </div>
+            <div class="col-6 text-left font-weight-bold font-italic text-info">
+                {{ True if unit.tenant_id else False }}
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                Rental Amount:
+            </div>
+            <div class="col-6 text-left font-weight-bold font-italic text-info">
+                R {{ unit.rental_amount }}
+            </div>
+        </div>
+    </li>
 
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                    Unit Area:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.unit_area }} sq Metres
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
-                                   Has Reception:
-                                </div>
-                                <div class="col-6 text-left font-weight-bold font-italic text-info">
-                                    {{ unit.has_reception }}
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+    {% if unit.tenant_id %}
+        <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                Lease Start Date:
+            </div>
+            <div class="col-6 text-left font-weight-bold font-italic text-info">
+                {{ unit.lease_start_date }}
+            </div>
+        </div>
+        </li>
+        <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                Lease End Date:
+            </div>
+            <div class="col-6 text-left font-weight-bold font-italic text-info">
+                {{ unit.lease_end_date }}
+            </div>
+        </div>
+        </li>
+    {% endif %}
+
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+                Unit Area:
+            </div>
+            <div class="col-6 text-left font-weight-bold font-italic text-info">
+                {{ unit.unit_area }} sq Metres
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 text-left font-weight-bold">
+               Has Reception:
+            </div>
+            <div class="col-6 text-left font-weight-bold font-italic text-info">
+                {{ unit.has_reception }}
+            </div>
+        </div>
+    </li>
+</ul>
+
+</div>
