@@ -128,6 +128,7 @@ async def do_add_unit(user: User, building_id: str):
         _ = await company_controller.add_unit(user=user, unit_data=unit_data, property_id=building_id)
         flash(message="Unit Added Successfully", category="success")
     except ValidationError as e:
+        buildings_logger.error(f"error raised when adding Unit : {str(e)}")
         flash(message="To Add a Unit please Fill in all Fields", category="danger")
     return redirect(url_for('buildings.get_building', building_id=building_id))
 
@@ -140,6 +141,10 @@ async def get_unit(user: User, building_id: str, unit_id: str):
     if unit_data.tenant_id:
         tenant_data: Tenant = await tenant_controller.get_tenant_by_id(tenant_id=unit_data.tenant_id)
         context.update({'tenant': tenant_data.dict()})
+        if tenant_data.company_id:
+            company_data: Company = await company_controller.get_company_internal(company_id=tenant_data.company_id)
+            if company_data:
+                context.update({'company': company_data.dict()})
     else:
         tenants_list: list[Tenant] = await tenant_controller.get_un_booked_tenants()
         context.update({'tenants': tenants_list})
