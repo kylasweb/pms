@@ -37,11 +37,10 @@
     </div>
     {% if tenant.company_id %}
         <ul class="list-group">
-            <li class="list-group-item"><strong>Company ID:</strong> {{ company.company_id }}</li>
             <li class="list-group-item"><strong>Company Name:</strong> {% if company.company_name %}{{ company.company_name }}{% else %}N/A{% endif %}</li>
             <li class="list-group-item"><strong>Description:</strong> {% if company.description %}{{ company.description }}{% else %}N/A{% endif %}</li>
-            <li class="list-group-item"><strong>Address Line 1:</strong> {% if company.address_line_1 %}{{ company.address_line_1 }}{% else %}N/A{% endif %}</li>
-            <li class="list-group-item"><strong>Address Line 2:</strong> {% if company.address_line_2 %}{{ company.address_line_2 }}{% else %}N/A{% endif %}</li>
+{#            <li class="list-group-item"><strong>Address Line 1:</strong> {% if company.address_line_1 %}{{ company.address_line_1 }}{% else %}N/A{% endif %}</li>#}
+{#            <li class="list-group-item"><strong>Address Line 2:</strong> {% if company.address_line_2 %}{{ company.address_line_2 }}{% else %}N/A{% endif %}</li>#}
             <li class="list-group-item"><strong>City:</strong> {% if company.city %}{{ company.city }}{% else %}N/A{% endif %}</li>
             <li class="list-group-item"><strong>Postal Code:</strong> {% if company.postal_code %}{{ company.postal_code }}{% else %}N/A{% endif %}</li>
             <li class="list-group-item"><strong>Province:</strong> {% if company.province %}{{ company.province }}{% else %}N/A{% endif %}</li>
