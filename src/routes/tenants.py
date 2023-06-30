@@ -43,7 +43,7 @@ async def do_add_tenants(user: User, building_id: str, unit_id: str):
     new_tenant = CreateTenant(**request.form)
     tenant_added = await tenant_controller.create_tenant(user_id=user.user_id, tenant=new_tenant)
     flash(message="Tenant Successfully added - Continue to create a lease for tenant", category='success')
-    return redirect(url_for('buildings.get_unit', building_id=building_id, unit_id=unit_id))
+    return redirect(url_for('buildings.get_unit', building_id=building_id, unit_id=unit_id), code=302)
 
 
 @tenants_route.post('/admin/tenant-rentals')
@@ -60,4 +60,4 @@ async def tenant_rentals(user: User):
     """
 
     flash(message=message, category="success")
-    return redirect(url_for('tenants.get_tenants'))
+    return redirect(url_for('tenants.get_tenants'), code=302)

@@ -92,7 +92,7 @@ async def do_add_building(user: User, company_id: str):
 
     _message: str = f"Property : {property_model.name.title()} Successfully added to : {company.company_name.title()}"
     flash(message=_message, category="success")
-    return redirect(url_for('companies.get_company', company_id=company.company_id))
+    return redirect(url_for('companies.get_company', company_id=company.company_id), code=302)
 
 
 @buildings_route.get('/admin/edit-building/<string:building_id>')
@@ -130,7 +130,7 @@ async def do_add_unit(user: User, building_id: str):
     except ValidationError as e:
         buildings_logger.error(f"error raised when adding Unit : {str(e)}")
         flash(message="To Add a Unit please Fill in all Fields", category="danger")
-    return redirect(url_for('buildings.get_building', building_id=building_id))
+    return redirect(url_for('buildings.get_building', building_id=building_id), code=302)
 
 
 @buildings_route.get('/admin/building/<string:building_id>/unit/<string:unit_id>')
@@ -250,7 +250,7 @@ async def billable_items(user: User):
     print(f"BILLABLE ITEMS : {billable_item}")
     billable_item: CreateInvoicedItem = await company_controller.create_billable_item(billable_item=billable_item)
     flash(message="Billable Item Added to building", category="success")
-    return redirect(url_for("buildings.get_building", building_id=billable_item.property_id))
+    return redirect(url_for("buildings.get_building", building_id=billable_item.property_id), code=302)
 
 
 @buildings_route.post('/admin/building/billed-item/<string:property_id>/<string:item_number>')
@@ -284,7 +284,7 @@ async def delete_billed_item(user: User, property_id: str, item_number: str):
     billed_item: CreateInvoicedItem = await company_controller.delete_billed_item(property_id=property_id,
                                                                                   item_number=item_number)
     flash(message=f"Billable Item : {billed_item.description} Deleted", category="success")
-    return redirect(url_for("buildings.get_building", building_id=property_id))
+    return redirect(url_for("buildings.get_building", building_id=property_id), code=302)
 
 
 @buildings_route.post('/admin/building/create-charge')
@@ -301,7 +301,7 @@ async def create_billing_charge(user: User):
     print(f"Unit Charge: {unit_charge_item}")
     _ = await company_controller.create_unit_bill_charge(charge_item=unit_charge_item)
     flash(message="Billing Charge Added to Unit", category="success")
-    return redirect(url_for("buildings.get_building", building_id=unit_charge_item.property_id))
+    return redirect(url_for("buildings.get_building", building_id=unit_charge_item.property_id), code=302)
 
 
 @buildings_route.get('/admin/building/delete-charge/<string:charge_id>')
@@ -317,4 +317,4 @@ async def delete_charge(User: User, charge_id: str):
     # get_unit
     flash(message="Charge Successfully Deleted", category="success")
     return redirect(url_for("buildings.get_unit", building_id=deleted_charge_item.property_id,
-                            unit_id=deleted_charge_item.unit_id))
+                            unit_id=deleted_charge_item.unit_id), code=302)

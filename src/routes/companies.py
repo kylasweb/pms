@@ -92,7 +92,7 @@ async def do_create_company(user: User):
         companies_logger.error(str(e))
         flash(message="Error creating Company please fill in all required fields", category='danger')
 
-    return redirect(url_for('companies.get_companies'))
+    return redirect(url_for('companies.get_companies'), code=302)
 
 
 @companies_route.post('/admin/edit-company/<string:company_id>')
@@ -114,7 +114,7 @@ async def do_edit_company(user: User, company_id: str):
     company_controller = CompaniesController()
     _ = await company_controller.update_company(user=user, company_data=company_data)
     flash(message="Successfully Updated Company Data", category="success")
-    return redirect(url_for('companies.get_company', company_id=company_id))
+    return redirect(url_for('companies.get_company', company_id=company_id), code=302)
 
 
 @companies_route.post('/admin/company/add-bank-account/<string:company_id>')
@@ -136,7 +136,7 @@ async def do_add_bank_account(user: User, company_id: str):
         companies_logger.error(str(e))
         flash(message="Error creating Bank Account please fill in all the details", category="danger")
 
-    return redirect(url_for('companies.get_company', company_id=company_id))
+    return redirect(url_for('companies.get_company', company_id=company_id), code=302)
 
 
 @companies_route.get('/admin/company/print/<string:company_id>')
@@ -179,16 +179,16 @@ async def print_company(user: User, company_id: str):
         download_name=f"{_title}.pdf")
 
 
-@companies_route.post('/admin/add-tenant-company')
+@companies_route.post('/admin/add-tenants-company')
 @login_required
-async def add_tenant_company(user: User):
+async def add_tenants_company(user: User):
     """
 
     :param user:
     :return:
     """
     tenant_company: CreateCompany = CreateCompany(**request.form)
-    tenant_company_relation: CreateTenantRelationCompany = CreateTenantRelationCompany(tenant_company.dict())
-    print(f"Create Tenant Company Relation : {tenant_company_relation}")
+    tenant_company_relation: CreateTenantRelationCompany = CreateTenantRelationCompany(**tenant_company.dict())
+
     return {'status': True}
 
