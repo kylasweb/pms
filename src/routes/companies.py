@@ -199,3 +199,17 @@ async def add_tenants_company(user: User):
 
     return redirect(url_for('buildings.get_unit', building_id=tenant_company.building_id,
                             unit_id=tenant_company.unit_id), code=302)
+
+
+
+@companies_route.post('/admin/update-tenant-company/<string:company_id>')
+@login_required
+async def update_tenant_company(user: User, company_id: str):
+    """
+
+    :param user:
+    :param company_id:
+    :return:
+    """
+    pass
+
