@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <span class="font-weight-bold text-black">Used to update Unit Details</span>
-        <form action="{{ url_for('buildings.update_unit)', unit_id=unit.unit_id) }}"
+        <form action="{{ url_for('buildings.updated_unit', unit_id=unit.unit_id) }}"
               method="POST" enctype="application/x-www-form-urlencoded">
 
         <input type="hidden" name="property_id" value="{{ unit.property_id }}" readonly>

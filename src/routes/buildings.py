@@ -322,7 +322,7 @@ async def delete_charge(user: User, charge_id: str):
 
 @buildings_route.post('/admin/building/update-unit/<string:unit_id>')
 @login_required
-async def update_unit(user: User, unit_id: str):
+async def updated_unit(user: User, unit_id: str):
     """
 
     :param user:
