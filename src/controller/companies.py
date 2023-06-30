@@ -8,8 +8,8 @@ from src.database.models.properties import Property, Unit, AddUnit, UpdateProper
 from src.database.sql.properties import PropertyORM, UnitORM
 from src.database.sql import Session
 from src.database.models.users import User
-from src.database.models.companies import Company, UpdateCompany
-from src.database.sql.companies import CompanyORM, UserCompanyORM
+from src.database.models.companies import Company, UpdateCompany, TenantRelationCompany, CreateTenantCompany
+from src.database.sql.companies import CompanyORM, UserCompanyORM, TenantCompanyORM
 from src.controller import error_handler, UnauthorizedError
 
 
@@ -87,6 +87,35 @@ class CompaniesController:
 
             return response
 
+    @staticmethod
+    @error_handler
+    async def create_company_internal(company: CreateTenantCompany) -> Company:
+        """
+
+        :param company:
+        :return:
+        """
+        with Session() as session:
+            _company = Company(**company.dict())
+            company_orm: CompanyORM = CompanyORM(**_company.dict())
+            session.add(company_orm)
+            session.commit()
+            return company
+
+    @staticmethod
+    @error_handler
+    async def create_company_tenant_relation_internal(company_relation: TenantRelationCompany) -> TenantRelationCompany:
+        """
+
+        :return:
+        """
+        with Session() as session:
+            company_tenant_relation_orm: TenantCompanyORM = TenantCompanyORM(**company_relation.dict())
+            session.add(company_tenant_relation_orm)
+            session.commit()
+            return company_relation
+
+    @error_handler
     async def update_company(self, user: User, company_data: UpdateCompany):
         """
 

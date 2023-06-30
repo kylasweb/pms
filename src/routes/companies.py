@@ -6,12 +6,13 @@ from pydantic import ValidationError
 from src.authentication import login_required
 from src.controller.companies import CompaniesController
 from src.database.models.bank_accounts import BusinessBankAccount
-from src.database.models.companies import Company, UpdateCompany, CreateCompany, CreateTenantRelationCompany
+from src.database.models.companies import Company, UpdateCompany, CreateCompany, CreateTenantRelationCompany, \
+    TenantRelationCompany, CreateTenantCompany
 from src.database.models.notifications import NotificationsModel
 from src.database.models.properties import Property
 from src.database.models.users import User
 from src.logger import init_logger
-from src.main import notifications_controller
+from src.main import notifications_controller, company_controller
 from src.reports import create_report
 from src.reports.bank_account_report import BankAccountPrintParser
 from src.reports.company_report import map_company_to_parser, CompanyPrintParser
@@ -25,8 +26,8 @@ companies_logger.setLevel(logging.INFO)
 @login_required
 async def get_companies(user: User):
     context: dict[str, str | list[dict[str, str]]] = user.dict() if user else {}
-    companies_controller = CompaniesController()
-    companies: list[Company] = await companies_controller.get_user_companies(user_id=user.user_id)
+
+    companies: list[Company] = await company_controller.get_user_companies(user_id=user.user_id)
     companies_dict = [company.dict() for company in companies if company] if isinstance(companies, list) else []
 
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
@@ -42,11 +43,11 @@ async def get_companies(user: User):
 @login_required
 async def get_company(user: User, company_id: str):
     user_data = user.dict()
-    companies_controller = CompaniesController()
-    company: Company = await companies_controller.get_company(company_id=company_id, user_id=user.user_id)
-    properties: list[Property] = await companies_controller.get_properties(user=user, company_id=company_id)
 
-    bank_accounts: BusinessBankAccount = await companies_controller.get_bank_accounts(user=user, company_id=company_id)
+    company: Company = await company_controller.get_company(company_id=company_id, user_id=user.user_id)
+    properties: list[Property] = await company_controller.get_properties(user=user, company_id=company_id)
+
+    bank_accounts: BusinessBankAccount = await company_controller.get_bank_accounts(user=user, company_id=company_id)
 
     properties_dict = [prop.dict() for prop in properties if prop] if isinstance(properties, list) else []
 
@@ -83,8 +84,8 @@ async def do_create_company(user: User):
     form_data = request.form
     try:
         company_data = Company(**form_data)
-        companies_controller = CompaniesController()
-        _company_data = await companies_controller.create_company(company=company_data, user=user)
+
+        _company_data = await company_controller.create_company(company=company_data, user=user)
 
         _message = f"Company {_company_data.company_name} Added Successfully"
         flash(message=_message, category="success")
@@ -111,7 +112,6 @@ async def do_edit_company(user: User, company_id: str):
         flash(message=message, category="danger")
         return redirect(url_for('companies.get_company', company_id=company_id))
 
-    company_controller = CompaniesController()
     _ = await company_controller.update_company(user=user, company_data=company_data)
     flash(message="Successfully Updated Company Data", category="success")
     return redirect(url_for('companies.get_company', company_id=company_id), code=302)
@@ -125,9 +125,9 @@ async def do_add_bank_account(user: User, company_id: str):
         if company_id != bank_account_details.company_id:
             flash(message='Ouch That one hurt ', category="danger")
             return redirect(url_for('home.get_home'))
-        companies_controller = CompaniesController()
-        account_details = await companies_controller.update_bank_account(user=user,
-                                                                         account_details=bank_account_details)
+
+        account_details = await company_controller.update_bank_account(user=user,
+                                                                       account_details=bank_account_details)
         companies_logger.info(account_details)
 
         flash(message="successfully updated company_id bank account details", category="success")
@@ -149,13 +149,13 @@ async def print_company(user: User, company_id: str):
     :return:
     """
     user_id = user.user_id
-    companies_controller = CompaniesController()
-    company_data: Company = await companies_controller.get_company(company_id=company_id,
-                                                                   user_id=user_id)
-    company_bank_account: BusinessBankAccount = await companies_controller.get_bank_accounts(user=user,
-                                                                                             company_id=company_id)
-    properties_list: list[Property] = await companies_controller.get_properties(user=user,
-                                                                                company_id=company_id)
+
+    company_data: Company = await company_controller.get_company(company_id=company_id,
+                                                                 user_id=user_id)
+    company_bank_account: BusinessBankAccount = await company_controller.get_bank_accounts(user=user,
+                                                                                           company_id=company_id)
+    properties_list: list[Property] = await company_controller.get_properties(user=user,
+                                                                              company_id=company_id)
 
     _title = f"{company_data.company_name.upper()} Report"
 
@@ -187,8 +187,11 @@ async def add_tenants_company(user: User):
     :param user:
     :return:
     """
-    tenant_company: CreateCompany = CreateCompany(**request.form)
+    tenant_company: CreateTenantCompany = CreateTenantCompany(**request.form)
     tenant_company_relation: CreateTenantRelationCompany = CreateTenantRelationCompany(**tenant_company.dict())
+    new_company_data = await company_controller.create_company_internal(company=tenant_company)
+    new_company_relation: TenantRelationCompany = await company_controller.create_company_tenant_relation_internal(
+        company_relation=tenant_company_relation)
 
-    return {'status': True}
-
+    return redirect(url_for('buildings.get_unit', building_id=tenant_company.building_id,
+                            unit_id=tenant_company.unit_id), code=302)
