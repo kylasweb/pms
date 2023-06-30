@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, url_for, redirect, flash,
 from pydantic import ValidationError
 
 from src.authentication import login_required
-from src.controller.companies import CompaniesController
+
 from src.database.models.bank_accounts import BusinessBankAccount
 from src.database.models.companies import Company, UpdateCompany, CreateCompany, CreateTenantRelationCompany, \
     TenantRelationCompany, CreateTenantCompany
@@ -12,7 +12,7 @@ from src.database.models.notifications import NotificationsModel
 from src.database.models.properties import Property
 from src.database.models.users import User
 from src.logger import init_logger
-from src.main import notifications_controller, company_controller
+from src.main import notifications_controller, company_controller, tenant_controller
 from src.reports import create_report
 from src.reports.bank_account_report import BankAccountPrintParser
 from src.reports.company_report import map_company_to_parser, CompanyPrintParser
@@ -192,6 +192,10 @@ async def add_tenants_company(user: User):
     new_company_data = await company_controller.create_company_internal(company=tenant_company)
     new_company_relation: TenantRelationCompany = await company_controller.create_company_tenant_relation_internal(
         company_relation=tenant_company_relation)
+
+    tenant_data = await tenant_controller.get_tenant_by_id(tenant_id=tenant_company.tenant_id)
+    tenant_data.company_id = tenant_company.company_id
+    updated_tenant = await tenant_controller.update_tenant(tenant=tenant_data)
 
     return redirect(url_for('buildings.get_unit', building_id=tenant_company.building_id,
                             unit_id=tenant_company.unit_id), code=302)
