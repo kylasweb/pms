@@ -7,7 +7,7 @@ from src.authentication import login_required
 
 from src.database.models.bank_accounts import BusinessBankAccount
 from src.database.models.companies import Company, UpdateCompany, CreateCompany, CreateTenantRelationCompany, \
-    TenantRelationCompany, CreateTenantCompany
+    TenantRelationCompany, CreateTenantCompany, UpdateTenantCompany
 from src.database.models.notifications import NotificationsModel
 from src.database.models.properties import Property
 from src.database.models.users import User
@@ -211,5 +211,7 @@ async def update_tenant_company(user: User, company_id: str):
     :param company_id:
     :return:
     """
-    pass
+    tenant_company_data = UpdateTenantCompany(**request.form)
+    print(f"Update Tenant Company : {tenant_company_data}")
+    return {'status': True}
 

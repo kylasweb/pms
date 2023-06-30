@@ -112,6 +112,27 @@ class CreateTenantCompany(BaseModel):
     website: str | None
 
 
+class UpdateTenantCompany(BaseModel):
+    """
+
+    """
+    company_id: str
+    tenant_id: str
+    building_id: str
+    unit_id: str
+    company_name: str | None
+    description: str | None
+
+    address_line_1: str | None
+    address_line_2: str | None
+    city: str | None
+    postal_code: str | None
+    province: str | None
+    country: str | None
+    contact_number: str | None
+    website: str | None
+
+
 class CreateTenantRelationCompany(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     company_id: str
