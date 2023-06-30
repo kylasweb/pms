@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from src.authentication import login_required
 from src.controller.companies import CompaniesController
 from src.database.models.bank_accounts import BusinessBankAccount
-from src.database.models.companies import Company, UpdateCompany
+from src.database.models.companies import Company, UpdateCompany, CreateCompany
 from src.database.models.notifications import NotificationsModel
 from src.database.models.properties import Property
 from src.database.models.users import User
@@ -24,7 +24,6 @@ companies_logger.setLevel(logging.INFO)
 @companies_route.get('/admin/companies')
 @login_required
 async def get_companies(user: User):
-
     context: dict[str, str] = user.dict() if user else {}
     companies_controller = CompaniesController()
     companies: list[Company] = await companies_controller.get_user_companies(user_id=user.user_id)
@@ -176,3 +175,15 @@ async def print_company(user: User, company_id: str):
         mimetype='application/pdf',
         as_attachment=True,
         download_name=f"{_title}.pdf")
+
+
+@companies_route.post('/admin/company/tenant-company')
+@login_required
+async def add_tenant_company(user: User):
+    """
+
+    :param user:
+    :return:
+    """
+    tenant_company: Company = CreateCompany(**request.form)
+    print(f"Create Tenant Company : {tenant_company}")
