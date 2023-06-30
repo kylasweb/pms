@@ -49,6 +49,7 @@ async def get_company(user: User, company_id: str):
     bank_accounts: BusinessBankAccount = await companies_controller.get_bank_accounts(user=user, company_id=company_id)
 
     properties_dict = [prop.dict() for prop in properties if prop] if isinstance(properties, list) else []
+
     bank_accounts_dicts = bank_accounts.dict() if bank_accounts else {}
 
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
@@ -178,7 +179,7 @@ async def print_company(user: User, company_id: str):
         download_name=f"{_title}.pdf")
 
 
-@companies_route.post('/admin/company/tenant-company')
+@companies_route.post('/admin/add-tenant-company')
 @login_required
 async def add_tenant_company(user: User):
     """
