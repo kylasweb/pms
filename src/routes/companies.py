@@ -218,7 +218,7 @@ async def update_tenant_company(user: User, company_id: str):
         updated_company = None
 
     if updated_company:
-        flash(message=f"updated company data : {updated_company.company_name}", category="success")
+        flash(message=f"updated Tenant Company data : {updated_company.company_name}", category="success")
     else:
         flash(message=f"Unable to Update Company Data : {updated_company.company_name}", category="danger")
     return redirect(url_for('buildings.get_unit', building_id=tenant_company_data.company_id,
