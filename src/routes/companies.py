@@ -201,7 +201,6 @@ async def add_tenants_company(user: User):
                             unit_id=tenant_company.unit_id), code=302)
 
 
-
 @companies_route.post('/admin/update-tenant-company/<string:company_id>')
 @login_required
 async def update_tenant_company(user: User, company_id: str):
@@ -212,6 +211,15 @@ async def update_tenant_company(user: User, company_id: str):
     :return:
     """
     tenant_company_data = UpdateTenantCompany(**request.form)
-    print(f"Update Tenant Company : {tenant_company_data}")
-    return {'status': True}
+    if company_id == tenant_company_data.company_id:
+        updated_company: UpdateTenantCompany | None = await company_controller.update_tenant_company(
+            company_data=tenant_company_data)
+    else:
+        updated_company = None
 
+    if updated_company:
+        flash(message=f"updated company data : {updated_company.company_name}", category="success")
+    else:
+        flash(message=f"Unable to Update Company Data : {updated_company.company_name}", category="danger")
+    return redirect(url_for('buildings.get_unit', building_id=tenant_company_data.company_id,
+                            unit_id=tenant_company_data.unit_id), code=302)

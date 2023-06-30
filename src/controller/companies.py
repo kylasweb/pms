@@ -8,7 +8,8 @@ from src.database.models.properties import Property, Unit, AddUnit, UpdateProper
 from src.database.sql.properties import PropertyORM, UnitORM
 from src.database.sql import Session
 from src.database.models.users import User
-from src.database.models.companies import Company, UpdateCompany, TenantRelationCompany, CreateTenantCompany
+from src.database.models.companies import Company, UpdateCompany, TenantRelationCompany, CreateTenantCompany, \
+    UpdateTenantCompany
 from src.database.sql.companies import CompanyORM, UserCompanyORM, TenantCompanyORM
 from src.controller import error_handler, UnauthorizedError
 
@@ -143,6 +144,27 @@ class CompaniesController:
             session.commit()
 
             return UpdateCompany(**original_company_data.to_dict())
+
+    @error_handler
+    async def update_tenant_company(self, company_data: UpdateTenantCompany):
+        """
+
+        :return:
+        """
+        with Session() as session:
+            company_id: str = company_data.company_id
+            o_company_data: CompanyORM = session.query(CompanyORM).filter(CompanyORM.company_id == company_id).first()
+
+            if o_company_data is None:
+                return None
+
+            # Update original_company_data fields with corresponding values from company_data
+            for field, value in company_data.dict().items():
+                if value is not None:
+                    setattr(o_company_data, field, value)
+            session.commit()
+            return company_data
+
 
     @error_handler
     async def update_bank_account(self, user: User, account_details: BusinessBankAccount) -> BusinessBankAccount | None:
