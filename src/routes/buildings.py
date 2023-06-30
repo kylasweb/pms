@@ -7,7 +7,7 @@ from src.database.models.lease import LeaseAgreement, CreateLeaseAgreement
 from src.database.models.tenants import Tenant
 from src.database.models.notifications import NotificationsModel
 from src.main import company_controller, notifications_controller, tenant_controller, lease_agreement_controller
-from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty
+from src.database.models.properties import Property, Unit, AddUnit, UpdateProperty, CreateProperty, UpdateUnit
 from src.database.models.companies import Company
 from src.database.models.users import User
 from src.authentication import login_required
@@ -306,10 +306,10 @@ async def create_billing_charge(user: User):
 
 @buildings_route.get('/admin/building/delete-charge/<string:charge_id>')
 @login_required
-async def delete_charge(User: User, charge_id: str):
+async def delete_charge(user: User, charge_id: str):
     """
 
-    :param User:
+    :param user:
     :param charge_id:
     :return:
     """
@@ -318,3 +318,23 @@ async def delete_charge(User: User, charge_id: str):
     flash(message="Charge Successfully Deleted", category="success")
     return redirect(url_for("buildings.get_unit", building_id=deleted_charge_item.property_id,
                             unit_id=deleted_charge_item.unit_id), code=302)
+
+
+@buildings_route.post('/admin/building/update-unit/<string:unit_id>')
+@login_required
+async def update_unit(user: User, unit_id: str):
+    """
+
+    :param user:
+    :return:
+    """
+    update_unit_model = UpdateUnit(**request.form)
+    updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=update_unit_model)
+    if updated_unit:
+        flash(message="Successfully Updated Unit", category="success")
+    else:
+        flash(message="Unable to Update Unit", category="danger")
+
+    return redirect(url_for("buildings.get_unit", building_id=update_unit_model.property_id,
+                            unit_id=update_unit_model.unit_id), code=302)
+

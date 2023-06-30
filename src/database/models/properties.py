@@ -118,6 +118,20 @@ class AddUnit(BaseModel):
         return value
 
 
+class UpdateUnit(BaseModel):
+    tenant_id: str
+    property_id: str
+    unit_id: str
+    unit_number: str
+    is_occupied: bool | None
+    is_booked: bool | None
+    rental_amount: int
+    lease_start_date: date
+    lease_end_date: date
+    unit_area: int
+    has_reception: bool
+
+
 class UpdateProperty(BaseModel):
     property_id: str
     company_id: str
