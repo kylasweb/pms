@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from src.authentication import login_required
 from src.controller.companies import CompaniesController
 from src.database.models.bank_accounts import BusinessBankAccount
-from src.database.models.companies import Company, UpdateCompany, CreateCompany
+from src.database.models.companies import Company, UpdateCompany, CreateCompany, CreateTenantRelationCompany
 from src.database.models.notifications import NotificationsModel
 from src.database.models.properties import Property
 from src.database.models.users import User
@@ -188,5 +188,7 @@ async def add_tenant_company(user: User):
     :return:
     """
     tenant_company: CreateCompany = CreateCompany(**request.form)
-    print(f"Create Tenant Company : {tenant_company}")
+    tenant_company_relation: CreateTenantRelationCompany = CreateTenantRelationCompany(tenant_company.dict())
+    print(f"Create Tenant Company Relation : {tenant_company_relation}")
     return {'status': True}
+

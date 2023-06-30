@@ -1,6 +1,6 @@
 import uuid
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, Extra
 
 
 class Company(BaseModel):
@@ -66,6 +66,7 @@ class CreateCompany(BaseModel):
     """
 
     company_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    tenant_id: str
     company_name: str | None
     description: str | None
 
@@ -77,3 +78,12 @@ class CreateCompany(BaseModel):
     country: str | None
     contact_number: str | None
     website: str | None
+
+
+class CreateTenantRelationCompany(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    company_id: str
+    tenant_id: str
+
+    class Config:
+        extra = Extra.ignore
