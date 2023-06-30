@@ -24,7 +24,7 @@ companies_logger.setLevel(logging.INFO)
 @companies_route.get('/admin/companies')
 @login_required
 async def get_companies(user: User):
-    context: dict[str, str] = user.dict() if user else {}
+    context: dict[str, str | list[dict[str, str]]] = user.dict() if user else {}
     companies_controller = CompaniesController()
     companies: list[Company] = await companies_controller.get_user_companies(user_id=user.user_id)
     companies_dict = [company.dict() for company in companies if company] if isinstance(companies, list) else []
@@ -32,7 +32,8 @@ async def get_companies(user: User):
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
     notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
 
-    context.update(dict(companies=companies_dict, notifications_list=notifications_dicts))
+    context.update({'companies': companies_dict,
+                    'notifications_list': notifications_dicts})
 
     return render_template('companies/companies.html', **context)
 
@@ -185,5 +186,6 @@ async def add_tenant_company(user: User):
     :param user:
     :return:
     """
-    tenant_company: Company = CreateCompany(**request.form)
+    tenant_company: CreateCompany = CreateCompany(**request.form)
     print(f"Create Tenant Company : {tenant_company}")
+    return {'status': True}
