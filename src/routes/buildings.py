@@ -324,17 +324,24 @@ async def delete_charge(user: User, charge_id: str):
 @login_required
 async def updated_unit(user: User, unit_id: str):
     """
+    **updated_unit**
 
+    :param unit_id:
     :param user:
     :return:
     """
-    update_unit_model = UpdateUnit(**request.form)
-    updated_unit = await company_controller.update_unit(user_id=user.user_id, unit_data=update_unit_model)
-    if updated_unit:
+    update_unit_model: UpdateUnit = UpdateUnit(**request.form)
+    if unit_id == update_unit_model.unit_id:
+        _updated_unit: Unit = await company_controller.update_unit(user_id=user.user_id, unit_data=update_unit_model)
+    else:
+        _updated_unit = None
+
+    if _updated_unit:
         flash(message="Successfully Updated Unit", category="success")
     else:
         flash(message="Unable to Update Unit", category="danger")
 
-    return redirect(url_for("buildings.get_unit", building_id=update_unit_model.property_id,
+    return redirect(url_for("buildings.get_unit",
+                            building_id=update_unit_model.property_id,
                             unit_id=update_unit_model.unit_id), code=302)
 
