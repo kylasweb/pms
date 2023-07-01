@@ -165,6 +165,7 @@ class UserController:
 
             return user if user.is_login(password=password) else None
 
+    @error_handler
     async def send_verification_email(self, user: User) -> None:
         """
         Sends a verification email to the specified user.
@@ -175,7 +176,7 @@ class UserController:
         verification_link = f"https://rent-manager.site/verify-email?token={token}&email={user.email}"
 
         # Render the email template
-        email_html = render_template("verification_email.html", verification_link=verification_link)
+        email_html = render_template("email_templates/verification_email.html", verification_link=verification_link)
 
         msg = EmailModel(subject_="Rental-Manager.site Email Verification",
                          to_=[user.email], html_=email_html)
