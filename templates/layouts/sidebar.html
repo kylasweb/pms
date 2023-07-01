@@ -33,7 +33,11 @@
                     <li><a href="{{ url_for('payments.get_payments') }}"><i class="ti-money colour-success"></i> Payments</a></li>
                     <li><a href="{{ url_for('invoices.get_invoices') }}"><i class="ti-files"></i> Invoices</a></li>
                     <li><a href="{{ url_for('statements.get_statements') }}"><i class="ti-clipboard"></i> Statements</a></li>
-                    <li><a href="{{ url_for('auth.do_logout') }}"><i class="ti-power-off"></i> Logout</a></li>
+                    {% if user %}
+                        <li><a href="{{ url_for('auth.do_logout') }}"><i class="ti-power-off"></i> Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('auth.get_login') }}"><i class="ti-user"></i> Login</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

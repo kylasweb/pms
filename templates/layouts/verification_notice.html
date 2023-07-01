@@ -1,0 +1,11 @@
+
+{% if user %}
+    {% if not user.account_verified %}
+        <div class="card-footer">
+            <a class="btn btn-sm btn-primary">
+                <i class="ti-email"> </i>
+                Resend Verification Email
+            </a>
+        </div>
+    {% endif %}
+{% endif %}

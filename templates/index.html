@@ -62,16 +62,24 @@
                             </div>
                             <div class="card-body">
                               <ul class="list-group">
-                                <li class="list-group-item">
-                                  <a href="{{ url_for('auth.get_register') }}" class="btn btn-warning btn-block">
-                                      <i class="ti-save"> </i> <strong>Create Account Today</strong>
-                                  </a>
-                                </li>
-                                <li class="list-group-item">
-                                  <a href="{{ url_for('auth.get_login') }}" class="btn btn-primary btn-block">
-                                      <i class="ti-user"> </i> <strong>Login</strong>
-                                  </a>
-                                </li>
+                                {% if user %}
+                                    <li class="list-group-item">
+                                      <a href="{{ url_for('auth.do_logout') }}" class="btn btn-danger btn-block">
+                                          <i class="ti-power-off"> </i> <strong>Logout</strong>
+                                      </a>
+                                    </li>
+                                {% else %}
+                                    <li class="list-group-item">
+                                      <a href="{{ url_for('auth.get_register') }}" class="btn btn-warning btn-block">
+                                          <i class="ti-save"> </i> <strong>Create Account Today</strong>
+                                      </a>
+                                    </li>
+                                    <li class="list-group-item">
+                                      <a href="{{ url_for('auth.get_login') }}" class="btn btn-primary btn-block">
+                                          <i class="ti-user"> </i> <strong>Login</strong>
+                                      </a>
+                                    </li>
+                              {% endif %}
                               </ul>
                             </div>
                           </div>
