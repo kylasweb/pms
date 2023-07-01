@@ -165,7 +165,6 @@ class UserController:
 
             return user if user.is_login(password=password) else None
 
-
     @error_handler
     async def send_verification_email(self, user: User) -> None:
         """
@@ -178,7 +177,8 @@ class UserController:
         verification_link = f"https://rental-manager.site/admin/verify-email?token={token}&email={user.email}"
         self._verification_tokens[token] = dict(email=user.email, timestamp=int(time.time()))
         # Render the email template
-        email_html = render_template("email_templates/verification_email.html", user=user, verification_link=verification_link)
+        email_html = render_template("email_templates/verification_email.html", user=user,
+                                     verification_link=verification_link)
 
         msg = EmailModel(subject_="Rental-Manager.site Email Verification",
                          to_=user.email,
@@ -200,8 +200,3 @@ class UserController:
             elapsed_time = current_time - _data.get('timestamp', 0)
             return (elapsed_time < self._time_limit) and email == _data.get('email')
         return False
-
-
-
-
-
