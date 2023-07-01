@@ -247,7 +247,21 @@ async def update_tenant_to_building_unit(user: User, building_id: str, unit_id: 
     :param user:
     :return:
     """
-    pass
+    try:
+        tenant_data: Tenant | None = Tenant(**request.form)
+    except ValidationError as e:
+        buildings_logger.error(str(e))
+        flash(message="Unable to update tenant data", category="danger")
+        return redirect(url_for("buildings.get_unit", building_id=building_id, unit_id=unit_id), code=302)
+
+    if not tenant_data:
+        flash(message="Unable to update tenant data", category="danger")
+        return redirect(url_for("buildings.get_unit", building_id=building_id, unit_id=unit_id), code=302)
+
+    _ = await tenant_controller.update_tenant(tenant=tenant_data)
+
+    flash(message="Tenant Data updated", category="success")
+    return redirect(url_for("buildings.get_unit", building_id=building_id, unit_id=unit_id), code=302)
 
 
 @buildings_route.post('/admin/building/billable')
