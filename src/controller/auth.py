@@ -165,8 +165,9 @@ class UserController:
 
             return user if user.is_login(password=password) else None
 
+    @staticmethod
     @error_handler
-    async def send_verification_email(self, user: User) -> None:
+    async def send_verification_email(user: User) -> None:
         """
         Sends a verification email to the specified user.
 
