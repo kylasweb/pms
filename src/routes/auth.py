@@ -200,4 +200,5 @@ async def verify_email():
         else:
             flash(message="Your Account could not be verified, please log out", category="success")
         return redirect(url_for('home.get_home'), code=302)
-
+    flash(message="Unable to verify your email please try again later", category="danger")
+    return redirect(url_for('home.get_home'), code=302)
