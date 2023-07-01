@@ -15,7 +15,7 @@ from src.emailer import EmailModel
 class UserController:
 
     def __init__(self):
-        self._time_limit = 60
+        self._time_limit = 360
         self._verification_tokens: dict[str, int | dict[str, str | int]] = {}
 
     def init_app(self, app: Flask):
