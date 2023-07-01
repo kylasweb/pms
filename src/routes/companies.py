@@ -227,4 +227,4 @@ async def update_tenant_company(user: User, company_id: str):
     _company_id = tenant_company_data.company_id or company_id
     unit_id = tenant_company_data.unit_id
 
-    return redirect(url_for('buildings.get_unit', building_id=_company_id, unit_id=unit_id), code=302)
+    return redirect(url_for('buildings.get_unit', building_id=tenant_company_data.building_id, unit_id=unit_id), code=302)
