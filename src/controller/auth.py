@@ -175,7 +175,7 @@ class UserController:
         """
         print(f"user passed on : {user}")
         token = str(uuid.uuid4())  # Assuming you have a function to generate a verification token
-        verification_link = f"https://rent-manager.site/admin/verify-email?token={token}&email={user.email}"
+        verification_link = f"https://rental-manager.site/admin/verify-email?token={token}&email={user.email}"
         self._verification_tokens[token] = dict(email=user.email, timestamp=int(time.time()))
         # Render the email template
         email_html = render_template("email_templates/verification_email.html", user=user, verification_link=verification_link)
