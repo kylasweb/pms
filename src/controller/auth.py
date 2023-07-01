@@ -28,11 +28,11 @@ class UserController:
         :param token: The password reset token to validate.
         :return: True if the token is valid, False otherwise.
         """
-        if token in self._verification_tokens:
+        if token in set(self._verification_tokens.key()):
             timestamp: int = self._verification_tokens[token]
             current_time: int = int(time.time())
             elapsed_time = current_time - timestamp
-            return elapsed_time > self._time_limit
+            return elapsed_time < self._time_limit
 
         return False
 
@@ -194,9 +194,9 @@ class UserController:
         :param token:
         :return:
         """
-        if token in self._verification_tokens:
+        if token in set(self._verification_tokens.keys()):
             _data: dict[str, str | int] = self._verification_tokens[token]
             current_time: int = int(time.time())
             elapsed_time = current_time - _data.get('timestamp', 0)
-            return (elapsed_time > self._time_limit) and email == _data.get('email')
+            return (elapsed_time < self._time_limit) and email == _data.get('email')
         return False
