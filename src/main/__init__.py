@@ -1,4 +1,8 @@
 from flask import Flask
+
+from src.emailer import SendMail
+send_mail = SendMail()
+
 from src.controller.auth import UserController
 from src.controller.companies import CompaniesController
 from src.firewall import Firewall
@@ -19,9 +23,6 @@ from src.controller.lease_controller import LeaseController
 
 lease_agreement_controller = LeaseController()
 
-from src.emailer import SendMail
-
-send_mail = SendMail()
 
 
 def create_app(config):

@@ -8,8 +8,8 @@ from src.database.models.users import User, CreateUser
 from src.database.sql import Session
 from src.database.sql.user import UserORM
 from src.controller import error_handler, UnauthorizedError
-from src.emailer import EmailModel
 from src.main import send_mail
+from src.emailer import EmailModel
 
 
 class UserController:
