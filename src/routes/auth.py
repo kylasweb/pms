@@ -129,7 +129,7 @@ async def reset_password():
         if not password or not email:
             flash(message="Invalid request. Please provide both email and password.", category="error")
             return redirect(url_for('home.get_home'))
-
+        # TODO - refactor this can do better
         old_user = await user_controller.get_by_email(email=email)
 
         if not old_user:
