@@ -32,7 +32,7 @@ class UserController:
             timestamp: int = self._verification_tokens[token]
             current_time: int = int(time.time())
             elapsed_time = current_time - timestamp
-            return elapsed_time < self._time_limit
+            return elapsed_time > self._time_limit
 
         return False
 
@@ -198,5 +198,5 @@ class UserController:
             _data: dict[str, str | int] = self._verification_tokens[token]
             current_time: int = int(time.time())
             elapsed_time = current_time - _data.get('timestamp', 0)
-            return (elapsed_time < self._time_limit) and email == _data.get('email')
+            return (elapsed_time > self._time_limit) and email == _data.get('email')
         return False
