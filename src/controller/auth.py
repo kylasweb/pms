@@ -32,7 +32,7 @@ class UserController:
             timestamp: int = self._verification_tokens[token]
             current_time: int = int(time.time())
             elapsed_time = current_time - timestamp
-            return elapsed_time > self._time_limit
+            return elapsed_time < self._time_limit
 
         return False
 
@@ -195,8 +195,14 @@ class UserController:
         :return:
         """
         if token in set(self._verification_tokens.keys()):
+
             _data: dict[str, str | int] = self._verification_tokens[token]
+
             current_time: int = int(time.time())
-            elapsed_time = current_time - _data.get('timestamp', 0)
-            return (elapsed_time > self._time_limit) and email == _data.get('email')
+            elapsed_time = current_time - int(_data.get('timestamp', 0))
+            print(f"elapsed time : {elapsed_time} time limit : {self._time_limit}")
+            print(f"condition : {elapsed_time < self._time_limit}")
+
+            return (elapsed_time < self._time_limit) and (email.casefold() == _data.get('email'))
+
         return False
