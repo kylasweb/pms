@@ -114,6 +114,7 @@ async def reset_password():
     """
     Resets the password for the user associated with the provided token.
 
+
     :return: A response indicating the result of the password reset operation.
     """
     if request.method == "GET":
