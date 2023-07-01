@@ -183,6 +183,8 @@ async def print_company(user: User, company_id: str):
 @login_required
 async def add_tenants_company(user: User):
     """
+    **add_tenants_company**
+
 
     :param user:
     :return:

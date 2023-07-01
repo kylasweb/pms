@@ -136,6 +136,14 @@ async def do_add_unit(user: User, building_id: str):
 @buildings_route.get('/admin/building/<string:building_id>/unit/<string:unit_id>')
 @login_required
 async def get_unit(user: User, building_id: str, unit_id: str):
+    """
+        **get_unit**
+            obtains rental unit
+    :param user:
+    :param building_id:
+    :param unit_id:
+    :return:
+    """
     context = {}
     unit_data: Unit = await company_controller.get_unit(user=user, building_id=building_id, unit_id=unit_id)
     if unit_data and unit_data.tenant_id:

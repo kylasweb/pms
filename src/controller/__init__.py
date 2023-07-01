@@ -21,10 +21,11 @@ def error_handler(view_func):
             return await view_func(*args, **kwargs)
         except (OperationalError, ProgrammingError, IntegrityError, AttributeError) as e:
             error_logger.error(str(e))
-            pass
+            flash(message="Error accessing database - please try again", category='danger')
+            return redirect(url_for('home.get_home'))
         except UnauthorizedError as e:
             error_logger.error(str(e))
-            flash(message=e.description, category='danger')
+            flash(message="You are not authorized to access this resource", category='danger')
             return redirect(url_for('home.get_home'))
         except ConnectionResetError as e:
             error_logger.error(str(e))
