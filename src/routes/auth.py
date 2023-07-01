@@ -131,9 +131,11 @@ async def reset_password():
             return redirect(url_for('home.get_home'))
 
         old_user = await user_controller.get_by_email(email=email)
+
         if not old_user:
             flash(message="Invalid email. Please try again.", category="error")
             return redirect(url_for('home.get_home'))
+
         old_user_dict = old_user.dict(exclude={'password_hash'})
         old_user_dict['password'] = password
         new_user = PasswordResetUser(**old_user_dict)
