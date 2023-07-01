@@ -8,14 +8,14 @@ class UserORM(Base):
     __tablename__ = 'users'
 
     user_id: str = Column(String(ID_LEN), primary_key=True, unique=True)
-    is_tenant: bool = Column(Boolean)
+    is_tenant: bool = Column(Boolean, default=False)
     tenant_id: str = Column(String(ID_LEN), ForeignKey('tenants.tenant_id'))
     username: str = Column(String(NAME_LEN))
     password_hash: str = Column(String(255))
     email: str = Column(String(256))
     full_name: str = Column(String(NAME_LEN))
     contact_number: str = Column(String(13))
-    account_verified: bool = Column(default=False)
+    account_verified: bool = Column(Boolean, default=False)
 
     @classmethod
     def create_if_not_table(cls):
