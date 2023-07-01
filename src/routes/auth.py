@@ -40,7 +40,8 @@ async def do_login():
         expiration = datetime.utcnow() + timedelta(minutes=delay)
         response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
         if not login_user.account_verified:
-            flash(message="Please verify your account", category="danger")
+            await user_controller.send_verification_email(user=login_user)
+            flash(message="A verification email has been sent please verify your email", category="danger")
         return response
     else:
         return await create_response(url_for('auth.get_login'),

@@ -1,0 +1,17 @@
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Rental Manager Email Verification</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            Hello {{ user.username }},<br><br>
+            Thank you for signing up for Rental Manager. To complete your registration, please click on the link below to verify your email address:
+        </p>
+        <p>
+            <a href="{{ verification_link }}">{{ verification_link }}</a>
+        </p>
+        <p>
+            If you did not sign up for Rental Manager, please ignore this email.
+        </p>
+    </div>
+</div>

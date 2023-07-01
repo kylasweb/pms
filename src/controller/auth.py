@@ -1,6 +1,6 @@
 import uuid
 import time
-from flask import Flask
+from flask import Flask, render_template
 from pydantic import ValidationError
 from sqlalchemy import or_
 
@@ -164,3 +164,20 @@ class UserController:
                 raise UnauthorizedError(description="Cannot Login User please check your login details")
 
             return user if user.is_login(password=password) else None
+
+    async def send_verification_email(self, user: User) -> None:
+        """
+        Sends a verification email to the specified user.
+
+        :param user: The user to send the verification email to.
+        """
+        token = str(uuid.uuid4())  # Assuming you have a function to generate a verification token
+        verification_link = f"https://rent-manager.site/verify-email?token={token}&email={user.email}"
+
+        # Render the email template
+        email_html = render_template("verification_email.html", verification_link=verification_link)
+
+        msg = EmailModel(subject_="Rental-Manager.site Email Verification",
+                         to_=[user.email], html_=email_html)
+
+        await send_mail.send_mail_resend(email=msg)
