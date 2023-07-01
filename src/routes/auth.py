@@ -127,13 +127,13 @@ async def reset_password():
         password = request.form.get('password')
         email = request.form.get('email')
         if not password or not email:
-            flash(message="Invalid request. Please provide both email and password.", category="error")
+            flash(message="Invalid request. Please provide both email and password.", category="danger")
             return redirect(url_for('home.get_home'))
         # TODO - refactor this can do better
         old_user = await user_controller.get_by_email(email=email)
 
         if not old_user:
-            flash(message="Invalid email. Please try again.", category="error")
+            flash(message="Invalid email. Please try again.", category="danger")
             return redirect(url_for('home.get_home'))
 
         old_user_dict = old_user.dict(exclude={'password_hash'})
@@ -141,13 +141,13 @@ async def reset_password():
         new_user = PasswordResetUser(**old_user_dict)
         updated_user = await user_controller.put(user=new_user)
         if not updated_user:
-            flash(message="Failed to update password. Please try again.", category="error")
+            flash(message="Failed to update password. Please try again.", category="danger")
             return redirect(url_for('home.get_home'))
 
         flash(message="Successfully updated password. Please login.", category="success")
         return redirect(url_for('home.get_home'))
 
-    flash(message="Invalid request. Please try again.", category="error")
+    flash(message="Invalid request. Please try again.", category="danger")
     return redirect(url_for('home.get_home'), code=302)
 
 
