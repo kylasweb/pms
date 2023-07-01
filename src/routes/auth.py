@@ -191,7 +191,8 @@ async def verify_email():
     """
     token = request.args.get('token')
     email = request.args.get('email')
-    if await user_controller.verify_email(email=email, token=token):
+    email_verified = await user_controller.verify_email(email=email, token=token)
+    if email_verified:
         user: User = await user_controller.get_by_email(email=email)
         user.account_verified = True
         _update_user = await user_controller.put(user=user)
