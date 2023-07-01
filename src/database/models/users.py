@@ -70,3 +70,22 @@ class CreateUser(BaseModel):
         print(f"Update User : {dict_}")
         return dict_
 
+class PasswordResetUser(BaseModel):
+    user_id: str
+    is_tenant: bool
+    tenant_id: str | None
+    username: str
+    password: str
+    email: str
+    full_name: str | None
+    contact_number: str | None
+
+    @property
+    def password_hash(self):
+        return encryptor.create_hash(password=self.password)
+
+    def to_dict(self) -> dict[str, str | bool]:
+        dict_ = self.dict(exclude={'password'})
+        dict_.update(dict(password_hash=self.password_hash))
+        print(f"Update User : {dict_}")
+        return dict_

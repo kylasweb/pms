@@ -4,7 +4,7 @@ from pydantic import ValidationError
 
 from src.logger import init_logger
 from src.database.models.auth import Auth, RegisterUser
-from src.database.models.users import User, CreateUser
+from src.database.models.users import User, CreateUser, PasswordResetUser
 from src.main import user_controller
 
 auth_route = Blueprint('auth', __name__)
@@ -136,7 +136,8 @@ async def reset_password():
             return redirect(url_for('home.get_home'))
         old_user_dict = old_user.dict(exclude={'password_hash'})
         old_user_dict['password'] = password
-        updated_user = await user_controller.put(user=User(**old_user_dict))
+        new_user = PasswordResetUser(**old_user_dict)
+        updated_user = await user_controller.put(user=new_user)
         if not updated_user:
             flash(message="Failed to update password. Please try again.", category="error")
             return redirect(url_for('home.get_home'))
@@ -145,6 +146,6 @@ async def reset_password():
         return redirect(url_for('home.get_home'))
 
     flash(message="Invalid request. Please try again.", category="error")
-    return redirect(url_for('home.get_home'))
+    return redirect(url_for('home.get_home'), code=302)
 
 
