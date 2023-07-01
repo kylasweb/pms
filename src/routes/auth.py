@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from src.logger import init_logger
 from src.database.models.auth import Auth, RegisterUser
 from src.database.models.users import User, CreateUser
-from src.controller.auth import UserController
+from src.main import user_controller
 
 auth_route = Blueprint('auth', __name__)
 auth_logger = init_logger('auth_logger')
@@ -27,7 +27,6 @@ async def get_login():
 
 @auth_route.post('/admin/login')
 async def do_login():
-    auth_controller = UserController()
     try:
         auth_user = Auth(**request.form)
     except ValidationError as e:
@@ -35,7 +34,7 @@ async def do_login():
         return await create_response(url_for('auth.get_login'), 'Login failed. Check your username and password.',
                                      'danger')
 
-    login_user: User | None = await auth_controller.login(username=auth_user.username, password=auth_user.password)
+    login_user: User | None = await user_controller.login(username=auth_user.username, password=auth_user.password)
     if login_user and login_user.username == auth_user.username:
         response = await create_response(url_for('companies.get_companies'))
         delay = REMEMBER_ME_DELAY if auth_user.remember == "on" else 30
@@ -43,7 +42,8 @@ async def do_login():
         response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
         return response
     else:
-        return await create_response(url_for('auth.get_login'), 'Login failed. you may not be registered in this system', 'danger')
+        return await create_response(url_for('auth.get_login'),
+                                     'Login failed. you may not be registered in this system', 'danger')
 
 
 @auth_route.get('/admin/logout')
@@ -66,8 +66,6 @@ async def do_register():
     except ValidationError as e:
         auth_logger.error(str(e))
         return await create_response(url_for('auth.get_register'), 'Please fill in all the required fields.', 'danger')
-
-    user_controller = UserController()
 
     user_exist: User | None = await user_controller.get_by_email(email=register_user.email)
     # user bool test for the conditions necessary to validate the user
@@ -101,7 +99,6 @@ async def do_password_reset():
         flash(message='Please submit an email in order to proceed with password reset', category='danger')
         return await create_response(url_for('auth.get_password_reset'))
 
-    user_controller = UserController()
     email_exist = await user_controller.get_by_email(email=email)
     if email_exist is not None:
         await user_controller.send_password_reset(email=email)

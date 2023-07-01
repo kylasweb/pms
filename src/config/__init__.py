@@ -29,9 +29,11 @@ class Logging(BaseSettings):
         env_file = '.env.development'
         env_file_encoding = 'utf-8'
 
+
 class ResendSettings(BaseSettings):
     API_KEY: str = Field(..., env="RESEND_API_KEY")
     from_: str = Field(default="norespond@rental-manager.site")
+
     class Config:
         env_file = '.env.development'
         env_file_encoding = 'utf-8'
