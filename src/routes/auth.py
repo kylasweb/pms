@@ -31,8 +31,7 @@ async def do_login():
         auth_user = Auth(**request.form)
     except ValidationError as e:
         auth_logger.error(str(e))
-        return await create_response(url_for('auth.get_login'), 'Login failed. Check your username and password.',
-                                     'danger')
+        return await create_response(url_for('auth.get_login'), 'Login failed. Check your username and password.', 'danger')
 
     login_user: User | None = await user_controller.login(username=auth_user.username, password=auth_user.password)
     if login_user and login_user.username == auth_user.username:
@@ -40,6 +39,8 @@ async def do_login():
         delay = REMEMBER_ME_DELAY if auth_user.remember == "on" else 30
         expiration = datetime.utcnow() + timedelta(minutes=delay)
         response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
+        if not login_user.account_verified:
+            flash(message="Please verify your account", category="danger")
         return response
     else:
         return await create_response(url_for('auth.get_login'),

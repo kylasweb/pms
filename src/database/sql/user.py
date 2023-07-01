@@ -15,6 +15,7 @@ class UserORM(Base):
     email: str = Column(String(256))
     full_name: str = Column(String(NAME_LEN))
     contact_number: str = Column(String(13))
+    account_verified: bool = Column(default=False)
 
     @classmethod
     def create_if_not_table(cls):

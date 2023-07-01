@@ -1,4 +1,4 @@
-import hmac
+
 import uuid
 from pydantic import BaseModel, Field
 from enum import Enum
@@ -34,6 +34,7 @@ class User(BaseModel):
     email: str
     full_name: str | None
     contact_number: str | None
+    account_verified: bool = Field(default=False)
 
     class Config:
         orm_mode = True
@@ -59,6 +60,7 @@ class CreateUser(BaseModel):
     email: str
     full_name: str | None
     contact_number: str | None
+    account_verified: bool = Field(default=False)
 
     @property
     def password_hash(self):
@@ -70,6 +72,7 @@ class CreateUser(BaseModel):
         print(f"Update User : {dict_}")
         return dict_
 
+
 class PasswordResetUser(BaseModel):
     user_id: str
     is_tenant: bool
@@ -79,6 +82,7 @@ class PasswordResetUser(BaseModel):
     email: str
     full_name: str | None
     contact_number: str | None
+    account_verified: bool = Field(default=False)
 
     @property
     def password_hash(self):
