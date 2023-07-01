@@ -15,8 +15,8 @@ from src.emailer import EmailModel
 class UserController:
 
     def __init__(self):
-        self._time_limit = 360
-        self._password_reset_tokens: dict[str, int] = {}
+        self._time_limit = 60
+        self._verification_tokens: dict[str, int | dict[str, str | int]] = {}
 
     def init_app(self, app: Flask):
         pass
@@ -28,11 +28,11 @@ class UserController:
         :param token: The password reset token to validate.
         :return: True if the token is valid, False otherwise.
         """
-        if token in self._password_reset_tokens:
-            timestamp: int = self._password_reset_tokens[token]
+        if token in self._verification_tokens.keys():
+            timestamp: int = self._verification_tokens[token]
             current_time: int = int(time.time())
             elapsed_time = current_time - timestamp
-            return elapsed_time > self._time_limit
+            return elapsed_time < self._time_limit
 
         return False
 
@@ -107,7 +107,7 @@ class UserController:
         :return: The password reset link.
         """
         token = str(uuid.uuid4())  # Assuming you have a function to generate a random token
-        self._password_reset_tokens[token] = int(time.time())
+        self._verification_tokens[token] = int(time.time())
         password_reset_link = f"https://rental-manager.site/admin/reset-password?token={token}&email={email}"
 
         return password_reset_link
@@ -165,21 +165,43 @@ class UserController:
 
             return user if user.is_login(password=password) else None
 
-    @staticmethod
+
     @error_handler
-    async def send_verification_email(user: User) -> None:
+    async def send_verification_email(self, user: User) -> None:
         """
         Sends a verification email to the specified user.
 
         :param user: The user to send the verification email to.
         """
+        print(f"user passed on : {user}")
         token = str(uuid.uuid4())  # Assuming you have a function to generate a verification token
-        verification_link = f"https://rent-manager.site/verify-email?token={token}&email={user.email}"
-
+        verification_link = f"https://rent-manager.site/admin/verify-email?token={token}&email={user.email}"
+        self._verification_tokens[token] = dict(email=user.email, timestamp=int(time.time()))
         # Render the email template
-        email_html = render_template("email_templates/verification_email.html", verification_link=verification_link)
+        email_html = render_template("email_templates/verification_email.html", user=user, verification_link=verification_link)
 
         msg = EmailModel(subject_="Rental-Manager.site Email Verification",
-                         to_=[user.email], html_=email_html)
+                         to_=user.email,
+                         html_=email_html)
 
         await send_mail.send_mail_resend(email=msg)
+
+    @error_handler
+    async def verify_email(self, email: str, token: str):
+        """
+
+        :param email:
+        :param token:
+        :return:
+        """
+        if token in self._verification_tokens.keys():
+            _data: dict[str, str | int] = self._verification_tokens[token]
+            current_time: int = int(time.time())
+            elapsed_time = current_time - _data.get('timestamp', 0)
+            return (elapsed_time < self._time_limit) and email == _data.get('email')
+        return False
+
+
+
+
+

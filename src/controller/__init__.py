@@ -26,7 +26,7 @@ def error_handler(view_func):
         except UnauthorizedError as e:
             error_logger.error(str(e))
             flash(message="You are not authorized to access this resource", category='danger')
-            return redirect(url_for('home.get_home'))
+            # return redirect(url_for('home.get_home'))
         except ConnectionResetError as e:
             error_logger.error(str(e))
             flash(message="Ooh , took a nap, sorry lets do that again...", category='danger')

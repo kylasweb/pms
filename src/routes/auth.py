@@ -22,6 +22,11 @@ async def create_response(redirect_url, message=None, category=None) -> Response
 
 @auth_route.get('/admin/login')
 async def get_login():
+    """
+
+    :return:
+    """
+    # TODO - CHECK IF USER IS ALREADY LOGGED IN
     return render_template('login.html')
 
 
@@ -31,16 +36,20 @@ async def do_login():
         auth_user = Auth(**request.form)
     except ValidationError as e:
         auth_logger.error(str(e))
-        return await create_response(url_for('auth.get_login'), 'Login failed. Check your username and password.', 'danger')
+        return await create_response(url_for('auth.get_login'), 'Login failed. Check your username and password.',
+                                     'danger')
 
     login_user: User | None = await user_controller.login(username=auth_user.username, password=auth_user.password)
     if login_user and login_user.username == auth_user.username:
         response = await create_response(url_for('companies.get_companies'))
+
+        # Setting Loging Cookie
         delay = REMEMBER_ME_DELAY if auth_user.remember == "on" else 30
         expiration = datetime.utcnow() + timedelta(minutes=delay)
         response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
+
         if not login_user.account_verified:
-            await user_controller.send_verification_email(user=login_user)
+            _ = await user_controller.send_verification_email(user=login_user)
             flash(message="A verification email has been sent please verify your email", category="danger")
         return response
     else:
@@ -50,6 +59,11 @@ async def do_login():
 
 @auth_route.get('/admin/logout')
 async def do_logout():
+    """
+
+    :return:
+    """
+    # TODO - CHECK IF USER IS ALREADY LOGGED IN
     response = await create_response(url_for('home.get_home'))
     response.delete_cookie('auth')
     flash(message='You have been successfully logged out.', category='danger')
@@ -58,11 +72,22 @@ async def do_logout():
 
 @auth_route.get('/admin/register')
 async def get_register():
+    """
+
+    :return:
+    """
+    # TODO - CHECK IF USER IS ALREADY LOGGED IN
     return render_template('register.html')
 
 
 @auth_route.post('/admin/register')
 async def do_register():
+    """
+        **do_register**
+
+    :return:
+    """
+    # TODO - CHECK IF USER IS ALREADY LOGGED IN
     try:
         register_user: RegisterUser = RegisterUser(**request.form)
     except ValidationError as e:
@@ -91,6 +116,10 @@ async def do_register():
 
 @auth_route.get('/admin/password-reset')
 async def get_password_reset():
+    """
+        **get_password_reset**
+    :return:
+    """
     return render_template('password_reset.html')
 
 
@@ -114,6 +143,7 @@ async def do_password_reset():
 @auth_route.route('/admin/reset-password', methods=['GET', 'POST'])
 async def reset_password():
     """
+    **reset_password**
     Resets the password for the user associated with the provided token.
 
 
@@ -152,4 +182,22 @@ async def reset_password():
     flash(message="Invalid request. Please try again.", category="danger")
     return redirect(url_for('home.get_home'), code=302)
 
+
+@auth_route.get('/admin/verify-email')
+async def verify_email():
+    """
+
+        :return:
+    """
+    token = request.args.get('token')
+    email = request.args.get('email')
+    if await user_controller.verify_email(email=email, token=token):
+        user: User = await user_controller.get_by_email(email=email)
+        user.account_verified = True
+        _update_user = await user_controller.put(user=user)
+        if _update_user and _update_user.get('account_verified'):
+            flash(message="Account Verified successfully", category="success")
+        else:
+            flash(message="Your Account could not be verified, please log out", category="success")
+        return redirect(url_for('home.get_home'), code=302)
 
