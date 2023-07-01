@@ -69,3 +69,4 @@ class CreateUser(BaseModel):
         dict_.update(dict(password_hash=self.password_hash))
         print(f"Update User : {dict_}")
         return dict_
+

@@ -1,5 +1,5 @@
 import uuid
-
+import time
 from flask import Flask
 from pydantic import ValidationError
 from sqlalchemy import or_
@@ -15,10 +15,26 @@ from src.emailer import EmailModel
 class UserController:
 
     def __init__(self):
-        self._password_reset_tokens: list[dict[str, int]] = []
+        self._time_limit = 360
+        self._password_reset_tokens: dict[str, int] = {}
 
     def init_app(self, app: Flask):
         pass
+
+    async def is_token_valid(self, token: str) -> bool:
+        """
+        Checks if the password reset token is valid based on the elapsed time.
+
+        :param token: The password reset token to validate.
+        :return: True if the token is valid, False otherwise.
+        """
+        if token in self._password_reset_tokens:
+            timestamp: int = self._password_reset_tokens[token]
+            current_time: int = int(time.time())
+            elapsed_time = current_time - timestamp
+            return elapsed_time > self._time_limit
+
+        return False
 
     @staticmethod
     @error_handler
@@ -78,15 +94,12 @@ class UserController:
         </html>
         """
 
-        email_template = dict(to_=email, subject=password_reset_subject, html_=html)
+        email_template = dict(to_=email, subject_=password_reset_subject, html_=html)
+        await send_mail.send_mail_resend(email=EmailModel(**email_template))
 
-        # Code to send the email using an email service/library goes here
-
-        # Placeholder return statement for demonstration purposes
         return email_template
 
-    @staticmethod
-    def generate_password_reset_link(email: str) -> str:
+    def generate_password_reset_link(self, email: str) -> str:
         """
         Generates a password reset link for the specified email.
 
@@ -94,6 +107,7 @@ class UserController:
         :return: The password reset link.
         """
         token = str(uuid.uuid4())  # Assuming you have a function to generate a random token
+        self._password_reset_tokens[token] = int(time.time())
         password_reset_link = f"https://rental-manager.site/reset-password?token={token}&email={email}"
 
         return password_reset_link

@@ -101,7 +101,49 @@ async def do_password_reset():
 
     email_exist = await user_controller.get_by_email(email=email)
     if email_exist is not None:
+        flash(message='Password reset email sent to your Inbox', category='success')
         await user_controller.send_password_reset(email=email)
+    else:
+        flash(message='That Email was not found on our system please create a new account', category='success')
 
-    flash(message='Password reset email sent to your Inbox', category='success')
     return await create_response(url_for('home.get_home'))
+
+
+@auth_route.route('/admin/reset-password', methods=['GET', 'POST'])
+async def reset_password():
+    """
+    Resets the password for the user associated with the provided token.
+
+    :return: A response indicating the result of the password reset operation.
+    """
+    if request.method == "GET":
+        token = request.args.get('token')
+        email = request.args.get('email')
+        if token and email and user_controller.is_token_valid(token=token):
+            return render_template("do_reset_password.html", email=email)
+
+    elif request.method == "POST":
+        password = request.form.get('password')
+        email = request.form.get('email')
+        if not password or not email:
+            flash(message="Invalid request. Please provide both email and password.", category="error")
+            return redirect(url_for('home.get_home'))
+
+        old_user = await user_controller.get_by_email(email=email)
+        if not old_user:
+            flash(message="Invalid email. Please try again.", category="error")
+            return redirect(url_for('home.get_home'))
+
+        old_user.password = password
+        updated_user = await user_controller.update(user=old_user)
+        if not updated_user:
+            flash(message="Failed to update password. Please try again.", category="error")
+            return redirect(url_for('home.get_home'))
+
+        flash(message="Successfully updated password. Please login.", category="success")
+        return redirect(url_for('home.get_home'))
+
+    flash(message="Invalid request. Please try again.", category="error")
+    return redirect(url_for('home.get_home'))
+
+
