@@ -136,7 +136,7 @@ async def reset_password():
             return redirect(url_for('home.get_home'))
         old_user_dict = old_user.dict(exclude={'password_hash'})
         old_user_dict['password'] = password
-        updated_user = await user_controller.update(user=User(**old_user_dict))
+        updated_user = await user_controller.put(user=User(**old_user_dict))
         if not updated_user:
             flash(message="Failed to update password. Please try again.", category="error")
             return redirect(url_for('home.get_home'))
