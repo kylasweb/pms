@@ -72,24 +72,18 @@ class Unit(BaseModel):
     @validator('is_occupied', pre=True)
     @classmethod
     def check_is_occupied(cls, value):
-        if value is None:
-            return False
-        return value
+        return False if value is None else value
 
     @classmethod
     @validator('is_booked', pre=True)
     def validate_is_booked(cls, value):
 
-        if not isinstance(value, bool):
-            return False
-        return value
+        return False if not isinstance(value, bool) else value
 
     @classmethod
     @validator('is_occupied', pre=True)
     def validate_is_occupied(cls, value):
-        if not isinstance(value, bool):
-            return False
-        return value
+        return False if not isinstance(value, bool) else value
 
 
 class AddUnit(BaseModel):
@@ -106,16 +100,12 @@ class AddUnit(BaseModel):
     @validator('is_booked', pre=True)
     def validate_is_booked(cls, value):
 
-        if not isinstance(value, bool):
-            return False
-        return value
+        return False if not isinstance(value, bool) else value
 
     @classmethod
     @validator('is_occupied', pre=True)
     def validate_is_occupied(cls, value):
-        if not isinstance(value, bool):
-            return False
-        return value
+        return False if not isinstance(value, bool) else value
 
 
 class UpdateUnit(BaseModel):

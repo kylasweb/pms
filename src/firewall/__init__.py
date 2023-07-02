@@ -127,7 +127,10 @@ class Firewall:
             checks if edge ip falls within known cloudflare ip ranges
         """
         edge_ip = self.get_edge_server_ip(headers=request.headers)
-        if not any(ipaddress.ip_address(edge_ip) in ipaddress.ip_network(ip_range) for ip_range in self.ip_ranges):
+        if all(
+            ipaddress.ip_address(edge_ip) not in ipaddress.ip_network(ip_range)
+            for ip_range in self.ip_ranges
+        ):
             abort(401, 'IP Address not allowed')
 
     def check_if_request_malicious(self):
@@ -229,8 +232,9 @@ class Firewall:
         response.headers['X-XSS-Protection'] = '1; mode=block'
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         session_cookies = [request.cookies.get('auth')]
-        session_cookies = [cookie for cookie in session_cookies if cookie is not None]
-        if session_cookies:
+        if session_cookies := [
+            cookie for cookie in session_cookies if cookie is not None
+        ]:
             response.headers['Session-Vary'] = ','.join(session_cookies)
 
         # exempting redoc & blog from content security policies except frame and XSS

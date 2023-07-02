@@ -181,9 +181,13 @@ class CompaniesController:
             if not is_company_member:
                 raise UnauthorizedError(description="Not Authorized to Update Bank Account")
 
-            original_bank_account: BankAccountORM = session.query(BankAccountORM).filter(
-                BankAccountORM.account_number == account_details.account_number).first()
-            if original_bank_account:
+            if (
+                original_bank_account := session.query(BankAccountORM)
+                .filter(
+                    BankAccountORM.account_number == account_details.account_number
+                )
+                .first()
+            ):
                 for field, value in account_details.dict().items():
                     if value is not None:
                         setattr(original_bank_account, field, value)
@@ -418,9 +422,7 @@ class CompaniesController:
         with Session() as session:
             unit_data: UnitORM = session.query(UnitORM).filter(
                 UnitORM.property_id == building_id, UnitORM.unit_id == unit_id).first()
-            if unit_data is None:
-                return None
-            return Unit(**unit_data.to_dict())
+            return None if unit_data is None else Unit(**unit_data.to_dict())
 
     @error_handler
     async def update_unit(self, user_id: str, unit_data: Unit) -> Unit | None:
@@ -431,10 +433,14 @@ class CompaniesController:
         :return:
         """
         with Session() as session:
-            unit_orm: UnitORM = session.query(UnitORM).filter(UnitORM.unit_id == unit_data.unit_id,
-                                                              UnitORM.property_id == unit_data.property_id).first()
-
-            if unit_orm:
+            if (
+                unit_orm := session.query(UnitORM)
+                .filter(
+                    UnitORM.unit_id == unit_data.unit_id,
+                    UnitORM.property_id == unit_data.property_id,
+                )
+                .first()
+            ):
                 # Update the fields in tenant_orm based on the values in tenant
                 for field in unit_data.__dict__:
                     if field in unit_orm.__dict__ and unit_data.__dict__[field] is not None:

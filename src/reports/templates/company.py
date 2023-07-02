@@ -18,22 +18,16 @@ def create_report(title: str, data: dict[str, str | dict[str, str]]):
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter)
 
-    # Create a list to hold the content
-    content = []
-
     # Create a stylesheet for styling the content
 
     title = Paragraph(f"<u>{title}</u>", title_styles)
-    content.append(title)
-    content.append(Spacer(1, 20))
+    content = [title, Spacer(1, 20)]
     # Iterate over the company_id details and add them to the content list
     for heading, subheadings in data.items():
         # Heading
 
         heading_paragraph = Paragraph(heading, heading_style)
-        content.append(heading_paragraph)
-        content.append(Spacer(1, 10))
-
+        content.extend((heading_paragraph, Spacer(1, 10)))
         if isinstance(subheadings, dict):
             # Subheadings and content
             for subheading, content_text in subheadings.items():
@@ -41,9 +35,7 @@ def create_report(title: str, data: dict[str, str | dict[str, str]]):
                 content.append(subheading_paragraph)
         else:
             content_paragraph = Paragraph(subheadings, normal_style)
-            content.append(content_paragraph)
-            content.append(Spacer(1, 5))
-
+            content.extend((content_paragraph, Spacer(1, 5)))
         content.append(Spacer(1, 10))
 
     # Build the PDF document with the content

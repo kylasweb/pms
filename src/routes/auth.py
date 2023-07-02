@@ -40,21 +40,20 @@ async def do_login():
                                      'danger')
 
     login_user: User | None = await user_controller.login(username=auth_user.username, password=auth_user.password)
-    if login_user and login_user.username == auth_user.username:
-        response = await create_response(url_for('companies.get_companies'))
-
-        # Setting Loging Cookie
-        delay = REMEMBER_ME_DELAY if auth_user.remember == "on" else 30
-        expiration = datetime.utcnow() + timedelta(minutes=delay)
-        response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
-
-        if not login_user.account_verified:
-            _ = await user_controller.send_verification_email(user=login_user)
-            flash(message="A verification email has been sent please verify your email", category="danger")
-        return response
-    else:
+    if not login_user or login_user.username != auth_user.username:
         return await create_response(url_for('auth.get_login'),
                                      'Login failed. you may not be registered in this system', 'danger')
+    response = await create_response(url_for('companies.get_companies'))
+
+    # Setting Loging Cookie
+    delay = REMEMBER_ME_DELAY if auth_user.remember == "on" else 30
+    expiration = datetime.utcnow() + timedelta(minutes=delay)
+    response.set_cookie('auth', value=login_user.user_id, expires=expiration, httponly=True)
+
+    if not login_user.account_verified:
+        _ = await user_controller.send_verification_email(user=login_user)
+        flash(message="A verification email has been sent please verify your email", category="danger")
+    return response
 
 
 @auth_route.get('/admin/logout')

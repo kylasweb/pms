@@ -28,8 +28,6 @@ styles = getSampleStyleSheet()
 title_style = styles["Heading1"]
 content_style = styles["BodyText"]
 
-elements = []
-
 # Create a frame with a border
 border_width = 1  # Adjust the border width as needed
 frame_width = letter[0] - 2 * inch
@@ -40,26 +38,17 @@ border_frame = Frame(
 
 # Add the letter title
 title = Paragraph(letter_title, title_style)
-elements.append(title)
-
-# Add the sender's information
-elements.append(Spacer(1, 0.5 * inch))
+elements = [title, Spacer(1, 0.5 * inch)]
 sender_info = Paragraph(
     f"<b>From:</b><br/>{sender_name}<br/>{sender_address}",
     content_style
 )
-elements.append(sender_info)
-
-# Add the recipient's information
-elements.append(Spacer(1, 0.2 * inch))
+elements.extend((sender_info, Spacer(1, 0.2 * inch)))
 recipient_info = Paragraph(
     f"<b>To:</b><br/>{recipient_name}<br/>{recipient_address}",
     content_style
 )
-elements.append(recipient_info)
-
-# Add the letter body
-elements.append(Spacer(1, 0.5 * inch))
+elements.extend((recipient_info, Spacer(1, 0.5 * inch)))
 body = Paragraph(
     letter_body.format(recipient_name=recipient_name, sender_name=sender_name),
     content_style

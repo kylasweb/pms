@@ -64,14 +64,13 @@ class StatementsAndInvoicing:
     @staticmethod
     async def calculate_due_date(date_issued: date) -> date:
         if date_issued.day >= 7:
-            if date_issued.month == 12:
-                due_date = date(date_issued.year + 1, 1, 7)
-            else:
-                due_date = date(date_issued.year, date_issued.month + 1, 7)
+            return (
+                date(date_issued.year + 1, 1, 7)
+                if date_issued.month == 12
+                else date(date_issued.year, date_issued.month + 1, 7)
+            )
         else:
-            due_date = date(date_issued.year, date_issued.month, 7)
-
-        return due_date
+            return date(date_issued.year, date_issued.month, 7)
 
     @staticmethod
     async def create_invoiced_items(items: list[dict[str, str | int]]):
@@ -80,10 +79,7 @@ class StatementsAndInvoicing:
         :param items:
         :return:
         """
-        _response = []
-        for item in items:
-            _response.append(item.get('item_number'))
-        return _response
+        return [item.get('item_number') for item in items]
 
     async def create_invoice(self,
                              lease_data: dict[str, LeaseAgreement | Tenant | Company | Property],
