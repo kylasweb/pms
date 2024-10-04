@@ -31,16 +31,12 @@ class Tenant(BaseModel):
     @classmethod
     @validator("lease_start_date", pre=True)
     def validate_lease_start_date(cls, value):
-        if not isinstance(value, date):
-            return None
-        return value
+        return None if not isinstance(value, date) else value
 
     @classmethod
     @validator("lease_end_date", pre=True)
     def validate_lease_end_date(cls, value):
-        if not isinstance(value, date):
-            return None
-        return value
+        return None if not isinstance(value, date) else value
 
 
 class CreateTenant(BaseModel):

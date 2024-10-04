@@ -23,9 +23,7 @@ class TenantController:
         """
         with Session() as session:
             tenant = session.query(TenantORM).filter(TenantORM.cell == cell).first()
-            if isinstance(tenant, TenantORM):
-                return Tenant(**tenant.to_dict())
-            return None
+            return Tenant(**tenant.to_dict()) if isinstance(tenant, TenantORM) else None
 
     @staticmethod
     @error_handler
@@ -37,9 +35,7 @@ class TenantController:
         """
         with Session() as session:
             tenant = session.query(TenantORM).filter(TenantORM.tenant_id == tenant_id).first()
-            if isinstance(tenant, TenantORM):
-                return Tenant(**tenant.to_dict())
-            return None
+            return Tenant(**tenant.to_dict()) if isinstance(tenant, TenantORM) else None
 
     @error_handler
     async def get_un_booked_tenants(self) -> list[Tenant]:
@@ -91,9 +87,11 @@ class TenantController:
     @error_handler
     async def update_tenant(tenant: Tenant) -> Tenant | None:
         with Session() as session:
-            tenant_orm: TenantORM = session.query(TenantORM).filter(TenantORM.tenant_id == tenant.tenant_id).first()
-
-            if tenant_orm:
+            if (
+                tenant_orm := session.query(TenantORM)
+                .filter(TenantORM.tenant_id == tenant.tenant_id)
+                .first()
+            ):
                 # Update the fields in tenant_orm based on the values in tenant
                 for field in tenant.__dict__:
                     if field in tenant_orm.__dict__ and tenant.__dict__[field] is not None:

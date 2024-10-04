@@ -19,37 +19,26 @@ def create_report(title: str, data: dict[str, str | dict[str, str] | list[dict[s
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter)
 
-    # Create a list to hold the content
-    content = []
-
     # Create a stylesheet for styling the content
 
     title = Paragraph(f"<u>{title}</u>", title_styles)
-    content.append(title)
-    content.append(Spacer(1, 20))
+    content = [title, Spacer(1, 20)]
     # Iterate over the company_id details and add them to the content list
     heading = "Company Details"
     heading_paragraph = Paragraph(heading, heading_style)
-    content.append(heading_paragraph)
-    content.append(Spacer(1, 10))
-
+    content.extend((heading_paragraph, Spacer(1, 10)))
     for heading, subheadings in data.items():
         # Heading
         if heading.casefold() in ["properties"]:
             content.append(PageBreak())
-            property_development = f"Rental Properties"
+            property_development = "Rental Properties"
             heading_paragraph = Paragraph(property_development, heading_style)
-            content.append(heading_paragraph)
-            content.append(Spacer(1, 10))
-            for sub_content in create_property_development(subheadings):
-                content.append(sub_content)
-
+            content.extend((heading_paragraph, Spacer(1, 10)))
+            content.extend(iter(create_property_development(subheadings)))
             continue
         else:
             heading_paragraph = Paragraph(heading, subheading_style)
-            content.append(heading_paragraph)
-            content.append(Spacer(1, 10))
-
+            content.extend((heading_paragraph, Spacer(1, 10)))
         if isinstance(subheadings, dict):
             # Subheadings and content
             for subheading, content_text in subheadings.items():
@@ -72,9 +61,7 @@ def create_report(title: str, data: dict[str, str | dict[str, str] | list[dict[s
 
         else:
             content_paragraph = Paragraph(subheadings, normal_style)
-            content.append(content_paragraph)
-            content.append(Spacer(1, 5))
-
+            content.extend((content_paragraph, Spacer(1, 5)))
         content.append(Spacer(1, 10))
 
     # Build the PDF document with the content
@@ -110,8 +97,8 @@ def create_property_development(data_list):
     # Get the sample styles for formatting
     sub_content = []
     line = Paragraph("<br/>", normal_style)
-    horizontal_space = "                    "
     if isinstance(data_list, list):
+        horizontal_space = "                    "
         for item_object in data_list:
             # Add property name as subheading
             heading = Paragraph(item_object.get("name"), heading_style)
@@ -121,21 +108,14 @@ def create_property_development(data_list):
 
             sub_content.append(description_heading)
             description = Paragraph(f"<strong>{item_object.get('description')}</strong>", normal_style)
-            sub_content.append(description)
-            sub_content.append(line)
-            sub_content.append(line)
+            sub_content.extend((description, line, line))
             # Add lease terms
-            lease_heading = Paragraph(f"<strong>LEASE TERMS</strong>", subheading_style)
+            lease_heading = Paragraph("<strong>LEASE TERMS</strong>", subheading_style)
             sub_content.append(lease_heading)
             lease_terms = Paragraph(f"<strong>{item_object.get('lease_terms')}</strong>", normal_style)
-            sub_content.append(lease_terms)
-            sub_content.append(line)
-            sub_content.append(line)
-
-            details_heading = Paragraph(f"<strong>DETAILS</strong>", subheading_style)
-            sub_content.append(details_heading)
-            sub_content.append(line)
-            sub_content.append(line)
+            sub_content.extend((lease_terms, line, line))
+            details_heading = Paragraph("<strong>DETAILS</strong>", subheading_style)
+            sub_content.extend((details_heading, line, line))
             # Add property type
             property_type = Paragraph(f"Property Type:{horizontal_space} {item_object.get('property_type')}", normal_style)
             sub_content.append(property_type)
@@ -146,12 +126,10 @@ def create_property_development(data_list):
 
             # Add available units
             available_units = Paragraph(f"Available Units: {item_object.get('available_units')}", normal_style)
-            sub_content.append(available_units)
-            sub_content.append(line)
+            sub_content.extend((available_units, line))
             # Add amenities
             amenities = Paragraph(f"Amenities: {item_object.get('amenities')}", normal_style)
-            sub_content.append(amenities)
-            sub_content.append(line)
+            sub_content.extend((amenities, line))
             # Add landlord
             landlord = Paragraph(f"Landlord: {item_object.get('landlord')}", normal_style)
             sub_content.append(landlord)
@@ -163,12 +141,10 @@ def create_property_development(data_list):
 
             # Add built year
             built_year = Paragraph(f"Built Year: {item_object.get('built_year')}", normal_style)
-            sub_content.append(built_year)
-            sub_content.append(line)
+            sub_content.extend((built_year, line))
             # Add parking spots
             parking_spots = Paragraph(f"Parking Spots: {item_object.get('parking_spots')}", normal_style)
-            sub_content.append(parking_spots)
-            sub_content.append(line)
-            # Add a new line after each item
+            sub_content.extend((parking_spots, line))
+                    # Add a new line after each item
 
     return sub_content

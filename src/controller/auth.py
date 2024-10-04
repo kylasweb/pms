@@ -108,9 +108,7 @@ class UserController:
         """
         token = str(uuid.uuid4())  # Assuming you have a function to generate a random token
         self._verification_tokens[token] = int(time.time())
-        password_reset_link = f"https://rental-manager.site/admin/reset-password?token={token}&email={email}"
-
-        return password_reset_link
+        return f"https://rental-manager.site/admin/reset-password?token={token}&email={email}"
 
     @staticmethod
     @error_handler

@@ -20,8 +20,10 @@ class NotificationsController:
         with Session() as session:
             notifications: list[NotificationORM] = session.query(NotificationORM).filter(
                 NotificationORM.user_id == user_id).all()
-            notifications_ = [Notification(**notification.dict()) for notification in notifications]
-            if notifications_:
+            if notifications_ := [
+                Notification(**notification.dict())
+                for notification in notifications
+            ]:
                 notifications_list: NotificationsModel = NotificationsModel(**dict(notifications=notifications_))
                 return notifications_list
             return  None

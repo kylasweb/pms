@@ -33,8 +33,10 @@ async def get_companies(user: User):
     notifications: NotificationsModel = await notifications_controller.get_user_notifications(user_id=user.user_id)
     notifications_dicts = [notice.dict() for notice in notifications.unread_notification] if notifications else []
 
-    context.update({'companies': companies_dict,
-                    'notifications_list': notifications_dicts})
+    context |= {
+        'companies': companies_dict,
+        'notifications_list': notifications_dicts,
+    }
 
     return render_template('companies/companies.html', **context)
 
@@ -163,12 +165,12 @@ async def print_company(user: User, company_id: str):
     company_data_dict = {}
     if company_bank_account:
         bank_account_data: BankAccountPrintParser = BankAccountPrintParser(**company_bank_account.dict())
-        company_data_dict.update({"Bank Account": bank_account_data.to_dict()})
+        company_data_dict["Bank Account"] = bank_account_data.to_dict()
 
-    company_data_dict.update(company_data.to_dict())
+    company_data_dict |= company_data.to_dict()
     properties_dict = [building.dict() for building
                        in properties_list if building] if isinstance(properties_list, list) else []
-    company_data_dict.update({"Properties": properties_dict})
+    company_data_dict["Properties"] = properties_dict
 
     document_buffer = create_report(title=_title, data=company_data_dict)
 
